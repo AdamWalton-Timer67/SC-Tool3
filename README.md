@@ -2,6 +2,9 @@
 
 Thank you to the community for appreciating the tool and providing lots of feedback on it, whether through Suggestions, email, or social media! 
 
+<img width="1080" height="332" alt="image" src="https://github.com/user-attachments/assets/18b1286a-9c0a-47eb-93fb-83ade59ad963" />
+
+
 ### Installation
 
 ```bash
