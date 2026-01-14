@@ -1,0 +1,327 @@
+{
+  "patchNotes": [
+      {
+        "version": "1.0.1",
+        "date": "2025-12-14",
+        "changes": {
+          "en": [
+            "---- ORGANIZATIONS UX/UI IMPROVEMENTS & FIXES -----",
+            "Improved organization search: now displays only user's organizations by default",
+            "Public organizations are shown only through search (minimum 2 characters, max 5 results)",
+            "Added search debounce (300ms) for better performance",
+            "Added helpful message when user has no organizations",
+            "Removed total organization counter for cleaner UI",
+            "Fixed search to use server-side filtering (no more client-side filtering for better performance)",
+            "Added star background to organization pages for visual consistency",
+            "Temporary message added on homepage about upcoming Star Citizen Alpha 4.5 changes"
+          ],
+          "fr": [
+            "---- AMÉLIORATIONS UX/UI & CORRECTIONS ORGANISATIONS -----",
+            "Amélioration de la recherche d'organisations : affiche uniquement les organisations de l'utilisateur par défaut",
+            "Les organisations publiques ne sont affichées que via la recherche (minimum 2 caractères, max 5 résultats)",
+            "Ajout d'un debounce sur la recherche (300ms) pour de meilleures performances",
+            "Ajout d'un message d'aide quand l'utilisateur n'a aucune organisation",
+            "Retrait du compteur total d'organisations pour une interface plus épurée",
+            "Correction de la recherche pour utiliser le filtrage côté serveur (plus de filtrage côté client pour de meilleures performances)",
+            "Ajout du fond étoilé sur les pages d'organisations pour la cohérence visuelle",
+            "Message temporaire ajouté sur la page d'accueil concernant les changements Star Citizen Alpha 4.5 à venir"
+          ]
+        }
+      },
+      {
+        "version": "1.0.0",
+        "date": "2025-12-13",
+        "changes": {
+          "en": [
+            "---- ORGANIZATIONS SYSTEM (MAJOR UPDATE) -----",
+            "Added complete Organizations system: create, manage, and join player organizations",
+            "Organization creation with custom name, description, and image upload",
+            "Member management with 3 roles: Owner, Admin, and Member with specific permissions",
+            "Join request system: request to join organizations, accept/reject requests",
+            "Organization inventory: aggregated view of all members' ingredients",
+            "Ingredient breakdown by member: see who contributes what to the organization",
+            "Search and discover public organizations",
+            "In-Game Name (Display Name) system: set your name during registration or in account settings"
+          ],
+          "fr": [
+            "---- SYSTÈME D'ORGANISATIONS (MISE À JOUR MAJEURE) -----",
+            "Ajout du système complet d'Organisations : créez, gérez et rejoignez des organisations de joueurs",
+            "Création d'organisation avec nom personnalisé, description et upload d'image",
+            "Gestion des membres avec 3 rôles : Propriétaire, Admin et Membre avec permissions spécifiques",
+            "Système de demandes d'adhésion : demandez à rejoindre des organisations, acceptez/refusez les demandes",
+            "Inventaire d'organisation : vue agrégée des ingrédients de tous les membres",
+            "Répartition des ingrédients par membre : voyez qui contribue quoi à l'organisation",
+            "Recherche et découverte d'organisations publiques",
+            "Système de Nom In-Game (Display Name) : définissez votre nom lors de l'inscription ou dans les paramètres du compte",
+            "Display Name récupéré automatiquement depuis les providers OAuth"
+          ]
+        }
+      },
+      {
+        "version": "0.0.15",
+        "date": "2025-12-10",
+        "changes": {
+          "en": [
+            "---- WIKELO UX/UI IMPROVEMENTS (Alpha 4.5) -----",
+            "Added reputation requirements display for rewards (Alpha 4.5 feature)",
+            "Added favorites system: mark rewards as favorites and filter to show only favorites",
+            "Added collapse/expand system for reward ingredients",
+            "Removed unit names from quantity displays for cleaner UI",
+            "Multiple visual adjustments and improvements"
+          ],
+          "fr": [
+            "---- AMÉLIORATIONS UX/UI WIKELO (Alpha 4.5) -----",
+            "Ajout de l'affichage de la réputation requise pour les récompenses (nouveauté 4.5)",
+            "Ajout d'un système de favoris : marquer des récompenses en favoris et filtrer uniquement sur les favoris",
+            "Ajout d'un système de collapse pour ouvrir/fermer les ingrédients d'une récompense",
+            "Retrait du nom des unités derrière les quantités pour une interface plus épurée",
+            "Multiples ajustements visuels et améliorations"
+          ]
+        }
+      },
+      {
+        "version": "0.0.14",
+        "date": "2025-12-02",
+        "changes": {
+          "en": [
+            "---- AUTHENTICATION & UX/UI IMPROVEMENTS -----",
+            "Added Discord login authentication",
+            "Multiple improvements based on community feedback on crafts",
+            "Added 'Location' feature for ingredients (additional information being written)",
+            "Improved filters UX/UI",
+            "Performance optimization (cache/database queries)",
+            "Service Worker optimization"
+          ],
+          "fr": [
+            "---- AUTHENTIFICATION & AMÉLIORATIONS UX/UI -----",
+            "Ajout de la connexion via Discord",
+            "Nombreuses modifications liées aux retours de la communauté sur les crafts",
+            "Ajout d'une fonctionnalité de 'Location' pour rattacher aux ingrédients (informations complémentaires en cours de rédaction)",
+            "Amélioration des filtres UX/UI",
+            "Optimisation des performances (cache/requêtes BDD)",
+            "Optimisation du Service Worker"
+          ]
+        }
+      },
+      {
+        "version": "0.0.13",
+        "date": "2025-11-24",
+        "changes": {
+          "en": [
+            "---- REWARDS UPDATE (Alpha 4.4) -----",
+            "Updated Guardian MX ship data and loadout",
+            "Updated Meteor ship information",
+            "Added Boomtude Clanguard Rocket Launcher",
+            "Updated Testudo armor set information",
+            "Fixed category normalization (ship→ships, weapon→weapons)",
+            "Improved data loading with automatic retry system"
+          ],
+          "fr": [
+            "---- MISE À JOUR DES RÉCOMPENSES (Alpha 4.4) -----",
+            "Mise à jour des données et loadout du vaisseau Guardian MX",
+            "Mise à jour des informations du vaisseau Meteor",
+            "Ajout du lance-roquettes Boomtude Clanguard",
+            "Mise à jour des informations de l'armure Testudo",
+            "Correction de la normalisation des catégories (ship→ships, weapon→weapons)",
+            "Amélioration du chargement des données avec système de retry automatique"
+          ]
+        }
+      },
+      {
+        "version": "0.0.12",
+        "date": "2025-11-12",
+        "changes": {
+          "en": [
+            "---- SUGGESTIONS & FEEDBACK SYSTEM -----",
+            "Added suggestion system for rewards and ingredients",
+            "Users can now submit feedback without login (anonymous suggestions)",
+            "Suggestion button added to all reward cards and ingredient dialogs",
+            "Admin panel now includes suggestions management page",
+            "Admins can view, filter by status, and delete suggestions",
+            "Anonymous suggestions are clearly identified with a badge"
+          ],
+          "fr": [
+            "---- SYSTÈME DE SUGGESTIONS & FEEDBACK -----",
+            "Ajout d'un système de suggestions pour les récompenses et ingrédients",
+            "Les utilisateurs peuvent soumettre des suggestions sans connexion (suggestions anonymes)",
+            "Bouton de suggestion ajouté sur toutes les cartes de récompenses et dialogues d'ingrédients",
+            "Le panel admin inclut maintenant une page de gestion des suggestions",
+            "Les admins peuvent consulter, filtrer par statut et supprimer les suggestions",
+            "Les suggestions anonymes sont clairement identifiées avec un badge"
+          ]
+        }
+      },
+      {
+        "version": "0.0.11",
+        "date": "2025-11-12",
+        "changes": {
+          "en": [
+            "---- CLOUD MIGRATION & ADMIN PANEL -----",
+            "Migrated all rewards and ingredients data to Supabase database",
+            "Migrated all images to AWS S3 cloud storage (no longer stored locally)",
+            "Created admin interface to add, edit, and delete rewards and ingredients",
+            "Optimized image loading with lazy loading and error handling",
+            "Fixed ingredient details dialog bugs with location data",
+            "Improved image fallback system for better reliability"
+          ],
+          "fr": [
+            "---- MIGRATION CLOUD & PANEL ADMIN -----",
+            "Migration de toutes les données de récompenses et ingrédients vers la base de données Supabase",
+            "Migration de toutes les images vers le stockage cloud AWS S3 (plus de stockage local)",
+            "Création d'une interface d'administration pour ajouter, modifier et supprimer les récompenses et ingrédients",
+            "Optimisation du chargement des images avec lazy loading et gestion d'erreurs",
+            "Correction des bugs de la fenêtre de détails des ingrédients avec les données de localisation",
+            "Amélioration du système de fallback des images pour une meilleure fiabilité"
+          ]
+        }
+      },
+      {
+        "version": "0.0.10",
+        "date": "2025-11-05",
+        "changes": {
+          "en": [
+            "Add infinite re-reward system"
+          ],
+          "fr": [
+            "Ajout d'un système de re-reward infini"
+          ]
+        }
+      },
+      {
+      "version": "0.0.9",
+      "date": "2025-11-03",
+      "changes": {
+        "en": [
+          "---- DATABASE SYSTEM -----",
+          "Redesign of the rewards list/grid view system",
+          "Removal of local browser storage for rewards and ingredients",
+          "Addition of a real-time database system to manage login/logout (v1: email/password, later with providers like Google & Discord)",
+          "Tracking of rewards and ingredients in the database when the user is logged in",
+          "Alert on the number of available items for required ingredients when they are listed in the 'my inventory' section",
+          "Update of the image for Irradiated Vallakar Fang (adult)",
+          "Creation of an initial draft for the 'my account' page",
+          "Update image size"
+        ],
+        "fr": [
+          "---- DATABASE SYSTEM -----",
+          "Refonte du système de vue en liste/vignettes des récompenses",
+          "Suppression de la sauvegarde en local dans le navigateur des récompenses et ingrédients",
+          "Ajout d'un système de base de donnée (temps réel) pour gérer la connexion / déconnexion (v1 : email / password, dans un second temps des providers comme Google & Discord arriverons)",
+          "Suivi des récompenses et ingrédients en base de données si utilisateur connecté",
+          "Alerte sur le nombre d'éléments disponibles sur les ingrédients requis quand ceux-ci sont renseignés dans la section 'mon inventaire'",
+          "Mise à jour de l'image de Irradiated Vallakar Fang (adult)",
+          "Création d'une première ébauche de la page 'mon compte'",
+          "Modification taille des images"
+        ]
+      }
+    },
+    {
+      "version": "0.0.8",
+      "date": "2025-11-03",
+      "changes": {
+        "en": [
+          "Add irradiated kopion horn image",
+          "Add irradiated vallakar fang adult image",
+          "Add irradiated vallakar fang juvenile image",
+          "Update Ace helmet 'how to obtain' part",
+          "Start to add documentation / market links",
+          "Update Carinite, Jaclium, Saldynium ore 'how to obtain' part"
+        ],
+       "fr": [
+        "Ajout de l’image de la corne de kopion irradiée",
+        "Ajout de l’image du croc de vallakar irradié (adulte)",
+        "Ajout de l’image du croc de vallakar irradié (juvénile)",
+        "Mise à jour de la section 'comment obtenir' du casque Ace",
+        "Début de l’ajout des liens de documentation / marché",
+        "Mise à jour de la section 'comment obtenir' pour les minerais Carinite, Jaclium et Saldynium"
+      ]
+      }
+    },
+      {
+      "version": "0.0.7",
+      "date": "2025-11-02",
+      "changes": {
+        "en": [
+          "Add armor locations"
+        ],
+        "fr": [
+          "Ajout des emplacements des armures"
+        ]
+      }
+    },
+     {
+      "version": "0.0.6",
+      "date": "2025-11-02",
+      "changes": {
+        "en": [
+          "Add armor locations"
+        ],
+        "fr": [
+          "Ajout des emplacements des armures"
+        ]
+      }
+    },
+    {
+      "version": "0.0.5",
+      "date": "2025-11-01",
+      "changes": {
+        "en": [
+          "Add discord dedicated for feedback"
+        ],
+        "fr": [
+          "Ajout d'un discord dédié pour les retours"
+        ]
+      }
+    },
+     {
+      "version": "0.0.4",
+      "date": "2025-10-31",
+      "changes": {
+        "en": [
+          "Update ship descriptions"
+        ],
+        "fr": [
+          "Mise à jour de la description des vaisseaux"
+        ]
+      }
+    },
+     {
+      "version": "0.0.3",
+      "date": "2025-10-31",
+      "changes": {
+        "en": [
+          "Improve 'how to obtain' and 'locations' sections"
+        ],
+        "fr": [
+          "Amélioration des sections 'Comment obtenir' et 'Où trouver'"
+        ]
+      }
+    },
+    {
+      "version": "0.0.2",
+      "date": "2025-10-31",
+      "changes": {
+        "en": [
+          "Fixed EN/FR translation inconsistencies",
+          "Fixed typo: Corbet → Corbel"
+        ],
+        "fr": [
+          "Correction des traductions EN/FR",
+          "Correction de la faute de frappe : Corbet → Corbel"
+        ]
+      }
+    },
+     {
+      "version": "0.0.1",
+      "date": "2025-10-30",
+      "changes": {
+        "en": [
+          "Initial release"
+        ],
+        "fr": [
+          "Première version"
+        ]
+      }
+    }
+  ]
+}

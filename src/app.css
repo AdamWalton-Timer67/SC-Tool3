@@ -1,0 +1,134 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/forms';
+
+/* Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
+
+/* Glitch animations for images */
+@keyframes glitch-1 {
+	0%,
+	100% {
+		transform: translate(0, 0);
+		opacity: 0.3;
+	}
+	33% {
+		transform: translate(-2px, 2px);
+		opacity: 0.5;
+	}
+	66% {
+		transform: translate(2px, -2px);
+		opacity: 0.4;
+	}
+}
+
+@keyframes glitch-2 {
+	0%,
+	100% {
+		transform: translate(0, 0);
+		opacity: 0.2;
+	}
+	33% {
+		transform: translate(2px, -2px);
+		opacity: 0.4;
+	}
+	66% {
+		transform: translate(-2px, 2px);
+		opacity: 0.3;
+	}
+}
+
+@keyframes glitch-border {
+	0%,
+	100% {
+		clip-path: polygon(
+			0 0,
+			100% 0,
+			100% 2%,
+			98% 4%,
+			100% 6%,
+			100% 94%,
+			98% 96%,
+			100% 98%,
+			100% 100%,
+			0 100%,
+			0 98%,
+			2% 96%,
+			0 94%,
+			0 6%,
+			2% 4%,
+			0 2%
+		);
+	}
+	25% {
+		clip-path: polygon(
+			0 0,
+			100% 0,
+			100% 3%,
+			97% 5%,
+			100% 7%,
+			100% 93%,
+			97% 95%,
+			100% 97%,
+			100% 100%,
+			0 100%,
+			0 97%,
+			3% 95%,
+			0 93%,
+			0 7%,
+			3% 5%,
+			0 3%
+		);
+	}
+	50% {
+		clip-path: polygon(
+			0 0,
+			100% 0,
+			100% 4%,
+			96% 6%,
+			100% 8%,
+			100% 92%,
+			96% 94%,
+			100% 96%,
+			100% 100%,
+			0 100%,
+			0 96%,
+			4% 94%,
+			0 92%,
+			0 8%,
+			4% 6%,
+			0 4%
+		);
+	}
+	75% {
+		clip-path: polygon(
+			0 0,
+			100% 0,
+			100% 2%,
+			99% 4%,
+			100% 6%,
+			100% 94%,
+			99% 96%,
+			100% 98%,
+			100% 100%,
+			0 100%,
+			0 98%,
+			1% 96%,
+			0 94%,
+			0 6%,
+			1% 4%,
+			0 2%
+		);
+	}
+}
+
+.animate-glitch-1 {
+	animation: glitch-1 0.5s 1 forwards;
+}
+
+.animate-glitch-2 {
+	animation: glitch-2 0.5s 1 forwards;
+}
+
+.animate-glitch-border {
+	animation: glitch-border 0.5s ease-in-out 1 forwards;
+}

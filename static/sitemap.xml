@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <!-- Homepage -->
+  <url>
+    <loc>https://www.star-citizen-wikelo-tools.space/</loc>
+    <lastmod>2025-12-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.star-citizen-wikelo-tools.space/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.star-citizen-wikelo-tools.space/" />
+  </url>
+
+  <!-- Main Wikelo Tracker Page (Most Important) -->
+  <url>
+    <loc>https://www.star-citizen-wikelo-tools.space/wikelo</loc>
+    <lastmod>2025-12-15</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.star-citizen-wikelo-tools.space/wikelo" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.star-citizen-wikelo-tools.space/wikelo" />
+    <image:image>
+      <image:loc>https://www.star-citizen-wikelo-tools.space/android-chrome-512x512.png</image:loc>
+      <image:title>Star Citizen Wikelo Emporium Tracker</image:title>
+      <image:caption>Complete database of Wikelo rewards for Star Citizen</image:caption>
+    </image:image>
+  </url>
+
+  <!-- Inventory Page -->
+  <url>
+    <loc>https://www.star-citizen-wikelo-tools.space/inventory</loc>
+    <lastmod>2025-12-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.star-citizen-wikelo-tools.space/inventory" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.star-citizen-wikelo-tools.space/inventory" />
+  </url>
+
+  <!-- Locations Page -->
+  <url>
+    <loc>https://www.star-citizen-wikelo-tools.space/locations</loc>
+    <lastmod>2025-12-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.star-citizen-wikelo-tools.space/locations" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.star-citizen-wikelo-tools.space/locations" />
+  </url>
+
+  <!-- Organizations Page -->
+  <url>
+    <loc>https://www.star-citizen-wikelo-tools.space/organizations</loc>
+    <lastmod>2025-12-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.star-citizen-wikelo-tools.space/organizations" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.star-citizen-wikelo-tools.space/organizations" />
+  </url>
+
+  <!-- Account Page -->
+  <url>
+    <loc>https://www.star-citizen-wikelo-tools.space/account</loc>
+    <lastmod>2025-12-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+</urlset>

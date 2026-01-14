@@ -1,0 +1,47 @@
+# Star Citizen Wikelo Emporium Tracker - Robots.txt
+# Optimized for maximum search engine visibility
+
+User-agent: *
+Allow: /
+Allow: /wikelo
+Allow: /inventory
+Allow: /account
+
+# Sitemaps
+Sitemap: https://www.star-citizen-wikelo-tools.space/sitemap.xml
+
+# Crawl-delay for polite crawling
+Crawl-delay: 1
+
+# Specific bot optimizations
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+User-agent: Googlebot-Image
+Allow: /images/
+Allow: /android-chrome-512x512.png
+Allow: /apple-touch-icon.png
+
+User-agent: bingbot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Slurp
+Allow: /
+Crawl-delay: 1
+
+# Block admin and API routes (if any)
+User-agent: *
+Disallow: /admin/
+Disallow: /api/auth/
+
+# Allow all static assets
+User-agent: *
+Allow: /*.css$
+Allow: /*.js$
+Allow: /*.png$
+Allow: /*.jpg$
+Allow: /*.svg$
+Allow: /*.webp$
+Allow: /*.ico$
