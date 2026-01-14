@@ -2,7 +2,9 @@
 
 Thank you to the community for appreciating the tool and providing lots of feedback on it, whether through Suggestions, email, or social media! 
 
-<img width="1080" height="332" alt="image" src="https://github.com/user-attachments/assets/18b1286a-9c0a-47eb-93fb-83ade59ad963" />
+<img width="3344" height="1666" alt="image" src="https://github.com/user-attachments/assets/53d0a9e7-bbb8-4bd5-b279-039e538b0107" />
+
+<img width="3344" height="1666" alt="image" src="https://github.com/user-attachments/assets/68b974a7-fdb3-46be-9129-07b450f055c5" />
 
 
 ### Installation
@@ -61,7 +63,7 @@ My latest feature was to add the reputation system required in 4.5.0. But, victi
 The problem isn't really the money, but the lack of time to develop the technical stack and, above all, to update the data related to the various SC updates. There is currently a suggestion system in place to allow the community to report issues and changes.
 Due to a lack of personal time, I am making this repo open-source to allow anyone who wants to update, deploy, and improve it to do so.
 
-## i18n
+## i18n
 
 The application was designed to be FR/EN only.
 However, it was initially intended for FR only, hence the absence of advanced i18n tools such as svelte-i18n.
