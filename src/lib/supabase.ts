@@ -169,8 +169,8 @@ class QueryBuilder {
 	update(payload: any): this { this.writeMode = 'update'; this.payload = payload; return this; }
 	delete(..._args: any[]): this { this.writeMode = 'delete'; return this; }
 
-	upsert(payload: any): QueryResult<null> {
-		const table = getTable(this.tableName);
+	upsert(payload: any, options?: { onConflict?: string }): QueryResult<null> {
+		const table = getTable(this.tableName) as any[];
 		const items = Array.isArray(payload) ? payload : [payload];
 		const conflictFields = (options?.onConflict ?? '')
 			.split(',')
