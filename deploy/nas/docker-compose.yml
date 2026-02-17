@@ -5,9 +5,9 @@ services:
     restart: unless-stopped
     environment:
       MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD:-rootchangeme}
-      MARIADB_DATABASE: ${MARIADB_DATABASE:-wikelo}
-      MARIADB_USER: ${MARIADB_USER:-wikelo}
-      MARIADB_PASSWORD: ${MARIADB_PASSWORD:-changeme}
+      MARIADB_DATABASE: ${MARIADB_DATABASE}
+      MARIADB_USER: ${MARIADB_USER}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD}
     command: ['--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
     healthcheck:
       test: ['CMD-SHELL', 'mariadb-admin ping -h 127.0.0.1 -uroot -p$$MARIADB_ROOT_PASSWORD --silent']
@@ -26,18 +26,11 @@ services:
     container_name: sc-tool3-web
     ports:
       - '4173:4173'
+    env_file:
+      - ../../.env
     environment:
       MARIADB_HOST: mariadb
       MARIADB_PORT: 3306
-      MARIADB_USER: ${MARIADB_USER:-wikelo}
-      MARIADB_PASSWORD: ${MARIADB_PASSWORD:-changeme}
-      MARIADB_DATABASE: ${MARIADB_DATABASE:-wikelo}
-      MARIADB_CONNECTION_LIMIT: ${MARIADB_CONNECTION_LIMIT:-10}
-      PUBLIC_ENABLE_DISCORD_AUTH: ${PUBLIC_ENABLE_DISCORD_AUTH:-false}
-      PUBLIC_ENABLE_TWITCH_AUTH: ${PUBLIC_ENABLE_TWITCH_AUTH:-false}
-      PUBLIC_ENABLE_GOOGLE_AUTH: ${PUBLIC_ENABLE_GOOGLE_AUTH:-false}
-      PUBLIC_SHOW_FULL_LOCATION_DETAILS: ${PUBLIC_SHOW_FULL_LOCATION_DETAILS:-false}
-      PUBLIC_OAUTH_REDIRECT_URL: ${PUBLIC_OAUTH_REDIRECT_URL:-http://127.0.0.1:4173}
     depends_on:
       mariadb:
         condition: service_healthy

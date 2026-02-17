@@ -63,38 +63,21 @@ From the repository root:
 docker compose -f deploy/nas/docker-compose.yml --env-file .env up -d --build
 ```
 
-Or use the helper script (recommended; works from any current directory):
+Or from inside `deploy/nas` (use an absolute env path to avoid path resolution issues in Container Station):
 
 ```bash
-./deploy/nas/compose.sh up -d --build
-```
-
-If your NAS paths are:
-- Compose: `\\NASFFA2AB\Public2\Container\SC-Tools3\deploy\nas\docker-compose.yml`
-- Env: `\\NASFFA2AB\Public2\Container\SC-Tools3\.env`
-
-then the equivalent NAS shell paths are:
-- Compose: `/share/Public2/Container/SC-Tools3/deploy/nas/docker-compose.yml`
-- Env: `/share/Public2/Container/SC-Tools3/.env`
-
-and the direct command is:
-
-```bash
-docker compose -f /share/Public2/Container/SC-Tools3/deploy/nas/docker-compose.yml --env-file /share/Public2/Container/SC-Tools3/.env up -d --build
+docker compose --env-file /share/Container/sc-tool3/.env up -d --build
 ```
 
 The app is exposed on `4173` and includes a container healthcheck.
 
-This Compose stack also runs a local `mariadb` service with a persistent volume (`sc-tool3-mariadb-data`) so the web app does not need to reach a LAN database IP. The web service no longer uses `env_file` inside Compose, which avoids errors like `Couldn't find env file: /root/.env` when launched from different working directories.
+This Compose stack also runs a local `mariadb` service with a persistent volume (`sc-tool3-mariadb-data`) so the web app does not need to reach a LAN database IP.
 
 ### Initialize MariaDB schema (first run)
 
-After containers are up, load env vars and import the auth schema into the MariaDB container:
+After containers are up, import the auth schema into the MariaDB container:
 
 ```bash
-set -a
-. ./.env
-set +a
 docker exec -i sc-tool3-mariadb mariadb -uroot -p"$MARIADB_ROOT_PASSWORD" "$MARIADB_DATABASE" < MARIADB_AUTH_SCHEMA.sql
 ```
 
