@@ -17,7 +17,8 @@
 		"test": "npm run test:unit -- --run",
 		"migrate:images": "tsx scripts/migrate-images-to-s3.ts",
 		"check:image-urls": "tsx scripts/update-urls-to-s3.ts",
-		"check:db-urls": "tsx scripts/check-db-urls.ts"
+		"check:db-urls": "tsx scripts/check-db-urls.ts",
+		"rebuild:sheet-db": "node scripts/rebuild-mock-db-from-googlesheet.mjs"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^1.4.0",
