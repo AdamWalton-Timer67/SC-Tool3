@@ -164,26 +164,10 @@ class QueryBuilder {
 
 	constructor(private tableName: string) {}
 
-	select(..._args: any[]): this {
-		return this;
-	}
-
-	insert(payload: any): this {
-		this.writeMode = 'insert';
-		this.payload = payload;
-		return this;
-	}
-
-	update(payload: any): this {
-		this.writeMode = 'update';
-		this.payload = payload;
-		return this;
-	}
-
-	delete(..._args: any[]): this {
-		this.writeMode = 'delete';
-		return this;
-	}
+	select(..._args: any[]): this { return this; }
+	insert(payload: any): this { this.writeMode = 'insert'; this.payload = payload; return this; }
+	update(payload: any): this { this.writeMode = 'update'; this.payload = payload; return this; }
+	delete(..._args: any[]): this { this.writeMode = 'delete'; return this; }
 
 	upsert(payload: any, options?: { onConflict?: string }): QueryResult<null> {
 		const table = getTable(this.tableName) as any[];
@@ -210,14 +194,8 @@ class QueryBuilder {
 				table.push({ id: item.id ?? `mock_${Date.now()}_${Math.random()}`, ...item });
 			}
 		}
-
-		return Promise.resolve({ data: null, error: null });
 	}
-
-	eq(field: string, value: any): this {
-		this.filters.push({ type: 'eq', field, value });
-		return this;
-	}
+	eq(field: string, value: any): this { this.filters.push({ type: 'eq', field, value }); return this; }
 	neq(..._args: any[]): this { return this; }
 	gt(..._args: any[]): this { return this; }
 	gte(..._args: any[]): this { return this; }
