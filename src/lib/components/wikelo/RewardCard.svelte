@@ -3,7 +3,7 @@
 	import type { Reward } from '$lib/stores/wikelo.svelte';
 	import ImageWithFallback from './ImageWithFallback.svelte';
 	import SuggestionDialog from '$lib/components/SuggestionDialog.svelte';
-	import posthog from 'posthog-js';
+	import { captureEvent } from '$lib/analytics';
 
 	interface Props {
 		reward: Reward;
@@ -96,7 +96,7 @@
 
 		const requirement = reward.requirements.find((r) => r.id === requirementId);
 		wikeloStore.toggleRequirement(reward.id, requirementId);
-		posthog.capture('wikelo_requirement_checkbox_toggled', {
+		captureEvent('wikelo_requirement_checkbox_toggled', {
 			rewardId: reward.id,
 			rewardName: getText(reward.name),
 			requirementId: requirementId,
@@ -117,7 +117,7 @@
 			return;
 		}
 		await wikeloStore.resetReward(reward.id);
-		posthog.capture('wikelo_reward_restarted', {
+		captureEvent('wikelo_reward_restarted', {
 			rewardId: reward.id,
 			rewardName: getText(reward.name),
 			newCompletionCount: wikeloStore.getCompletionCount(reward.id)
@@ -132,7 +132,7 @@
 			return;
 		}
 		await wikeloStore.toggleFavoriteReward(reward.id);
-		posthog.capture('wikelo_favorite_toggled', {
+		captureEvent('wikelo_favorite_toggled', {
 			rewardId: reward.id,
 			rewardName: getText(reward.name),
 			isFavorite: !isFavorite
@@ -331,7 +331,7 @@
 												e.stopPropagation();
 												if (ingredient) {
 													wikeloStore.openIngredientDialog(ingredient);
-													posthog.capture('wikelo_ingredient_details_clicked', {
+													captureEvent('wikelo_ingredient_details_clicked', {
 														ingredientId: ingredient.id,
 														ingredientName: getText(ingredient.name),
 														fromReward: reward.id,
@@ -393,7 +393,7 @@
 							<button
 								onclick={() => {
 									wikeloStore.openShipDialog(reward);
-									posthog.capture('wikelo_loadout_clicked', {
+									captureEvent('wikelo_loadout_clicked', {
 										rewardId: reward.id,
 										rewardName: getText(reward.name),
 										rewardType: getText(reward.type)
@@ -584,7 +584,7 @@
 					<button
 						onclick={() => {
 							wikeloStore.openShipDialog(reward);
-							posthog.capture('wikelo_loadout_clicked', {
+							captureEvent('wikelo_loadout_clicked', {
 								rewardId: reward.id,
 								rewardName: getText(reward.name),
 								rewardType: getText(reward.type)
@@ -671,7 +671,7 @@
 										e.stopPropagation();
 										if (ingredient) {
 											wikeloStore.openIngredientDialog(ingredient);
-											posthog.capture('wikelo_ingredient_details_clicked', {
+											captureEvent('wikelo_ingredient_details_clicked', {
 												ingredientId: ingredient.id,
 												ingredientName: getText(ingredient.name),
 												fromReward: reward.id,

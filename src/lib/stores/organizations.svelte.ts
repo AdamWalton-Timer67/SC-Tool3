@@ -50,7 +50,7 @@ class OrganizationsStore {
 				this.currentUser = { id: user.id, email: user.email };
 			}
 
-			supabase.auth.onAuthStateChange(async (event, session) => {
+			supabase.auth.onAuthStateChange(async (event: any, session: any) => {
 				if (event === 'SIGNED_IN' && session?.user) {
 					this.currentUser = {
 						id: session.user.id,
