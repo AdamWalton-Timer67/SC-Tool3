@@ -545,7 +545,7 @@
 					<!-- Ingredients Grid - Max 2 per row -->
 					<div class="grid grid-cols-1 gap-4 sm:gap-6 lg:grid-cols-2">
 						{#each group.ingredients as ingredient}
-							{@const quantity = wikeloStore.getInventoryQuantity(ingredient.id)}
+							{@const quantity = wikeloStore.inventory[ingredient.id] ?? 0}
 							<div
 								class="group relative overflow-hidden rounded-xl border border-white/10 bg-slate-900/85 p-4 backdrop-blur-xl transition-all hover:border-cyan-500/50 sm:p-6"
 							>
