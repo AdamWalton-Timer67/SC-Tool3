@@ -52,8 +52,7 @@ supabase db push
 
 - **Frontend**: SvelteKit 5, TailwindCSS 4
 - **Backend**: Supabase (Auth + Database)
-- **Deployment**: Vercel
-- **Analytics**: PostHog
+- **Deployment**: Self-hosted (QNAP NAS / Docker)
 
 ## Context
 
@@ -67,3 +66,12 @@ Due to a lack of personal time, I am making this repo open-source to allow anyon
 
 The application was designed to be FR/EN only.
 However, it was initially intended for FR only, hence the absence of advanced i18n tools such as svelte-i18n.
+
+## NAS migration (QNAP TS-251+ / QTS 5.2.8)
+
+This repository is now prepared for a NAS self-hosted deployment:
+
+- **Supabase remains supported**, but should be self-hosted locally on the NAS (Container Station / Docker).
+- **Analytics were removed** from the frontend code.
+
+Read the full NAS guide in [`NAS_QNAP_DEPLOYMENT.md`](NAS_QNAP_DEPLOYMENT.md).

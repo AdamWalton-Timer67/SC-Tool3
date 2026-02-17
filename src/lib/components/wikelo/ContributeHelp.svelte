@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { wikeloStore } from '$lib/stores/wikelo.svelte';
-	import posthog from 'posthog-js';
+	import { captureEvent } from '$lib/analytics';
 
 	const t = $derived(
 		wikeloStore.currentLang === 'fr'
@@ -21,7 +21,7 @@
 	);
 
 	function handleEmailClick() {
-		posthog.capture('contribute_help_email_clicked', {
+		captureEvent('contribute_help_email_clicked', {
 			timestamp: new Date().toISOString(),
 			lang: wikeloStore.currentLang
 		});
