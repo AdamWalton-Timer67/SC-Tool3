@@ -39,11 +39,36 @@ npm run preview -- --host 0.0.0.0 --port 4173
 
 A compose file is included at `deploy/nas/docker-compose.yml`.
 
+Run from the **repository root** (folder containing `deploy/`):
+
 ```bash
 docker compose -f deploy/nas/docker-compose.yml up -d --build
 ```
 
+Or run from inside `deploy/nas`:
+
+```bash
+docker compose up -d --build
+```
+
+If you see `no such file or directory`, verify:
+
+- you are inside the checked-out repository
+- the file `deploy/nas/docker-compose.yml` exists
+- the file `.env` exists at the repository root (compose loads `../../.env`)
+
 The app will be exposed on `4173`.
+
+If you see a Rollup error like `Cannot find module @rollup/rollup-linux-x64-musl`, clean old dependencies and recreate:
+
+```bash
+# from repo root
+docker compose -f deploy/nas/docker-compose.yml down -v
+rm -rf node_modules
+docker compose -f deploy/nas/docker-compose.yml up -d --build
+```
+
+The compose file mounts a dedicated Docker volume at `/app/node_modules` so dependencies are installed for the container OS/arch (Alpine musl), avoiding host/container binary mismatches.
 
 ## 4) Reverse proxy / SSL (recommended)
 
