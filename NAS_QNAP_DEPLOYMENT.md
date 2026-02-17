@@ -44,13 +44,13 @@ The NAS deployment now uses a dedicated image build (`deploy/nas/Dockerfile`) in
 From the repository root:
 
 ```bash
-docker compose -f deploy/nas/docker-compose.yml up -d --build
+docker compose --env-file .env -f deploy/nas/docker-compose.yml up -d --build
 ```
 
 Or from inside `deploy/nas`:
 
 ```bash
-docker compose up -d --build
+docker compose --env-file ../../.env up -d --build
 ```
 
 The app is exposed on `4173` and includes a container healthcheck.
