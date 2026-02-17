@@ -33,23 +33,6 @@ const locationBloom = {
 export const mockDb = {
 	rewards: [
 		{
-			id: 'reward_karna',
-			name_en: 'Karna Plasma Rifle',
-			name_fr: 'Fusil Plasma Karna',
-			type_en: 'Weapon',
-			type_fr: 'Arme',
-			category: 'weapons',
-			rarity: 'epic',
-			version: '4.0',
-			favor_cost: 120,
-			description_en: 'Reliable plasma rifle for medium range combat.',
-			description_fr: 'Fusil plasma fiable pour le combat à moyenne portée.',
-			image_url: '/images/wikelo/karna.webp',
-			has_loadout: false,
-			gives: 1,
-			not_released: false
-		},
-		{
 			id: 'reward_polaris',
 			name_en: 'Polaris',
 			name_fr: 'Polaris',
@@ -1064,7 +1047,7 @@ export const mockDb = {
 			favor_cost: 0,
 			description_en: 'Reward from Wikelo exchange contracts.',
 			description_fr: 'Récompense issue des contrats Wikelo.',
-			image_url: '/images/wikelo/unavailable.png',
+			image_url: '/images/wikelo/starlancer_tac.png',
 			has_loadout: false,
 			gives: 1,
 			not_released: false
@@ -1132,7 +1115,7 @@ export const mockDb = {
 			favor_cost: 0,
 			description_en: 'Reward from Wikelo exchange contracts.',
 			description_fr: 'Récompense issue des contrats Wikelo.',
-			image_url: '/images/wikelo/unavailable.png',
+			image_url: '/images/wikelo/a2_hercules.png',
 			has_loadout: false,
 			gives: 1,
 			not_released: false
@@ -1171,6 +1154,7 @@ export const mockDb = {
 			gives: 1,
 			not_released: false
 		},
+
 		{
 			id: 'reward_idris_p',
 			name_en: 'Idris-P',
