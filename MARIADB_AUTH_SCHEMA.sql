@@ -8,6 +8,44 @@ CREATE TABLE IF NOT EXISTS auth_users (
   raw_user_meta_data LONGTEXT NULL
 );
 
+CREATE TABLE IF NOT EXISTS profiles (
+  id CHAR(36) PRIMARY KEY,
+  display_name VARCHAR(120) NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS user_roles (
+  id CHAR(36) PRIMARY KEY,
+  user_id CHAR(36) NOT NULL,
+  role VARCHAR(32) NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_user_roles_user_id (user_id)
+);
+
+INSERT INTO auth_users (id, email, password, approved, created_at, raw_user_meta_data)
+VALUES (
+  'local-user-1',
+  'local@test.lan',
+  'admin123',
+  1,
+  NOW(),
+  '{"role":"admin","display_name":"Local Tester"}'
+)
+ON DUPLICATE KEY UPDATE
+  password = VALUES(password),
+  approved = VALUES(approved),
+  raw_user_meta_data = VALUES(raw_user_meta_data);
+
+INSERT INTO profiles (id, display_name, created_at)
+VALUES ('local-user-1', 'Local Tester', NOW())
+ON DUPLICATE KEY UPDATE display_name = VALUES(display_name);
+
+INSERT INTO user_roles (id, user_id, role)
+VALUES ('role_local_admin', 'local-user-1', 'admin')
+ON DUPLICATE KEY UPDATE
+  role = VALUES(role),
+  user_id = VALUES(user_id);
+
 SET @idx_exists := (
   SELECT COUNT(*)
   FROM information_schema.statistics

@@ -37,6 +37,7 @@ services:
       PORT_HEADER: x-forwarded-port
       # Public origin seen by browsers (set to your NAS/reverse-proxy URL)
       ORIGIN: ${ORIGIN:-http://localhost:4173}
+      CSRF_TRUSTED_ORIGINS: ${CSRF_TRUSTED_ORIGINS:-}
     depends_on:
       mariadb:
         condition: service_healthy
