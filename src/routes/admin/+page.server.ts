@@ -136,6 +136,52 @@ export const actions: Actions = {
 
 		throw redirect(303, '/admin');
 	},
+
+	acceptPendingUserAsAdmin: async ({ request, locals }) => {
+		const formData = await request.formData();
+		const userId = formData.get('userId');
+
+		if (typeof userId !== 'string' || !userId) {
+			return fail(400, { error: 'Missing user id.' });
+		}
+
+		const { error, data } = await locals.supabase
+			.from('auth.users')
+			.update({ approved: 1 })
+			.eq('id', userId)
+			.select('id');
+
+		if (error) {
+			return fail(500, { error: error.message || 'Failed to approve user as admin.' });
+		}
+
+		if (!data || data.length === 0) {
+			return fail(404, { error: 'User not found.' });
+		}
+
+		const { data: existingRoles } = await locals.supabase.from('user_roles').select('id').eq('user_id', userId).limit(1);
+		const existingRoleId = Array.isArray(existingRoles) && existingRoles.length > 0 ? existingRoles[0]?.id : null;
+
+		if (existingRoleId) {
+			const { error: updateRoleError } = await locals.supabase
+				.from('user_roles')
+				.update({ role: 'admin' })
+				.eq('id', existingRoleId);
+			if (updateRoleError) {
+				return fail(500, { error: updateRoleError.message || 'Failed to grant admin role.' });
+			}
+		} else {
+			const roleId = `role_admin_${Date.now()}`;
+			const { error: insertRoleError } = await locals.supabase
+				.from('user_roles')
+				.insert({ id: roleId, user_id: userId, role: 'admin' });
+			if (insertRoleError) {
+				return fail(500, { error: insertRoleError.message || 'Failed to create admin role.' });
+			}
+		}
+
+		return { success: true };
+	},
 	rejectPendingUser: async ({ request, locals }) => {
 		const formData = await request.formData();
 		const userId = formData.get('userId');
