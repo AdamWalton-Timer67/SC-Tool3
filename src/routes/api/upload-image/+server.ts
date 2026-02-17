@@ -1,6 +1,6 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { uploadToS3 } from '$lib/server/s3';
+import { uploadToLocalStorage } from '$lib/server/local-storage';
 
 export const POST: RequestHandler = async ({ request }) => {
 	try {
@@ -11,8 +11,8 @@ export const POST: RequestHandler = async ({ request }) => {
 			return json({ error: 'No file provided' }, { status: 400 });
 		}
 
-		// Upload to S3
-		const url = await uploadToS3(file, 'images');
+		// Upload to local NAS storage
+		const url = await uploadToLocalStorage(file, 'images');
 
 		return json({
 			url: url,

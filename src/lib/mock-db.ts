@@ -149,7 +149,13 @@ export const mockDb = {
 		{ id: 'local-user-1', display_name: 'Local Tester', created_at: now }
 	],
 	auth_users: [
-		{ id: 'local-user-1', email: 'local@test.lan', raw_user_meta_data: { role: 'admin' } }
+		{
+			id: 'local-user-1',
+			email: 'local@test.lan',
+			password: 'admin123',
+			approved: true,
+			raw_user_meta_data: { role: 'admin', display_name: 'Local Tester' }
+		}
 	],
 	user_inventory: [],
 	user_reward_ingredients: [],

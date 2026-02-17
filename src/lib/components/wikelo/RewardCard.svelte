@@ -287,7 +287,7 @@
 									{@const isObtained = wikeloStore.currentUser
 										? wikeloStore.isRequirementObtained(reward.id, requirement.id)
 										: false}
-									{@const availableQuantity = wikeloStore.getInventoryQuantity(requirement.id)}
+									{@const availableQuantity = wikeloStore.inventory[requirement.id] ?? 0}
 
 									<label
 										class="group/ingredient relative flex cursor-pointer items-center gap-2 overflow-hidden rounded-lg border px-3 py-1.5 text-sm transition-all hover:bg-white/10
@@ -619,7 +619,7 @@
 							{@const isObtained = wikeloStore.currentUser
 								? wikeloStore.isRequirementObtained(reward.id, requirement.id)
 								: false}
-							{@const availableQuantity = wikeloStore.getInventoryQuantity(requirement.id)}
+							{@const availableQuantity = wikeloStore.inventory[requirement.id] ?? 0}
 
 							<label
 								class="group/ingredient relative flex w-full cursor-pointer items-center gap-3 overflow-hidden rounded-lg border p-3 transition-all hover:bg-white/10
