@@ -2,7 +2,7 @@
 	import { wikeloStore } from '$lib/stores/wikelo.svelte';
 	import { browser } from '$app/environment';
 	import { page } from '$app/state';
-	import posthog from 'posthog-js';
+	import { captureEvent } from '$lib/analytics';
 
 	// State for hiding/showing the contact info - Hidden by default
 	let isHidden = $state(true);
@@ -53,7 +53,7 @@
 		isHidden = true;
 		if (browser) {
 			localStorage.setItem('contactInfoHidden', 'true');
-			posthog.capture('contact_info_hidden', {
+			captureEvent('contact_info_hidden', {
 				timestamp: new Date().toISOString()
 			});
 		}
@@ -63,7 +63,7 @@
 		isHidden = false;
 		if (browser) {
 			localStorage.setItem('contactInfoHidden', 'false');
-			posthog.capture('contact_info_shown', {
+			captureEvent('contact_info_shown', {
 				timestamp: new Date().toISOString()
 			});
 		}

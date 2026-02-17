@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { wikeloStore } from '$lib/stores/wikelo.svelte';
 	import { browser } from '$app/environment';
-	import posthog from 'posthog-js';
+	import { captureEvent } from '$lib/analytics';
 
 	const introMission = $derived(wikeloStore.introMission);
 	const getText = (obj: { en: string; fr: string } | string) => {
@@ -38,7 +38,7 @@
 		isHidden = true;
 		if (browser) {
 			localStorage.setItem('introMissionHidden', 'true');
-			posthog.capture('intro_mission_hidden', {
+			captureEvent('intro_mission_hidden', {
 				timestamp: new Date().toISOString()
 			});
 		}
@@ -48,7 +48,7 @@
 		isHidden = false;
 		if (browser) {
 			localStorage.setItem('introMissionHidden', 'false');
-			posthog.capture('intro_mission_shown', {
+			captureEvent('intro_mission_shown', {
 				timestamp: new Date().toISOString()
 			});
 		}
