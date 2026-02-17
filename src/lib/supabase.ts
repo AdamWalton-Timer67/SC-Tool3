@@ -127,6 +127,20 @@ function applyFilters(rows: any[], filters: Filter[]) {
 	return rows.filter((row) => filters.every((f) => (f.type === 'eq' ? row[f.field] === f.value : true)));
 }
 
+
+const BROWSER_MARIA_WIKELO_TABLES = new Set(['rewards', 'ingredients', 'reward_ingredients', 'reputation_requirements']);
+
+async function fetchWikeloTableFromServer(tableName: string): Promise<any[] | null> {
+	if (!browser || !BROWSER_MARIA_WIKELO_TABLES.has(tableName)) return null;
+	try {
+		const response = await fetch(`/api/wikelo/${tableName}`);
+		if (!response.ok) return null;
+		const payload = await response.json();
+		return Array.isArray(payload?.data) ? payload.data : [];
+	} catch {
+		return null;
+	}
+}
 function maybeWithRelations(tableName: string, rows: any[]) {
 	if (tableName === 'reward_ingredients') {
 		return rows.map((ri) => ({
@@ -232,7 +246,8 @@ class QueryBuilder {
 	}
 
 	private async execute(): QueryResult<any> {
-		const table = getTable(this.tableName);
+		const serverRows = this.writeMode ? null : await fetchWikeloTableFromServer(this.tableName);
+		const table = serverRows ?? getTable(this.tableName);
 		if (this.writeMode === 'insert') {
 			const rows = Array.isArray(this.payload) ? this.payload : [this.payload];
 			const created = rows.map((row) => ({ id: row.id ?? `mock_${Date.now()}_${Math.random()}`, ...row }));
