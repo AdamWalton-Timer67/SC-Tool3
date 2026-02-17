@@ -60,9 +60,8 @@
 		"@aws-sdk/s3-request-presigner": "^3.929.0",
 		"@supabase/ssr": "^0.5.2",
 		"@supabase/supabase-js": "^2.39.0",
-		"@sveltejs/adapter-vercel": "^6.1.1",
 		"dotenv": "^17.2.3",
-		"posthog-js": "^1.281.0",
-		"zod": "^4.1.13"
+		"zod": "^4.1.13",
+		"@sveltejs/adapter-vercel": "^6.1.1"
 	}
 }

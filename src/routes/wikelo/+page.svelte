@@ -13,7 +13,7 @@
 	import AuthDialog from '$lib/components/AuthDialog.svelte';
 	import DataSources from '$lib/components/wikelo/DataSources.svelte';
 	import LoginRequiredDialog from '$lib/components/LoginRequiredDialog.svelte';
-	import posthog from 'posthog-js';
+	import { captureEvent } from '$lib/analytics';
 
 	const stats = $derived(wikeloStore.stats);
 	const filteredRewards = $derived(wikeloStore.filteredRewards);
@@ -39,7 +39,7 @@
 		}
 
 		// Track page view
-		posthog.capture('wikelo_page_viewed', {
+		captureEvent('wikelo_page_viewed', {
 			timestamp: new Date().toISOString()
 		});
 	});
@@ -455,7 +455,7 @@
 					type="text"
 					bind:value={wikeloStore.searchQuery}
 					oninput={() => {
-						posthog.capture('wikelo_search_used', {
+						captureEvent('wikelo_search_used', {
 							query: wikeloStore.searchQuery,
 							timestamp: new Date().toISOString()
 						});
@@ -471,7 +471,7 @@
 				<button
 					onclick={() => {
 						wikeloStore.currentRarity = 'all';
-						posthog.capture('wikelo_rarity_filter_changed', { rarity: 'all' });
+						captureEvent('wikelo_rarity_filter_changed', { rarity: 'all' });
 					}}
 					class="cursor-pointer rounded-lg border px-4 py-2 text-sm font-semibold tracking-wider uppercase transition-all
 						{wikeloStore.currentRarity === 'all'
@@ -483,7 +483,7 @@
 				<button
 					onclick={() => {
 						wikeloStore.currentRarity = 'legendary';
-						posthog.capture('wikelo_rarity_filter_changed', { rarity: 'legendary' });
+						captureEvent('wikelo_rarity_filter_changed', { rarity: 'legendary' });
 					}}
 					class="cursor-pointer rounded-lg border px-4 py-2 text-sm font-semibold tracking-wider uppercase transition-all
 						{wikeloStore.currentRarity === 'legendary'
@@ -495,7 +495,7 @@
 				<button
 					onclick={() => {
 						wikeloStore.currentRarity = 'epic';
-						posthog.capture('wikelo_rarity_filter_changed', { rarity: 'epic' });
+						captureEvent('wikelo_rarity_filter_changed', { rarity: 'epic' });
 					}}
 					class="cursor-pointer rounded-lg border px-4 py-2 text-sm font-semibold tracking-wider uppercase transition-all
 						{wikeloStore.currentRarity === 'epic'
@@ -507,7 +507,7 @@
 				<button
 					onclick={() => {
 						wikeloStore.currentRarity = 'rare';
-						posthog.capture('wikelo_rarity_filter_changed', { rarity: 'rare' });
+						captureEvent('wikelo_rarity_filter_changed', { rarity: 'rare' });
 					}}
 					class="cursor-pointer rounded-lg border px-4 py-2 text-sm font-semibold tracking-wider uppercase transition-all
 						{wikeloStore.currentRarity === 'rare'
@@ -519,7 +519,7 @@
 				<button
 					onclick={() => {
 						wikeloStore.currentRarity = 'uncommon';
-						posthog.capture('wikelo_rarity_filter_changed', { rarity: 'uncommon' });
+						captureEvent('wikelo_rarity_filter_changed', { rarity: 'uncommon' });
 					}}
 					class="cursor-pointer rounded-lg border px-4 py-2 text-sm font-semibold tracking-wider uppercase transition-all
 						{wikeloStore.currentRarity === 'uncommon'
@@ -531,7 +531,7 @@
 				<button
 					onclick={() => {
 						wikeloStore.currentRarity = 'common';
-						posthog.capture('wikelo_rarity_filter_changed', { rarity: 'common' });
+						captureEvent('wikelo_rarity_filter_changed', { rarity: 'common' });
 					}}
 					class="cursor-pointer rounded-lg border px-4 py-2 text-sm font-semibold tracking-wider uppercase transition-all
 						{wikeloStore.currentRarity === 'common'
@@ -550,7 +550,7 @@
 				<button
 					onclick={() => {
 						wikeloStore.viewMode = 'grid';
-						posthog.capture('wikelo_view_mode_changed', { viewMode: 'grid' });
+						captureEvent('wikelo_view_mode_changed', { viewMode: 'grid' });
 					}}
 					class="cursor-pointer rounded-lg border px-4 py-1.5 font-semibold transition-all
 						{wikeloStore.viewMode === 'grid'
@@ -564,7 +564,7 @@
 				<button
 					onclick={() => {
 						wikeloStore.viewMode = 'list';
-						posthog.capture('wikelo_view_mode_changed', { viewMode: 'list' });
+						captureEvent('wikelo_view_mode_changed', { viewMode: 'list' });
 					}}
 					class="cursor-pointer rounded-lg border px-4 py-1.5 font-semibold transition-all
 						{wikeloStore.viewMode === 'list'
@@ -580,7 +580,7 @@
 			<button
 				onclick={() => {
 					wikeloStore.favoritesOnly = !wikeloStore.favoritesOnly;
-					posthog.capture('wikelo_favorites_filter_toggled', { enabled: wikeloStore.favoritesOnly });
+					captureEvent('wikelo_favorites_filter_toggled', { enabled: wikeloStore.favoritesOnly });
 				}}
 				class="cursor-pointer flex items-center gap-2 rounded-lg border transition-all hover:scale-105 px-3 py-2 sm:px-4
 					{wikeloStore.favoritesOnly
@@ -596,7 +596,7 @@
 			<button
 				onclick={() => {
 					wikeloStore.toggleCompactView();
-					posthog.capture('wikelo_compact_mode_toggled', { enabled: wikeloStore.isCompactView });
+					captureEvent('wikelo_compact_mode_toggled', { enabled: wikeloStore.isCompactView });
 				}}
 				class="cursor-pointer flex items-center gap-2 rounded-lg border px-3 py-1.5 sm:px-4 font-semibold transition-all
 					{wikeloStore.isCompactView
@@ -615,7 +615,7 @@
 		<button
 			onclick={() => {
 				wikeloStore.currentCategory = 'all';
-				posthog.capture('wikelo_category_filter_changed', { category: 'all' });
+				captureEvent('wikelo_category_filter_changed', { category: 'all' });
 			}}
 			class="flex cursor-pointer items-center gap-1 rounded-lg border px-3 py-2 text-xs font-semibold tracking-wider whitespace-nowrap uppercase transition-all sm:gap-2 sm:px-6 sm:py-3 sm:text-sm {wikeloStore.currentCategory ===
 			'all'
@@ -630,7 +630,7 @@
 			<button
 				onclick={() => {
 					wikeloStore.currentCategory = category.id;
-					posthog.capture('wikelo_category_filter_changed', { category: category.id });
+					captureEvent('wikelo_category_filter_changed', { category: category.id });
 				}}
 				class="flex cursor-pointer items-center gap-1 rounded-lg border px-3 py-2 text-xs font-semibold tracking-wider whitespace-nowrap uppercase transition-all sm:gap-2 sm:px-6 sm:py-3 sm:text-sm {wikeloStore.currentCategory ===
 				category.id

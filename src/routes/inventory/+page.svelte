@@ -6,7 +6,7 @@
 	import DataSources from '$lib/components/wikelo/DataSources.svelte';
 	import ContactInfo from '$lib/components/wikelo/ContactInfo.svelte';
 	import LoginRequiredDialog from '$lib/components/LoginRequiredDialog.svelte';
-	import posthog from 'posthog-js';
+	import { captureEvent } from '$lib/analytics';
 	import {
 		getCategoryIcon,
 		getCategoryTranslation,
@@ -37,7 +37,7 @@
 		}
 
 		// Track page view
-		posthog.capture('inventory_page_viewed', {
+		captureEvent('inventory_page_viewed', {
 			timestamp: new Date().toISOString()
 		});
 	});
@@ -130,7 +130,7 @@
 
 		const num = parseInt(value) || 0;
 		wikeloStore.setInventoryQuantity(ingredientId, Math.max(0, num));
-		posthog.capture('inventory_quantity_input_changed', {
+		captureEvent('inventory_quantity_input_changed', {
 			ingredientId,
 			ingredientName,
 			newQuantity: Math.max(0, num),
@@ -145,7 +145,7 @@
 		}
 
 		wikeloStore.adjustInventoryQuantity(ingredientId, adjustment);
-		posthog.capture('inventory_quantity_button_clicked', {
+		captureEvent('inventory_quantity_button_clicked', {
 			ingredientId,
 			ingredientName,
 			adjustment,
@@ -434,7 +434,7 @@
 			<button
 				onclick={() => {
 					favoritesOnly = !favoritesOnly;
-					posthog.capture('inventory_favorites_filter_toggled', { enabled: favoritesOnly });
+					captureEvent('inventory_favorites_filter_toggled', { enabled: favoritesOnly });
 				}}
 				class="hidden cursor-pointer items-center gap-2 rounded-lg border transition-all hover:scale-105 sm:flex px-4 py-2
 					{favoritesOnly
@@ -477,7 +477,7 @@
 		<button
 			onclick={() => {
 				selectedCategory = 'all';
-				posthog.capture('inventory_category_filter_changed', { category: 'all' });
+				captureEvent('inventory_category_filter_changed', { category: 'all' });
 			}}
 			class="flex cursor-pointer items-center gap-1 rounded-lg border px-3 py-2 text-xs font-semibold tracking-wider whitespace-nowrap uppercase transition-all sm:gap-2 sm:px-6 sm:py-3 sm:text-sm {selectedCategory ===
 			'all'
@@ -492,7 +492,7 @@
 			<button
 				onclick={() => {
 					selectedCategory = category.id;
-					posthog.capture('inventory_category_filter_changed', { category: category.id });
+					captureEvent('inventory_category_filter_changed', { category: category.id });
 				}}
 				class="flex cursor-pointer items-center gap-1 rounded-lg border px-3 py-2 text-xs font-semibold tracking-wider whitespace-nowrap uppercase transition-all sm:gap-2 sm:px-6 sm:py-3 sm:text-sm {selectedCategory ===
 				category.id
@@ -564,7 +564,7 @@
 												return;
 											}
 											wikeloStore.toggleFavoriteIngredient(ingredient.id);
-											posthog.capture('inventory_favorite_toggled', {
+											captureEvent('inventory_favorite_toggled', {
 												ingredientId: ingredient.id,
 												ingredientName: wikeloStore.getText(ingredient.name),
 												isFavorite: !wikeloStore.isFavoriteIngredient(ingredient.id)

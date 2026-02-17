@@ -3,7 +3,7 @@
 	import ImageWithFallback from './ImageWithFallback.svelte';
 	import ContributeHelp from './ContributeHelp.svelte';
 	import SuggestionDialog from '$lib/components/SuggestionDialog.svelte';
-	import posthog from 'posthog-js';
+	import { captureEvent } from '$lib/analytics';
 
 	const ingredient = $derived(wikeloStore.selectedIngredient);
 	const isOpen = $derived(ingredient !== null);
@@ -71,7 +71,7 @@
 			// For now, let's just call it.
 		}
 		await wikeloStore.toggleFavoriteIngredient(ingredient.id);
-		posthog.capture('wikelo_ingredient_favorite_toggled', {
+		captureEvent('wikelo_ingredient_favorite_toggled', {
 			ingredientId: ingredient.id,
 			ingredientName: getText(ingredient.name),
 			isFavorite: !isFavorite
