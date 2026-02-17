@@ -1,7 +1,6 @@
 <script lang="ts">
 	import '../app.css';
 	import AuthDialog from '$lib/components/AuthDialog.svelte';
-	import MaintenanceBanner from '$lib/components/MaintenanceBanner.svelte';
 	import { navigating } from '$app/stores';
 
 	let { children } = $props();
@@ -22,8 +21,6 @@
 	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 	<link rel="manifest" href="/site.webmanifest" />
 </svelte:head>
-
-<MaintenanceBanner />
 
 {@render children?.()}
 
