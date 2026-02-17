@@ -1,6 +1,6 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { uploadImageVariants } from '$lib/server/s3';
+import { uploadLocalVariants } from '$lib/server/local-storage';
 
 /**
  * Upload optimized images with multiple variants
@@ -20,19 +20,11 @@ export const POST: RequestHandler = async ({ request }) => {
 			);
 		}
 
-		// Upload all variants to S3
-		const urls = await Promise.all([
-			uploadImageVariants(thumbnail, 'images/thumbnails'),
-			uploadImageVariants(medium, 'images/medium'),
-			uploadImageVariants(original, 'images/original')
-		]);
+		// Upload all variants to local NAS storage
+		const urls = await uploadLocalVariants({ thumbnail, medium, original }, 'images');
 
 		return json({
-			urls: {
-				thumbnail: urls[0].original,
-				medium: urls[1].original,
-				original: urls[2].original
-			},
+			urls,
 			sizes: {
 				thumbnail: thumbnail.size,
 				medium: medium.size,

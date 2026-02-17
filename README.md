@@ -23,15 +23,26 @@ npm run dev
 ## 📦 Tech
 
 - **Frontend**: SvelteKit 5, TailwindCSS 4
-- **Backend**: Supabase (Auth + Database)
+- **Backend**: Local mock database (JSON/in-memory)
 - **Deployment**: Self-hosted (QNAP NAS / Docker)
 
-- **Supabase removed completely** from runtime and dependencies.
+- **Supabase/S3 are not required at runtime** (NAS local-only mode).
 - **Analytics removed** from frontend runtime.
-- User/session features that depended on Supabase are disabled in free mode.
+- User/session features are limited to local-mode behavior.
 - A built-in in-memory mock database now includes sample rewards, ingredients, locations, organizations, and suggestions for testing.
 
 Read the full NAS guide in [`NAS_QNAP_DEPLOYMENT.md`](NAS_QNAP_DEPLOYMENT.md).
+
+## 🔐 Local NAS authentication
+
+- Login is enabled in local mode (no Supabase required).
+- New signups are created as **pending** and cannot sign in until approved by an admin.
+- Default local admin account (change after first login):
+  - Email: `local@test.lan`
+  - Password: `admin123`
+- Admin approval APIs:
+  - `GET /api/admin/users/pending`
+  - `POST /api/admin/users/:id/approve`
 
 ## i18n
 
@@ -42,7 +53,7 @@ However, it was initially intended for FR only, hence the absence of advanced i1
 
 This repository is now prepared for a NAS self-hosted deployment:
 
-- **Supabase remains supported**, but should be self-hosted locally on the NAS (Container Station / Docker).
+- **Runs fully locally on NAS** (no Supabase, no S3).
 - **Analytics were removed** from the frontend code.
 
 Read the full NAS guide in [`NAS_QNAP_DEPLOYMENT.md`](NAS_QNAP_DEPLOYMENT.md).

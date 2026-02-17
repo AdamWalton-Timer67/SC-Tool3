@@ -1,7 +1,7 @@
 import { ImageOptimizer } from './utils/imageOptimizer';
 
 /**
- * Simple upload function to upload images via S3
+ * Simple upload function to upload images to local NAS storage
  */
 export async function uploadImage(file: File): Promise<string> {
 	const formData = new FormData();

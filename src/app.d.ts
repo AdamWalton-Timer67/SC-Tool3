@@ -1,11 +1,17 @@
 // See https://svelte.dev/docs/kit/types#app.d.ts
 // for information about these interfaces
 
-type Session = null;
-
 type User = {
 	id: string;
 	email?: string;
+	created_at?: string;
+	last_sign_in_at?: string;
+	user_metadata?: Record<string, unknown>;
+};
+
+type Session = {
+	access_token: string;
+	user: User;
 };
 
 declare global {

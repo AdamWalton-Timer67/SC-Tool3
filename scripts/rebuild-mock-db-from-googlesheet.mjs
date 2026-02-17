@@ -1,9 +1,13 @@
 #!/usr/bin/env node
 import fs from 'node:fs/promises';
+import { execFile } from 'node:child_process';
+import { promisify } from 'node:util';
 
-const SHEET_ID = '1ji0q_pp6iW35RG1YyFEsv-lsmZOaCStJXGdIEdLLwhM';
+const execFileAsync = promisify(execFile);
+
+const SHEET_ID = process.env.SHEET_ID ?? '1ji0q_pp6iW35RG1YyFEsv-lsmZOaCStJXGdIEdLLwhM';
 const HTML_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/htmlview`;
-const OUTPUT_PATH = 'src/lib/mock-db.generated.json';
+const OUTPUT_PATH = process.env.OUTPUT_PATH ?? 'src/lib/mock-db.generated.json';
 
 function parseGvizPayload(raw) {
 	const match = raw.match(/setResponse\((.*)\);?\s*$/s);
@@ -11,13 +15,39 @@ function parseGvizPayload(raw) {
 	return JSON.parse(match[1]);
 }
 
+function normalizeDate(value) {
+	if (!value) return null;
+	if (/^\d{4}-\d{2}-\d{2}$/.test(value)) return value;
+
+	const us = value.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+	if (us) {
+		const [, month, day, year] = us;
+		return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+	}
+
+	const parsed = new Date(value);
+	if (!Number.isNaN(parsed.valueOf())) {
+		return parsed.toISOString().slice(0, 10);
+	}
+	return null;
+}
+
 function dateValue(cell) {
 	if (!cell) return null;
-	if (cell.f && /^\d{4}-\d{2}-\d{2}/.test(cell.f)) return cell.f.slice(0, 10);
-	if (typeof cell.v === 'string') {
-		const m = cell.v.match(/(\d{4}-\d{2}-\d{2}|\d{1,2}\/\d{1,2}\/\d{4})/);
-		if (m) return m[1];
+
+	if (typeof cell.f === 'string') {
+		const f = cell.f.trim();
+		const iso = f.match(/\d{4}-\d{2}-\d{2}/)?.[0];
+		if (iso) return iso;
+		const slash = f.match(/\d{1,2}\/\d{1,2}\/\d{4}/)?.[0];
+		if (slash) return normalizeDate(slash);
 	}
+
+	if (typeof cell.v === 'string') {
+		const fromString = normalizeDate(cell.v.trim());
+		if (fromString) return fromString;
+	}
+
 	return null;
 }
 
@@ -33,6 +63,7 @@ function sheetTableToRows(payload) {
 	const cols = payload?.table?.cols ?? [];
 	const rows = payload?.table?.rows ?? [];
 	const headers = cols.map((c, i) => (c?.label?.trim() ? c.label.trim() : `col_${i + 1}`));
+
 	return rows.map((r) => {
 		const out = {};
 		(r.c ?? []).forEach((cell, i) => {
@@ -42,25 +73,60 @@ function sheetTableToRows(payload) {
 	});
 }
 
+async function fetchTextWithCurl(url) {
+	const { stdout } = await execFileAsync('curl', ['-fsSL', '--retry', '3', '--retry-delay', '1', url], {
+		maxBuffer: 10 * 1024 * 1024
+	});
+	return stdout;
+}
+
 async function fetchText(url) {
-	const res = await fetch(url);
-	if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}`);
-	return res.text();
+	return fetchTextWithCurl(url);
+}
+
+function decodeJsString(raw) {
+	const normalized = raw
+		.replace(/\\\\x([0-9a-fA-F]{2})/g, (_, hex) => String.fromCharCode(Number.parseInt(hex, 16)))
+		.replace(/\\x([0-9a-fA-F]{2})/g, (_, hex) => String.fromCharCode(Number.parseInt(hex, 16)))
+		.replace(/\\([&>])/g, '$1');
+	try {
+		return JSON.parse(`"${normalized}"`);
+	} catch {
+		return normalized;
+	}
+}
+
+
+function parseSheetNamesFromHtml(html) {
+	const names = [];
+
+	for (const match of html.matchAll(/items\.push\(\{name:\s*"((?:\\.|[^"\\])*)"/g)) {
+		const name = decodeJsString(match[1]).trim();
+		if (name) names.push(name);
+	}
+
+	if (names.length > 0) {
+		return [...new Set(names)];
+	}
+
+	for (const match of html.matchAll(/<a[^>]+href="#[^"]*gid=\d+"[^>]*>(.*?)<\/a>/gsi)) {
+		const text = match[1]
+			.replace(/<[^>]*>/g, ' ')
+			.replace(/&nbsp;/gi, ' ')
+			.trim();
+		if (text) names.push(text);
+	}
+
+	return [...new Set(names)];
 }
 
 async function main() {
-	console.log('Downloading sheet index...');
+	console.log(`Downloading sheet index for ${SHEET_ID}...`);
 	const html = await fetchText(HTML_URL);
-
-	const names = Array.from(
-		html.matchAll(/<td[^>]*>([^<]+)<\/td>/g),
-		(m) => m[1].trim()
-	)
-		.filter(Boolean)
-		.filter((value, i, arr) => arr.indexOf(value) === i);
+	const names = parseSheetNamesFromHtml(html);
 
 	if (names.length === 0) {
-		throw new Error('No sheet names found in htmlview export.');
+		throw new Error('No sheet names found in htmlview export. Check sheet sharing settings.');
 	}
 
 	console.log(`Found ${names.length} tabs. Rebuilding from oldest entries to latest updates...`);
@@ -93,7 +159,7 @@ async function main() {
 		if (!a.parsedDate && !b.parsedDate) return 0;
 		if (!a.parsedDate) return -1;
 		if (!b.parsedDate) return 1;
-		return new Date(a.parsedDate) - new Date(b.parsedDate);
+		return new Date(a.parsedDate).valueOf() - new Date(b.parsedDate).valueOf();
 	});
 
 	for (const event of events) {
@@ -119,8 +185,8 @@ async function main() {
 		mergedEntries: Array.from(mergedByKey.values())
 	};
 
-	await fs.writeFile(OUTPUT_PATH, JSON.stringify(output, null, 2), 'utf8');
-	console.log(`Wrote ${OUTPUT_PATH}`);
+	await fs.writeFile(OUTPUT_PATH, `${JSON.stringify(output, null, 2)}\n`, 'utf8');
+	console.log(`Wrote ${OUTPUT_PATH} (${output.mergedEntries.length} merged entries).`);
 }
 
 main().catch((error) => {
