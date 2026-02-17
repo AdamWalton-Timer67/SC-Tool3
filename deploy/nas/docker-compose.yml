@@ -1,4 +1,23 @@
 services:
+  mariadb:
+    image: mariadb:11
+    container_name: sc-tool3-mariadb
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD:-rootchangeme}
+      MARIADB_DATABASE: ${MARIADB_DATABASE:-wikelo}
+      MARIADB_USER: ${MARIADB_USER:-wikelo}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD:-changeme}
+    command: ['--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
+    healthcheck:
+      test: ['CMD-SHELL', 'mariadb-admin ping -h 127.0.0.1 -uroot -p$$MARIADB_ROOT_PASSWORD --silent']
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    volumes:
+      - sc-tool3-mariadb-data:/var/lib/mysql
+
   sc-tool3-web:
     build:
       context: ../..
@@ -7,8 +26,21 @@ services:
     container_name: sc-tool3-web
     ports:
       - '4173:4173'
-    env_file:
-      - ../../.env
+    environment:
+      MARIADB_HOST: mariadb
+      MARIADB_PORT: 3306
+      MARIADB_USER: ${MARIADB_USER:-wikelo}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD:-changeme}
+      MARIADB_DATABASE: ${MARIADB_DATABASE:-wikelo}
+      MARIADB_CONNECTION_LIMIT: ${MARIADB_CONNECTION_LIMIT:-10}
+      PUBLIC_ENABLE_DISCORD_AUTH: ${PUBLIC_ENABLE_DISCORD_AUTH:-false}
+      PUBLIC_ENABLE_TWITCH_AUTH: ${PUBLIC_ENABLE_TWITCH_AUTH:-false}
+      PUBLIC_ENABLE_GOOGLE_AUTH: ${PUBLIC_ENABLE_GOOGLE_AUTH:-false}
+      PUBLIC_SHOW_FULL_LOCATION_DETAILS: ${PUBLIC_SHOW_FULL_LOCATION_DETAILS:-false}
+      PUBLIC_OAUTH_REDIRECT_URL: ${PUBLIC_OAUTH_REDIRECT_URL:-http://127.0.0.1:4173}
+    depends_on:
+      mariadb:
+        condition: service_healthy
     restart: unless-stopped
     healthcheck:
       test: ['CMD-SHELL', 'wget -q -O - http://127.0.0.1:4173 >/dev/null 2>&1 || exit 1']
@@ -18,3 +50,6 @@ services:
       start_period: 20s
     volumes:
       - ../../static/uploads:/app/static/uploads
+
+volumes:
+  sc-tool3-mariadb-data:
