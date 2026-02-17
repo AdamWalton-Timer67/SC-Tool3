@@ -2,6 +2,9 @@
  * Admin Authentication & Authorization (local NAS mode)
  */
 
+import { env } from '$env/dynamic/private';
+import { createClient } from '@supabase/supabase-js';
+
 export async function isUserAdmin(supabase: any): Promise<boolean> {
 	const {
 		data: { user },
@@ -21,6 +24,16 @@ export async function requireAdmin(supabase: any): Promise<void> {
 	}
 }
 
-export function createAdminClient(): any {
-	throw new Error('Not required in local NAS mode: use locals.supabase with requireAdmin().');
+export function createAdminClient(): any | null {
+	const url = env.SUPABASE_URL;
+	const serviceRoleKey = env.SUPABASE_SERVICE_ROLE_KEY;
+
+	if (!url || !serviceRoleKey) return null;
+
+	return createClient(url, serviceRoleKey, {
+		auth: {
+			autoRefreshToken: false,
+			persistSession: false
+		}
+	});
 }

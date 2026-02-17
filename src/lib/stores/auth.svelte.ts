@@ -84,7 +84,8 @@ class AuthStore {
 			password,
 			options: {
 				data: {
-					display_name: displayName
+					display_name: displayName,
+					approved: false
 				}
 			}
 		});
