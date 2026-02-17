@@ -6,7 +6,12 @@ const config = {
 	preprocess: vitePreprocess(),
 
 	kit: {
-		adapter: adapter()
+		adapter: adapter(),
+		csrf: {
+			// Allow POSTs from any origin in self-hosted NAS/reverse-proxy deployments.
+			// This avoids false positives caused by forwarded host/protocol mismatches.
+			trustedOrigins: ['*']
+		}
 	}
 };
 
