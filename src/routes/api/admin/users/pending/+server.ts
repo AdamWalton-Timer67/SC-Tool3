@@ -12,7 +12,7 @@ export const GET: RequestHandler = async ({ locals }) => {
 		}
 
 		const pendingUsers = (users || [])
-			.filter((user: any) => user.approved === false)
+			.filter((user: any) => user.approved !== true)
 			.map((user: any) => ({
 				id: user.id,
 				email: user.email,
