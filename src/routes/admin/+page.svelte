@@ -252,6 +252,15 @@
 										Accept
 									</button>
 								</form>
+								<form method="POST" action="?/acceptPendingUserAsAdmin">
+									<input type="hidden" name="userId" value={user.id} />
+									<button
+										type="submit"
+										class="rounded-md border border-cyan-400/60 bg-cyan-500/20 px-3 py-2 text-xs font-semibold text-cyan-200 transition hover:bg-cyan-500/30 sm:text-sm"
+									>
+										Accept + Admin
+									</button>
+								</form>
 								<form method="POST" action="?/rejectPendingUser">
 									<input type="hidden" name="userId" value={user.id} />
 									<button
