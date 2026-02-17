@@ -1,5 +1,5 @@
 /**
- * Admin Authentication & Authorization (local NAS mode)
+ * Admin Authentication & Authorization
  */
 
 import { env } from '$env/dynamic/private';

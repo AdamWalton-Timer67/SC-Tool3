@@ -90,13 +90,16 @@ class AuthStore {
 			}
 		});
 
-		if (error) throw error;
+		const payload = await response.json();
+		if (!response.ok) {
+			throw new Error(payload?.error || 'Signup failed.');
+		}
+
 		this.showAuthDialog = false;
-		// Invalidate to refresh isAdmin status (client-only)
 		if (browser) {
 			await invalidateAll();
 		}
-		return data;
+		return payload;
 	}
 
 	async signOut() {

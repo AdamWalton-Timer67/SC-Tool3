@@ -11,7 +11,7 @@ export const POST: RequestHandler = async ({ params, locals }) => {
 		const { data, error } = await approveUserById(locals.supabase, userId);
 
 		if (error) {
-			return json({ error: error.message || 'Failed to approve user' }, { status: 500 });
+			return json({ error: 'Failed to approve user' }, { status: 500 });
 		}
 
 		if (!data || (Array.isArray(data) && data.length === 0)) {

@@ -9,7 +9,7 @@ export const GET: RequestHandler = async ({ locals }) => {
 
 		const { data: pendingUsers, error } = await listPendingUsers(locals.supabase);
 		if (error) {
-			return json({ error: error.message || 'Failed to load users' }, { status: 500 });
+			return json({ error: 'Failed to load users' }, { status: 500 });
 		}
 
 		const pendingUsers = (users || [])
