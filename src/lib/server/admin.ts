@@ -1,6 +1,8 @@
 /**
- * Admin Authentication & Authorization (local NAS mode)
+ * Admin Authentication & Authorization
  */
+
+import { createSupabaseClient } from '$lib/supabase';
 
 export async function isUserAdmin(supabase: any): Promise<boolean> {
 	const {
@@ -22,5 +24,5 @@ export async function requireAdmin(supabase: any): Promise<void> {
 }
 
 export function createAdminClient(): any {
-	throw new Error('Not required in local NAS mode: use locals.supabase with requireAdmin().');
+	return createSupabaseClient();
 }

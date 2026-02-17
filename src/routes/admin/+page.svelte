@@ -9,6 +9,7 @@
 
 	// Use stats from server load
 	const stats = $derived(data.stats);
+	const pendingUsers = $derived(data.pendingUsers);
 </script>
 
 <div class="space-y-6">
@@ -203,6 +204,68 @@
 					<div class="text-xs text-green-300/60 sm:text-sm">Manage user feedback</div>
 				</div>
 			</a>
+		</div>
+	</div>
+
+	<!-- Pending User Approvals -->
+	<div class="space-y-4">
+		<div class="flex items-center gap-3">
+			<div
+				class="h-px flex-1 bg-linear-to-r from-transparent via-amber-400/50 to-transparent"
+			></div>
+			<h3
+				class="font-orbitron text-lg font-semibold tracking-wider text-amber-300 uppercase sm:text-xl"
+			>
+				📝 Pending User Approvals
+			</h3>
+			<div
+				class="h-px flex-1 bg-linear-to-r from-transparent via-amber-400/50 to-transparent"
+			></div>
+		</div>
+
+		<div
+			class="rounded-xl border-2 border-amber-500/30 bg-gradient-to-br from-amber-500/10 to-orange-500/10 p-4 sm:p-6"
+		>
+			{#if pendingUsers.length === 0}
+				<p class="text-sm text-amber-200/80 sm:text-base">
+					No users are currently waiting for approval.
+				</p>
+			{:else}
+				<div class="space-y-3">
+					{#each pendingUsers as user}
+						<div
+							class="flex flex-col gap-4 rounded-lg border border-amber-400/30 bg-black/20 p-4 lg:flex-row lg:items-center lg:justify-between"
+						>
+							<div class="space-y-1">
+								<p class="text-sm font-semibold text-amber-200 sm:text-base">
+									{user.characterName}
+								</p>
+								<p class="text-xs text-amber-100/80 sm:text-sm">{user.email}</p>
+							</div>
+							<div class="flex gap-2">
+								<form method="POST" action="?/acceptPendingUser">
+									<input type="hidden" name="userId" value={user.id} />
+									<button
+										type="submit"
+										class="rounded-md border border-green-400/60 bg-green-500/20 px-3 py-2 text-xs font-semibold text-green-200 transition hover:bg-green-500/30 sm:text-sm"
+									>
+										Accept
+									</button>
+								</form>
+								<form method="POST" action="?/rejectPendingUser">
+									<input type="hidden" name="userId" value={user.id} />
+									<button
+										type="submit"
+										class="rounded-md border border-red-400/60 bg-red-500/20 px-3 py-2 text-xs font-semibold text-red-200 transition hover:bg-red-500/30 sm:text-sm"
+									>
+										Reject
+									</button>
+								</form>
+							</div>
+						</div>
+					{/each}
+				</div>
+			{/if}
 		</div>
 	</div>
 

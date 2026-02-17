@@ -79,23 +79,22 @@ class AuthStore {
 	}
 
 	async signUp(email: string, password: string, displayName: string | null = null) {
-		const { data, error } = await supabase.auth.signUp({
-			email,
-			password,
-			options: {
-				data: {
-					display_name: displayName
-				}
-			}
+		const response = await fetch('/api/auth/signup', {
+			method: 'POST',
+			headers: { 'content-type': 'application/json' },
+			body: JSON.stringify({ email, password, displayName })
 		});
 
-		if (error) throw error;
+		const payload = await response.json();
+		if (!response.ok) {
+			throw new Error(payload?.error || 'Signup failed.');
+		}
+
 		this.showAuthDialog = false;
-		// Invalidate to refresh isAdmin status (client-only)
 		if (browser) {
 			await invalidateAll();
 		}
-		return data;
+		return payload;
 	}
 
 	async signOut() {
