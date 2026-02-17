@@ -320,6 +320,7 @@ function runRpc(fn: string, params: any) {
 
 function createAuthApi(requestUserId?: string | null) {
 	ensureSeedAdmin();
+	const authUsers = mockDb.auth_users as any[];
 
 	const getCurrentAuthUser = () => {
 		if (requestUserId !== undefined) return findAuthUserById(requestUserId);
