@@ -1893,354 +1893,146 @@ export const mockDb = {
 			location_id: locationBloom.id
 		},
 		{
-			id: 'ing_corbel_helmet_mire',
-			name_en: 'Corbel Helmet Mire',
-			name_fr: 'Corbel Helmet Mire',
-			category: 'equipment',
+			id: 'ing_wikelo_favor',
+			name_en: 'Wikelo Favor',
+			name_fr: 'Wikelo Favor',
+			category: 'currency',
 			rarity: 'rare',
-			image_url: '/images/wikelo/unavailable.png',
-			description_en: 'Required material for Wikelo contracts.',
-			description_fr: 'Matériau requis pour les contrats Wikelo.',
-			how_to_obtain_en: 'Collected through missions, exploration, and trading.',
-			how_to_obtain_fr: 'Collecté via des missions, l’exploration et le commerce.',
+			image_url: '/images/wikelo/wikelo_favor.webp',
+			description_en: 'Exchange currency used for Wikelo rewards.',
+			description_fr: 'Monnaie d’échange utilisée pour les récompenses Wikelo.',
+			how_to_obtain_en: 'Earned through Wikelo contracts and exchanges.',
+			how_to_obtain_fr: 'Obtenu via les contrats et échanges Wikelo.',
+			location_id: locationPyroStation.id
+		},
+		{
+			id: 'ing_polaris_bit',
+			name_en: 'Polaris Bit',
+			name_fr: 'Polaris Bit',
+			category: 'component',
+			rarity: 'rare',
+			image_url: '/images/wikelo/polaris_bit.png',
+			description_en: 'Specialized component recovered from Polaris systems.',
+			description_fr: 'Composant spécialisé récupéré sur des systèmes Polaris.',
+			how_to_obtain_en: 'Recovered from high-tier contracts and exchanges.',
+			how_to_obtain_fr: 'Récupéré via des contrats et échanges de haut niveau.',
 			location_id: locationBloom.id
 		},
 		{
-			id: 'ing_corbel_core_mire',
-			name_en: 'Corbel Core Mire',
-			name_fr: 'Corbel Core Mire',
+			id: 'ing_dchs_05_orbital_positioning_comp_board',
+			name_en: 'DCHS-05 Orbital Positioning Comp-Board',
+			name_fr: 'DCHS-05 Orbital Positioning Comp-Board',
+			category: 'component',
+			rarity: 'epic',
+			image_url: '/images/wikelo/dchs_05_orbital.png',
+			description_en: 'Orbital-grade navigation and targeting component.',
+			description_fr: 'Composant de navigation et de ciblage de grade orbital.',
+			how_to_obtain_en: 'Found in advanced salvage and mission chains.',
+			how_to_obtain_fr: 'Trouvé dans des chaînes de missions et de récupération avancées.',
+			location_id: locationBloom.id
+		},
+		{
+			id: 'ing_carinite',
+			name_en: 'Carinite',
+			name_fr: 'Carinite',
 			category: 'mineral',
 			rarity: 'rare',
-			image_url: '/images/wikelo/unavailable.png',
-			description_en: 'Required material for Wikelo contracts.',
-			description_fr: 'Matériau requis pour les contrats Wikelo.',
-			how_to_obtain_en: 'Collected through missions, exploration, and trading.',
-			how_to_obtain_fr: 'Collecté via des missions, l’exploration et le commerce.',
-			location_id: locationBloom.id
+			image_url: '/images/wikelo/carinite.webp',
+			description_en: 'A refined mineral used in high-end exchanges.',
+			description_fr: 'Un minerai raffiné utilisé dans les échanges haut de gamme.',
+			how_to_obtain_en: 'Mine and refine in Pyro and contested sectors.',
+			how_to_obtain_fr: 'Miner et raffiner dans Pyro et les secteurs contestés.',
+			location_id: locationPyroStation.id
 		},
 		{
-			id: 'ing_corbel_arms_mire',
-			name_en: 'Corbel Arms Mire',
-			name_fr: 'Corbel Arms Mire',
-			category: 'equipment',
-			rarity: 'rare',
-			image_url: '/images/wikelo/unavailable.png',
-			description_en: 'Required material for Wikelo contracts.',
-			description_fr: 'Matériau requis pour les contrats Wikelo.',
-			how_to_obtain_en: 'Collected through missions, exploration, and trading.',
-			how_to_obtain_fr: 'Collecté via des missions, l’exploration et le commerce.',
-			location_id: locationBloom.id
-		},
-		{
-			id: 'ing_corbel_legs_mire',
-			name_en: 'Corbel Legs Mire',
-			name_fr: 'Corbel Legs Mire',
-			category: 'equipment',
-			rarity: 'rare',
-			image_url: '/images/wikelo/unavailable.png',
-			description_en: 'Required material for Wikelo contracts.',
-			description_fr: 'Matériau requis pour les contrats Wikelo.',
-			how_to_obtain_en: 'Collected through missions, exploration, and trading.',
-			how_to_obtain_fr: 'Collecté via des missions, l’exploration et le commerce.',
-			location_id: locationBloom.id
-		},
-		{
-			id: 'ing_novikov_backpack_mire',
-			name_en: 'Novikov Backpack Mire',
-			name_fr: 'Novikov Backpack Mire',
-			category: 'equipment',
-			rarity: 'rare',
-			image_url: '/images/wikelo/novikov_backpack_mire.png',
-			description_en: 'Required material for Wikelo contracts.',
-			description_fr: 'Matériau requis pour les contrats Wikelo.',
-			how_to_obtain_en: 'Collected through missions, exploration, and trading.',
-			how_to_obtain_fr: 'Collecté via des missions, l’exploration et le commerce.',
-			location_id: locationBloom.id
-		},
-		{
-			id: 'ing_rcmbnt_rgl_1',
-			name_en: 'RCMBNT-RGL-1',
-			name_fr: 'RCMBNT-RGL-1',
-			category: 'component',
-			rarity: 'rare',
-			image_url: '/images/wikelo/RCMBNT.png',
-			description_en: 'Required material for Wikelo contracts.',
-			description_fr: 'Matériau requis pour les contrats Wikelo.',
-			how_to_obtain_en: 'Collected through missions, exploration, and trading.',
-			how_to_obtain_fr: 'Collecté via des missions, l’exploration et le commerce.',
-			location_id: locationBloom.id
-		},
-		{
-			id: 'ing_rcmbnt_rgl_2',
-			name_en: 'RCMBNT-RGL-2',
-			name_fr: 'RCMBNT-RGL-2',
-			category: 'component',
-			rarity: 'rare',
-			image_url: '/images/wikelo/RCMBNT.png',
-			description_en: 'Required material for Wikelo contracts.',
-			description_fr: 'Matériau requis pour les contrats Wikelo.',
-			how_to_obtain_en: 'Collected through missions, exploration, and trading.',
-			how_to_obtain_fr: 'Collecté via des missions, l’exploration et le commerce.',
-			location_id: locationBloom.id
-		},
-		{
-			id: 'ing_rcmbnt_rgl_3',
-			name_en: 'RCMBNT-RGL-3',
-			name_fr: 'RCMBNT-RGL-3',
-			category: 'component',
-			rarity: 'rare',
-			image_url: '/images/wikelo/RCMBNT.png',
-			description_en: 'Required material for Wikelo contracts.',
-			description_fr: 'Matériau requis pour les contrats Wikelo.',
-			how_to_obtain_en: 'Collected through missions, exploration, and trading.',
-			how_to_obtain_fr: 'Collecté via des missions, l’exploration et le commerce.',
-			location_id: locationBloom.id
-		},
-		{
-			id: 'ing_testudo_helmet_turfwar',
-			name_en: 'Testudo Helmet Turfwar',
-			name_fr: 'Testudo Helmet Turfwar',
-			category: 'equipment',
-			rarity: 'rare',
-			image_url: '/images/wikelo/unavailable.png',
-			description_en: 'Required material for Wikelo contracts.',
-			description_fr: 'Matériau requis pour les contrats Wikelo.',
-			how_to_obtain_en: 'Collected through missions, exploration, and trading.',
-			how_to_obtain_fr: 'Collecté via des missions, l’exploration et le commerce.',
-			location_id: locationBloom.id
-		},
-		{
-			id: 'ing_testudo_core_turfwar',
-			name_en: 'Testudo Core Turfwar',
-			name_fr: 'Testudo Core Turfwar',
-			category: 'mineral',
-			rarity: 'rare',
-			image_url: '/images/wikelo/unavailable.png',
-			description_en: 'Required material for Wikelo contracts.',
-			description_fr: 'Matériau requis pour les contrats Wikelo.',
-			how_to_obtain_en: 'Collected through missions, exploration, and trading.',
-			how_to_obtain_fr: 'Collecté via des missions, l’exploration et le commerce.',
-			location_id: locationBloom.id
-		},
-		{
-			id: 'ing_testudo_arms_turfwar',
-			name_en: 'Testudo Arms Turfwar',
-			name_fr: 'Testudo Arms Turfwar',
-			category: 'equipment',
-			rarity: 'rare',
-			image_url: '/images/wikelo/unavailable.png',
-			description_en: 'Required material for Wikelo contracts.',
-			description_fr: 'Matériau requis pour les contrats Wikelo.',
-			how_to_obtain_en: 'Collected through missions, exploration, and trading.',
-			how_to_obtain_fr: 'Collecté via des missions, l’exploration et le commerce.',
-			location_id: locationBloom.id
-		},
-		{
-			id: 'ing_testudo_legs_turfwar',
-			name_en: 'Testudo Legs Turfwar',
-			name_fr: 'Testudo Legs Turfwar',
-			category: 'equipment',
-			rarity: 'rare',
-			image_url: '/images/wikelo/unavailable.png',
-			description_en: 'Required material for Wikelo contracts.',
-			description_fr: 'Matériau requis pour les contrats Wikelo.',
-			how_to_obtain_en: 'Collected through missions, exploration, and trading.',
-			how_to_obtain_fr: 'Collecté via des missions, l’exploration et le commerce.',
-			location_id: locationBloom.id
-		},
-		{
-			id: 'ing_testudo_backpack_turfwar',
-			name_en: 'Testudo Backpack Turfwar',
-			name_fr: 'Testudo Backpack Turfwar',
-			category: 'equipment',
-			rarity: 'rare',
-			image_url: '/images/wikelo/unavailable.png',
-			description_en: 'Required material for Wikelo contracts.',
-			description_fr: 'Matériau requis pour les contrats Wikelo.',
-			how_to_obtain_en: 'Collected through missions, exploration, and trading.',
-			how_to_obtain_fr: 'Collecté via des missions, l’exploration et le commerce.',
-			location_id: locationBloom.id
-		},
-		{
-			id: 'ing_valakkar_fang_juvenile',
-			name_en: 'Valakkar Fang (Juvenile)',
-			name_fr: 'Valakkar Fang (Juvenile)',
+			id: 'ing_irradiated_valakkar_fang_apex',
+			name_en: 'Irradiated Valakkar Fang (Apex)',
+			name_fr: 'Croc de Valakkar Irradié (Apex)',
 			category: 'creature',
-			rarity: 'rare',
-			image_url: '/images/wikelo/irradiated_valakkar_fang_juvenile.png',
-			description_en: 'Required material for Wikelo contracts.',
-			description_fr: 'Matériau requis pour les contrats Wikelo.',
-			how_to_obtain_en: 'Collected through missions, exploration, and trading.',
-			how_to_obtain_fr: 'Collecté via des missions, l’exploration et le commerce.',
+			rarity: 'epic',
+			image_url: '/images/wikelo/irradiated_valakkar_fang.png',
+			description_en: 'Apex-grade trophy from the most dangerous Valakkar hunts.',
+			description_fr: 'Trophée de niveau Apex provenant des chasses Valakkar les plus dangereuses.',
+			how_to_obtain_en: 'Loot from apex irradiated Valakkar encounters.',
+			how_to_obtain_fr: 'Butin d’affrontements avec des Valakkars irradiés Apex.',
 			location_id: locationBloom.id
 		},
 		{
-			id: 'ing_adp_mk4_core_woodland',
-			name_en: 'ADP-mk4 Core Woodland',
-			name_fr: 'ADP-mk4 Core Woodland',
+			id: 'ing_mg_scrip',
+			name_en: 'MG Scrip',
+			name_fr: 'MG Scrip',
+			category: 'currency',
+			rarity: 'epic',
+			image_url: '/images/wikelo/mg_scrip.webp',
+			description_en: 'Trusted currency used for military-grade exchanges.',
+			description_fr: 'Monnaie utilisée pour les échanges de qualité militaire.',
+			how_to_obtain_en: 'Awarded by specific mission chains and events.',
+			how_to_obtain_fr: 'Récompense de chaînes de missions et d’événements spécifiques.',
+			location_id: locationPyroStation.id
+		},
+		{
+			id: 'ing_ace_interceptor_helmet',
+			name_en: 'Ace Interceptor Helmet',
+			name_fr: 'Casque Ace Interceptor',
+			category: 'equipment',
+			rarity: 'epic',
+			image_url: '/images/wikelo/ace_interceptor_helmet.png',
+			description_en: 'Rare pilot helmet valued in elite exchanges.',
+			description_fr: 'Casque de pilote rare prisé dans les échanges élite.',
+			how_to_obtain_en: 'Recovered from high-tier caches and contracts.',
+			how_to_obtain_fr: 'Récupéré dans des caches et contrats de haut niveau.',
+			location_id: locationBloom.id
+		},
+		{
+			id: 'ing_irradiated_valakkar_pearl_grade_aaa',
+			name_en: 'Irradiated Valakkar Pearl (Grade AAA)',
+			name_fr: 'Perle de Valakkar Irradiée (Grade AAA)',
+			category: 'creature',
+			rarity: 'legendary',
+			image_url: '/images/wikelo/irradiated_valakkar_pearl.png',
+			description_en: 'Top-grade pearl used in premium reward exchanges.',
+			description_fr: 'Perle de premier ordre utilisée dans les échanges premium.',
+			how_to_obtain_en: 'Loot from rare apex fauna encounters.',
+			how_to_obtain_fr: 'Butin d’affrontements rares contre la faune apex.',
+			location_id: locationBloom.id
+		},
+		{
+			id: 'ing_uee_6th_platoon_medal_pristine',
+			name_en: 'UEE 6th Platoon Medal (Pristine)',
+			name_fr: 'Médaille du 6e Peloton UEE (Parfaite)',
+			category: 'artifact',
+			rarity: 'legendary',
+			image_url: '/images/wikelo/uue_6th.webp',
+			description_en: 'Pristine military medal accepted in elite barter.',
+			description_fr: 'Médaille militaire parfaite acceptée dans le troc élite.',
+			how_to_obtain_en: 'Recovered from military relic caches.',
+			how_to_obtain_fr: 'Récupérée dans des caches de reliques militaires.',
+			location_id: locationBloom.id
+		},
+		{
+			id: 'ing_carinite_pure',
+			name_en: 'Carinite (Pure)',
+			name_fr: 'Carinite (Pure)',
 			category: 'mineral',
-			rarity: 'rare',
-			image_url: '/images/wikelo/adp_mk4_core.png',
-			description_en: 'Required material for Wikelo contracts.',
-			description_fr: 'Matériau requis pour les contrats Wikelo.',
-			how_to_obtain_en: 'Collected through missions, exploration, and trading.',
-			how_to_obtain_fr: 'Collecté via des missions, l’exploration et le commerce.',
-			location_id: locationBloom.id
+			rarity: 'epic',
+			image_url: '/images/wikelo/carinite.webp',
+			description_en: 'Exceptionally pure Carinite for flagship-grade trades.',
+			description_fr: 'Carinite d’une pureté exceptionnelle pour les échanges haut de gamme.',
+			how_to_obtain_en: 'Refine premium Carinite deposits.',
+			how_to_obtain_fr: 'Raffiner des gisements premium de Carinite.',
+			location_id: locationPyroStation.id
 		},
 		{
-			id: 'ing_adp_mk4_arms_woodland',
-			name_en: 'ADP-mk4 Arms Woodland',
-			name_fr: 'ADP-mk4 Arms Woodland',
-			category: 'equipment',
-			rarity: 'rare',
-			image_url: '/images/wikelo/adp_mk4_arms.png',
-			description_en: 'Required material for Wikelo contracts.',
-			description_fr: 'Matériau requis pour les contrats Wikelo.',
-			how_to_obtain_en: 'Collected through missions, exploration, and trading.',
-			how_to_obtain_fr: 'Collecté via des missions, l’exploration et le commerce.',
-			location_id: locationBloom.id
-		},
-		{
-			id: 'ing_adp_mk4_legs_woodland',
-			name_en: 'ADP-mk4 Legs Woodland',
-			name_fr: 'ADP-mk4 Legs Woodland',
-			category: 'equipment',
-			rarity: 'rare',
-			image_url: '/images/wikelo/adp_mk4_legs.png',
-			description_en: 'Required material for Wikelo contracts.',
-			description_fr: 'Matériau requis pour les contrats Wikelo.',
-			how_to_obtain_en: 'Collected through missions, exploration, and trading.',
-			how_to_obtain_fr: 'Collecté via des missions, l’exploration et le commerce.',
-			location_id: locationBloom.id
-		},
-		{
-			id: 'ing_adp_mk4_helmet_woodland',
-			name_en: 'ADP-mk4 Helmet Woodland',
-			name_fr: 'ADP-mk4 Helmet Woodland',
-			category: 'equipment',
-			rarity: 'rare',
-			image_url: '/images/wikelo/adp_mk4_helmet.png',
-			description_en: 'Required material for Wikelo contracts.',
-			description_fr: 'Matériau requis pour les contrats Wikelo.',
-			how_to_obtain_en: 'Collected through missions, exploration, and trading.',
-			how_to_obtain_fr: 'Collecté via des missions, l’exploration et le commerce.',
-			location_id: locationBloom.id
-		},
-		{
-			id: 'ing_antium_armor_core',
-			name_en: 'Antium Armor Core',
-			name_fr: 'Antium Armor Core',
-			category: 'mineral',
-			rarity: 'rare',
-			image_url: '/images/wikelo/unavailable.png',
-			description_en: 'Required material for Wikelo contracts.',
-			description_fr: 'Matériau requis pour les contrats Wikelo.',
-			how_to_obtain_en: 'Collected through missions, exploration, and trading.',
-			how_to_obtain_fr: 'Collecté via des missions, l’exploration et le commerce.',
-			location_id: locationBloom.id
-		},
-		{
-			id: 'ing_antium_armor_helmet',
-			name_en: 'Antium Armor Helmet',
-			name_fr: 'Antium Armor Helmet',
-			category: 'equipment',
-			rarity: 'rare',
-			image_url: '/images/wikelo/unavailable.png',
-			description_en: 'Required material for Wikelo contracts.',
-			description_fr: 'Matériau requis pour les contrats Wikelo.',
-			how_to_obtain_en: 'Collected through missions, exploration, and trading.',
-			how_to_obtain_fr: 'Collecté via des missions, l’exploration et le commerce.',
-			location_id: locationBloom.id
-		},
-		{
-			id: 'ing_antium_armor_legs',
-			name_en: 'Antium Armor Legs',
-			name_fr: 'Antium Armor Legs',
-			category: 'equipment',
-			rarity: 'rare',
-			image_url: '/images/wikelo/unavailable.png',
-			description_en: 'Required material for Wikelo contracts.',
-			description_fr: 'Matériau requis pour les contrats Wikelo.',
-			how_to_obtain_en: 'Collected through missions, exploration, and trading.',
-			how_to_obtain_fr: 'Collecté via des missions, l’exploration et le commerce.',
-			location_id: locationBloom.id
-		},
-		{
-			id: 'ing_antium_armor_arms',
-			name_en: 'Antium Armor Arms',
-			name_fr: 'Antium Armor Arms',
-			category: 'equipment',
-			rarity: 'rare',
-			image_url: '/images/wikelo/unavailable.png',
-			description_en: 'Required material for Wikelo contracts.',
-			description_fr: 'Matériau requis pour les contrats Wikelo.',
-			how_to_obtain_en: 'Collected through missions, exploration, and trading.',
-			how_to_obtain_fr: 'Collecté via des missions, l’exploration et le commerce.',
-			location_id: locationBloom.id
-		},
-		{
-			id: 'ing_strata_core',
-			name_en: 'Strata Core',
-			name_fr: 'Strata Core',
-			category: 'mineral',
-			rarity: 'rare',
-			image_url: '/images/wikelo/unavailable.png',
-			description_en: 'Required material for Wikelo contracts.',
-			description_fr: 'Matériau requis pour les contrats Wikelo.',
-			how_to_obtain_en: 'Collected through missions, exploration, and trading.',
-			how_to_obtain_fr: 'Collecté via des missions, l’exploration et le commerce.',
-			location_id: locationBloom.id
-		},
-		{
-			id: 'ing_strata_helmet',
-			name_en: 'Strata Helmet',
-			name_fr: 'Strata Helmet',
-			category: 'equipment',
-			rarity: 'rare',
-			image_url: '/images/wikelo/unavailable.png',
-			description_en: 'Required material for Wikelo contracts.',
-			description_fr: 'Matériau requis pour les contrats Wikelo.',
-			how_to_obtain_en: 'Collected through missions, exploration, and trading.',
-			how_to_obtain_fr: 'Collecté via des missions, l’exploration et le commerce.',
-			location_id: locationBloom.id
-		},
-		{
-			id: 'ing_strata_legs',
-			name_en: 'Strata Legs',
-			name_fr: 'Strata Legs',
-			category: 'equipment',
-			rarity: 'rare',
-			image_url: '/images/wikelo/unavailable.png',
-			description_en: 'Required material for Wikelo contracts.',
-			description_fr: 'Matériau requis pour les contrats Wikelo.',
-			how_to_obtain_en: 'Collected through missions, exploration, and trading.',
-			how_to_obtain_fr: 'Collecté via des missions, l’exploration et le commerce.',
-			location_id: locationBloom.id
-		},
-		{
-			id: 'ing_strata_arms',
-			name_en: 'Strata Arms',
-			name_fr: 'Strata Arms',
-			category: 'equipment',
-			rarity: 'rare',
-			image_url: '/images/wikelo/unavailable.png',
-			description_en: 'Required material for Wikelo contracts.',
-			description_fr: 'Matériau requis pour les contrats Wikelo.',
-			how_to_obtain_en: 'Collected through missions, exploration, and trading.',
-			how_to_obtain_fr: 'Collecté via des missions, l’exploration et le commerce.',
-			location_id: locationBloom.id
-		},
-		{
-			id: 'ing_strata_backpack',
-			name_en: 'Strata Backpack',
-			name_fr: 'Strata Backpack',
-			category: 'equipment',
-			rarity: 'rare',
-			image_url: '/images/wikelo/unavailable.png',
-			description_en: 'Required material for Wikelo contracts.',
-			description_fr: 'Matériau requis pour les contrats Wikelo.',
-			how_to_obtain_en: 'Collected through missions, exploration, and trading.',
-			how_to_obtain_fr: 'Collecté via des missions, l’exploration et le commerce.',
+			id: 'ing_asd_secure_drive',
+			name_en: 'ASD Secure Drive',
+			name_fr: 'Disque sécurisé ASD',
+			category: 'component',
+			rarity: 'epic',
+			image_url: '/images/wikelo/asd_secure_drive.png',
+			description_en: 'Encrypted storage component required for secure transactions.',
+			description_fr: 'Composant de stockage chiffré requis pour les transactions sécurisées.',
+			how_to_obtain_en: 'Loot from secure bunkers and mission rewards.',
+			how_to_obtain_fr: 'Butin de bunkers sécurisés et récompenses de mission.',
 			location_id: locationBloom.id
 		},
 		{
@@ -2250,10 +2042,10 @@ export const mockDb = {
 			category: 'component',
 			rarity: 'rare',
 			image_url: '/images/wikelo/RCMBNT.png',
-			description_en: 'Required material for Wikelo contracts.',
-			description_fr: 'Matériau requis pour les contrats Wikelo.',
-			how_to_obtain_en: 'Collected through missions, exploration, and trading.',
-			how_to_obtain_fr: 'Collecté via des missions, l’exploration et le commerce.',
+			description_en: 'Recombinant module used in advanced manufacturing.',
+			description_fr: 'Module recombinant utilisé dans la fabrication avancée.',
+			how_to_obtain_en: 'Found in contract rewards and component crates.',
+			how_to_obtain_fr: 'Trouvé dans les récompenses de contrats et caisses de composants.',
 			location_id: locationBloom.id
 		},
 		{
@@ -2263,10 +2055,10 @@ export const mockDb = {
 			category: 'component',
 			rarity: 'rare',
 			image_url: '/images/wikelo/RCMBNT.png',
-			description_en: 'Required material for Wikelo contracts.',
-			description_fr: 'Matériau requis pour les contrats Wikelo.',
-			how_to_obtain_en: 'Collected through missions, exploration, and trading.',
-			how_to_obtain_fr: 'Collecté via des missions, l’exploration et le commerce.',
+			description_en: 'Recombinant module used in advanced manufacturing.',
+			description_fr: 'Module recombinant utilisé dans la fabrication avancée.',
+			how_to_obtain_en: 'Found in contract rewards and component crates.',
+			how_to_obtain_fr: 'Trouvé dans les récompenses de contrats et caisses de composants.',
 			location_id: locationBloom.id
 		},
 		{
@@ -2276,2520 +2068,229 @@ export const mockDb = {
 			category: 'component',
 			rarity: 'rare',
 			image_url: '/images/wikelo/RCMBNT.png',
-			description_en: 'Required material for Wikelo contracts.',
-			description_fr: 'Matériau requis pour les contrats Wikelo.',
-			how_to_obtain_en: 'Collected through missions, exploration, and trading.',
-			how_to_obtain_fr: 'Collecté via des missions, l’exploration et le commerce.',
+			description_en: 'Recombinant module used in advanced manufacturing.',
+			description_fr: 'Module recombinant utilisé dans la fabrication avancée.',
+			how_to_obtain_en: 'Found in contract rewards and component crates.',
+			how_to_obtain_fr: 'Trouvé dans les récompenses de contrats et caisses de composants.',
 			location_id: locationBloom.id
 		},
 		{
-			id: 'ing_atls',
-			name_en: 'ATLS',
-			name_fr: 'ATLS',
+			id: 'ing_rcmbnt_rgl_1',
+			name_en: 'RCMBNT-RGL-1',
+			name_fr: 'RCMBNT-RGL-1',
 			category: 'component',
 			rarity: 'rare',
-			image_url: '/images/wikelo/atls.webp',
-			description_en: 'Required material for Wikelo contracts.',
-			description_fr: 'Matériau requis pour les contrats Wikelo.',
-			how_to_obtain_en: 'Collected through missions, exploration, and trading.',
-			how_to_obtain_fr: 'Collecté via des missions, l’exploration et le commerce.',
+			image_url: '/images/wikelo/RCMBNT.png',
+			description_en: 'Recombinant module used in advanced manufacturing.',
+			description_fr: 'Module recombinant utilisé dans la fabrication avancée.',
+			how_to_obtain_en: 'Found in contract rewards and component crates.',
+			how_to_obtain_fr: 'Trouvé dans les récompenses de contrats et caisses de composants.',
 			location_id: locationBloom.id
 		},
 		{
-			id: 'ing_irradiated_valakkar_fang_apex',
-			name_en: 'Irradiated Valakkar Fang (Apex)',
-			name_fr: 'Irradiated Valakkar Fang (Apex)',
-			category: 'creature',
-			rarity: 'legendary',
-			image_url: '/images/wikelo/irradiated_valakkar_fang.png',
-			description_en: 'Required material for Wikelo contracts.',
-			description_fr: 'Matériau requis pour les contrats Wikelo.',
-			how_to_obtain_en: 'Collected through missions, exploration, and trading.',
-			how_to_obtain_fr: 'Collecté via des missions, l’exploration et le commerce.',
-			location_id: locationBloom.id
-		},
-		{
-			id: 'ing_nn_13_cannon',
-			name_en: 'NN-13 Cannon',
-			name_fr: 'NN-13 Cannon',
+			id: 'ing_rcmbnt_rgl_2',
+			name_en: 'RCMBNT-RGL-2',
+			name_fr: 'RCMBNT-RGL-2',
 			category: 'component',
 			rarity: 'rare',
-			image_url: '/images/wikelo/nn-13-cannon.jpg',
-			description_en: 'Required material for Wikelo contracts.',
-			description_fr: 'Matériau requis pour les contrats Wikelo.',
-			how_to_obtain_en: 'Collected through missions, exploration, and trading.',
-			how_to_obtain_fr: 'Collecté via des missions, l’exploration et le commerce.',
+			image_url: '/images/wikelo/RCMBNT.png',
+			description_en: 'Recombinant module used in advanced manufacturing.',
+			description_fr: 'Module recombinant utilisé dans la fabrication avancée.',
+			how_to_obtain_en: 'Found in contract rewards and component crates.',
+			how_to_obtain_fr: 'Trouvé dans les récompenses de contrats et caisses de composants.',
 			location_id: locationBloom.id
 		},
 		{
-			id: 'ing_atls_geo',
-			name_en: 'ATLS GEO',
-			name_fr: 'ATLS GEO',
+			id: 'ing_rcmbnt_rgl_3',
+			name_en: 'RCMBNT-RGL-3',
+			name_fr: 'RCMBNT-RGL-3',
 			category: 'component',
 			rarity: 'rare',
-			image_url: '/images/wikelo/atls_geo.png',
-			description_en: 'Required material for Wikelo contracts.',
-			description_fr: 'Matériau requis pour les contrats Wikelo.',
-			how_to_obtain_en: 'Collected through missions, exploration, and trading.',
-			how_to_obtain_fr: 'Collecté via des missions, l’exploration et le commerce.',
+			image_url: '/images/wikelo/RCMBNT.png',
+			description_en: 'Recombinant module used in advanced manufacturing.',
+			description_fr: 'Module recombinant utilisé dans la fabrication avancée.',
+			how_to_obtain_en: 'Found in contract rewards and component crates.',
+			how_to_obtain_fr: 'Trouvé dans les récompenses de contrats et caisses de composants.',
 			location_id: locationBloom.id
 		},
 		{
-			id: 'ing_atls_ikti',
-			name_en: 'ATLS IKTI',
-			name_fr: 'ATLS IKTI',
+			id: 'ing_rcmbnt_xtl_1',
+			name_en: 'RCMBNT-XTL-1',
+			name_fr: 'RCMBNT-XTL-1',
 			category: 'component',
 			rarity: 'rare',
-			image_url: '/images/wikelo/atls_ikti.png',
-			description_en: 'Required material for Wikelo contracts.',
-			description_fr: 'Matériau requis pour les contrats Wikelo.',
-			how_to_obtain_en: 'Collected through missions, exploration, and trading.',
-			how_to_obtain_fr: 'Collecté via des missions, l’exploration et le commerce.',
+			image_url: '/images/wikelo/RBCMBNT-XTL-1.webp',
+			description_en: 'Recombinant module used in advanced manufacturing.',
+			description_fr: 'Module recombinant utilisé dans la fabrication avancée.',
+			how_to_obtain_en: 'Found in contract rewards and component crates.',
+			how_to_obtain_fr: 'Trouvé dans les récompenses de contrats et caisses de composants.',
 			location_id: locationBloom.id
 		},
 		{
-			id: 'ing_large_artifact_fragment_pristine',
-			name_en: 'Large Artifact Fragment (Pristine)',
-			name_fr: 'Large Artifact Fragment (Pristine)',
-			category: 'component',
-			rarity: 'legendary',
-			image_url: '/images/wikelo/unavailable.png',
-			description_en: 'Required material for Wikelo contracts.',
-			description_fr: 'Matériau requis pour les contrats Wikelo.',
-			how_to_obtain_en: 'Collected through missions, exploration, and trading.',
-			how_to_obtain_fr: 'Collecté via des missions, l’exploration et le commerce.',
-			location_id: locationBloom.id
-		},
-		{
-			id: 'ing_government_cartography_agency_medal_pristine',
-			name_en: 'Government Cartography Agency Medal (Pristine)',
-			name_fr: 'Government Cartography Agency Medal (Pristine)',
-			category: 'component',
-			rarity: 'legendary',
-			image_url: '/images/wikelo/government_cartography_agency_medal_pristine.png',
-			description_en: 'Required material for Wikelo contracts.',
-			description_fr: 'Matériau requis pour les contrats Wikelo.',
-			how_to_obtain_en: 'Collected through missions, exploration, and trading.',
-			how_to_obtain_fr: 'Collecté via des missions, l’exploration et le commerce.',
-			location_id: locationBloom.id
-		},
-		{
-			id: 'ing_uee_6th_platoon_medal_pristine',
-			name_en: 'UEE 6th Platoon Medal (Pristine)',
-			name_fr: 'UEE 6th Platoon Medal (Pristine)',
-			category: 'component',
-			rarity: 'legendary',
-			image_url: '/images/wikelo/uue_6th.webp',
-			description_en: 'Required material for Wikelo contracts.',
-			description_fr: 'Matériau requis pour les contrats Wikelo.',
-			how_to_obtain_en: 'Collected through missions, exploration, and trading.',
-			how_to_obtain_fr: 'Collecté via des missions, l’exploration et le commerce.',
-			location_id: locationBloom.id
-		},
-		{
-			id: 'ing_dchs_05_orbital_positioning_comp_board',
-			name_en: 'DCHS-05 Orbital Positioning Comp-Board',
-			name_fr: 'DCHS-05 Orbital Positioning Comp-Board',
+			id: 'ing_rcmbnt_xtl_2',
+			name_en: 'RCMBNT-XTL-2',
+			name_fr: 'RCMBNT-XTL-2',
 			category: 'component',
 			rarity: 'rare',
-			image_url: '/images/wikelo/dchs_05_orbital.png',
-			description_en: 'Required material for Wikelo contracts.',
-			description_fr: 'Matériau requis pour les contrats Wikelo.',
-			how_to_obtain_en: 'Collected through missions, exploration, and trading.',
-			how_to_obtain_fr: 'Collecté via des missions, l’exploration et le commerce.',
+			image_url: '/images/wikelo/RCMBNT.png',
+			description_en: 'Recombinant module used in advanced manufacturing.',
+			description_fr: 'Module recombinant utilisé dans la fabrication avancée.',
+			how_to_obtain_en: 'Found in contract rewards and component crates.',
+			how_to_obtain_fr: 'Trouvé dans les récompenses de contrats et caisses de composants.',
 			location_id: locationBloom.id
 		},
 		{
-			id: 'ing_polaris_bit',
-			name_en: 'Polaris Bit',
-			name_fr: 'Polaris Bit',
+			id: 'ing_rcmbnt_xtl_3',
+			name_en: 'RCMBNT-XTL-3',
+			name_fr: 'RCMBNT-XTL-3',
 			category: 'component',
 			rarity: 'rare',
-			image_url: '/images/wikelo/polaris_bit.png',
-			description_en: 'Required material for Wikelo contracts.',
-			description_fr: 'Matériau requis pour les contrats Wikelo.',
-			how_to_obtain_en: 'Collected through missions, exploration, and trading.',
-			how_to_obtain_fr: 'Collecté via des missions, l’exploration et le commerce.',
-			location_id: locationBloom.id
-		},
-		{
-			id: 'ing_irradiated_valakkar_pearl_grade_aa',
-			name_en: 'Irradiated Valakkar Pearl (Grade AA)',
-			name_fr: 'Irradiated Valakkar Pearl (Grade AA)',
-			category: 'creature',
-			rarity: 'epic',
-			image_url: '/images/wikelo/irradiated_valakkar_pearl.png',
-			description_en: 'Required material for Wikelo contracts.',
-			description_fr: 'Matériau requis pour les contrats Wikelo.',
-			how_to_obtain_en: 'Collected through missions, exploration, and trading.',
-			how_to_obtain_fr: 'Collecté via des missions, l’exploration et le commerce.',
+			image_url: '/images/wikelo/RCMBNT.png',
+			description_en: 'Recombinant module used in advanced manufacturing.',
+			description_fr: 'Module recombinant utilisé dans la fabrication avancée.',
+			how_to_obtain_en: 'Found in contract rewards and component crates.',
+			how_to_obtain_fr: 'Trouvé dans les récompenses de contrats et caisses de composants.',
 			location_id: locationBloom.id
 		}
 	],
 	reward_ingredients: [
 		{
-			id: 'ri_1',
-			reward_id: 'reward_xdl_mark_i_monocular_rangefinder',
-			ingredient_id: 'ing_wikelo_favor',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_2',
-			reward_id: 'reward_xdl_mark_i_monocular_rangefinder',
-			ingredient_id: 'ing_yormandi_eye',
-			quantity: 2,
-			unit: 'x'
-		},
-		{
-			id: 'ri_3',
-			reward_id: 'reward_xdl_mark_i_monocular_rangefinder',
-			ingredient_id: 'ing_yormandi_tongue',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_4',
-			reward_id: 'reward_boomtube_clanguard_rocket_launcher',
-			ingredient_id: 'ing_boomtube_rocket_launcher',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_5',
-			reward_id: 'reward_boomtube_clanguard_rocket_launcher',
-			ingredient_id: 'ing_vanduul_plating',
-			quantity: 2,
-			unit: 'x'
-		},
-		{
-			id: 'ri_6',
-			reward_id: 'reward_boomtube_clanguard_rocket_launcher',
-			ingredient_id: 'ing_vanduul_metal',
-			quantity: 2,
-			unit: 'x'
-		},
-		{
-			id: 'ri_7',
-			reward_id: 'reward_parallax_fun_kopion_skull_energy_assault_rifle',
-			ingredient_id: 'ing_jaclium',
-			quantity: 40,
-			unit: 'x'
-		},
-		{
-			id: 'ri_8',
-			reward_id: 'reward_parallax_fun_kopion_skull_energy_assault_rifle',
-			ingredient_id: 'ing_saldynium',
-			quantity: 30,
-			unit: 'x'
-		},
-		{
-			id: 'ri_9',
-			reward_id: 'reward_parallax_fun_kopion_skull_energy_assault_rifle',
-			ingredient_id: 'ing_carinite',
-			quantity: 20,
-			unit: 'x'
-		},
-		{
-			id: 'ri_10',
-			reward_id: 'reward_parallax_fun_kopion_skull_energy_assault_rifle',
-			ingredient_id: 'ing_parallax_energy_assault_rifle',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_11',
-			reward_id: 'reward_parallax_fun_kopion_skull_energy_assault_rifle',
-			ingredient_id: 'ing_tundra_kopion_horn',
-			quantity: 35,
-			unit: 'x'
-		},
-		{
-			id: 'ri_12',
-			reward_id: 'reward_parallax_fun_military_skull_energy_assault_rifle',
-			ingredient_id: 'ing_jaclium',
-			quantity: 40,
-			unit: 'x'
-		},
-		{
-			id: 'ri_13',
-			reward_id: 'reward_parallax_fun_military_skull_energy_assault_rifle',
-			ingredient_id: 'ing_saldynium',
-			quantity: 30,
-			unit: 'x'
-		},
-		{
-			id: 'ri_14',
-			reward_id: 'reward_parallax_fun_military_skull_energy_assault_rifle',
-			ingredient_id: 'ing_carinite',
-			quantity: 20,
-			unit: 'x'
-		},
-		{
-			id: 'ri_15',
-			reward_id: 'reward_parallax_fun_military_skull_energy_assault_rifle',
-			ingredient_id: 'ing_parallax_energy_assault_rifle',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_16',
-			reward_id: 'reward_parallax_fun_military_skull_energy_assault_rifle',
-			ingredient_id: 'ing_irradiated_valakkar_fang_juvenile',
-			quantity: 35,
-			unit: 'x'
-		},
-		{
-			id: 'ri_17',
-			reward_id: 'reward_parallax_fun_kopion_tooth_energy_assault_rifle',
-			ingredient_id: 'ing_jaclium',
-			quantity: 40,
-			unit: 'x'
-		},
-		{
-			id: 'ri_18',
-			reward_id: 'reward_parallax_fun_kopion_tooth_energy_assault_rifle',
-			ingredient_id: 'ing_saldynium',
-			quantity: 30,
-			unit: 'x'
-		},
-		{
-			id: 'ri_19',
-			reward_id: 'reward_parallax_fun_kopion_tooth_energy_assault_rifle',
-			ingredient_id: 'ing_carinite',
-			quantity: 20,
-			unit: 'x'
-		},
-		{
-			id: 'ri_20',
-			reward_id: 'reward_parallax_fun_kopion_tooth_energy_assault_rifle',
-			ingredient_id: 'ing_parallax_energy_assault_rifle',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_21',
-			reward_id: 'reward_parallax_fun_kopion_tooth_energy_assault_rifle',
-			ingredient_id: 'ing_tundra_kopion_horn',
-			quantity: 35,
-			unit: 'x'
-		},
-		{
-			id: 'ri_22',
-			reward_id: 'reward_parallax_fun_military_tooth_energy_assault_rifle',
-			ingredient_id: 'ing_jaclium',
-			quantity: 40,
-			unit: 'x'
-		},
-		{
-			id: 'ri_23',
-			reward_id: 'reward_parallax_fun_military_tooth_energy_assault_rifle',
-			ingredient_id: 'ing_saldynium',
-			quantity: 30,
-			unit: 'x'
-		},
-		{
-			id: 'ri_24',
-			reward_id: 'reward_parallax_fun_military_tooth_energy_assault_rifle',
-			ingredient_id: 'ing_carinite',
-			quantity: 20,
-			unit: 'x'
-		},
-		{
-			id: 'ri_25',
-			reward_id: 'reward_parallax_fun_military_tooth_energy_assault_rifle',
-			ingredient_id: 'ing_parallax_energy_assault_rifle',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_26',
-			reward_id: 'reward_parallax_fun_military_tooth_energy_assault_rifle',
-			ingredient_id: 'ing_irradiated_valakkar_fang_juvenile',
-			quantity: 35,
-			unit: 'x'
-		},
-		{
-			id: 'ri_27',
-			reward_id: 'reward_prism_irradiated_laser_shotgun',
-			ingredient_id: 'ing_wikelo_favor',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_28',
-			reward_id: 'reward_prism_irradiated_laser_shotgun',
-			ingredient_id: 'ing_prism_laser_shotgun',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_29',
-			reward_id: 'reward_prism_irradiated_laser_shotgun',
-			ingredient_id: 'ing_irradiated_valakkar_fang_juvenile',
-			quantity: 10,
-			unit: 'x'
-		},
-		{
-			id: 'ri_30',
-			reward_id: 'reward_prism_irradiated_laser_shotgun',
-			ingredient_id: 'ing_irradiated_valakkar_fang_adult',
-			quantity: 5,
-			unit: 'x'
-		},
-		{
-			id: 'ri_31',
-			reward_id: 'reward_zenith_snow_camo_laser_sniper_rifle',
-			ingredient_id: 'ing_asd_secure_drive',
-			quantity: 10,
-			unit: 'x'
-		},
-		{
-			id: 'ri_32',
-			reward_id: 'reward_zenith_snow_camo_laser_sniper_rifle',
-			ingredient_id: 'ing_zenith_laser_sniper_rifle',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_33',
-			reward_id: 'reward_fresnel_deepwater_energy_lmg',
-			ingredient_id: 'ing_fresnel_energy_lmg',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_34',
-			reward_id: 'reward_fresnel_deepwater_energy_lmg',
-			ingredient_id: 'ing_asd_secure_drive',
-			quantity: 5,
-			unit: 'x'
-		},
-		{
-			id: 'ri_35',
-			reward_id: 'reward_fresnel_deepwater_energy_lmg',
-			ingredient_id: 'ing_rcmbnt_xtl_1',
-			quantity: 5,
-			unit: 'x'
-		},
-		{
-			id: 'ri_36',
-			reward_id: 'reward_fresnel_deepwater_energy_lmg',
-			ingredient_id: 'ing_rcmbnt_xtl_2',
-			quantity: 5,
-			unit: 'x'
-		},
-		{
-			id: 'ri_37',
-			reward_id: 'reward_fresnel_deepwater_energy_lmg',
-			ingredient_id: 'ing_rcmbnt_xtl_3',
-			quantity: 5,
-			unit: 'x'
-		},
-		{
-			id: 'ri_38',
-			reward_id: 'reward_fresnel_yormandi_lmg',
-			ingredient_id: 'ing_fresnel_energy_lmg',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_39',
-			reward_id: 'reward_fresnel_yormandi_lmg',
-			ingredient_id: 'ing_yormandi_eye',
-			quantity: 6,
-			unit: 'x'
-		},
-		{
-			id: 'ri_40',
-			reward_id: 'reward_fresnel_yormandi_lmg',
-			ingredient_id: 'ing_yormandi_tongue',
-			quantity: 3,
-			unit: 'x'
-		},
-		{
-			id: 'ri_41',
-			reward_id: 'reward_quartz_cobalt_camo_energy_smg',
-			ingredient_id: 'ing_quartz_energy_smg',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_42',
-			reward_id: 'reward_quartz_cobalt_camo_energy_smg',
-			ingredient_id: 'ing_mg_scrip',
-			quantity: 30,
-			unit: 'x'
-		},
-		{
-			id: 'ri_43',
-			reward_id: 'reward_quartz_cobalt_camo_energy_smg',
-			ingredient_id: 'ing_ace_interceptor_helmet',
-			quantity: 5,
-			unit: 'x'
-		},
-		{
-			id: 'ri_44',
-			reward_id: 'reward_quartz_cobalt_camo_energy_smg',
-			ingredient_id: 'ing_grassland_quasi_grazer_egg',
-			quantity: 50,
-			unit: 'x'
-		},
-		{
-			id: 'ri_45',
-			reward_id: 'reward_quartz_jungle_camo_energy_smg',
-			ingredient_id: 'ing_quartz_energy_smg',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_46',
-			reward_id: 'reward_quartz_jungle_camo_energy_smg',
-			ingredient_id: 'ing_mg_scrip',
-			quantity: 30,
-			unit: 'x'
-		},
-		{
-			id: 'ri_47',
-			reward_id: 'reward_quartz_jungle_camo_energy_smg',
-			ingredient_id: 'ing_ace_interceptor_helmet',
-			quantity: 5,
-			unit: 'x'
-		},
-		{
-			id: 'ri_48',
-			reward_id: 'reward_quartz_jungle_camo_energy_smg',
-			ingredient_id: 'ing_tundra_kopion_horn',
-			quantity: 35,
-			unit: 'x'
-		},
-		{
-			id: 'ri_49',
-			reward_id: 'reward_quartz_hunter_camo_energy_smg',
-			ingredient_id: 'ing_quartz_energy_smg',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_50',
-			reward_id: 'reward_quartz_hunter_camo_energy_smg',
-			ingredient_id: 'ing_council_scrip',
-			quantity: 30,
-			unit: 'x'
-		},
-		{
-			id: 'ri_51',
-			reward_id: 'reward_quartz_hunter_camo_energy_smg',
-			ingredient_id: 'ing_ace_interceptor_helmet',
-			quantity: 5,
-			unit: 'x'
-		},
-		{
-			id: 'ri_52',
-			reward_id: 'reward_quartz_hunter_camo_energy_smg',
-			ingredient_id: 'ing_advocacy_badge_replica',
-			quantity: 10,
-			unit: 'x'
-		},
-		{
-			id: 'ri_53',
-			reward_id: 'reward_karna_ascension_rifle',
-			ingredient_id: 'ing_karna_rifle',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_54',
-			reward_id: 'reward_karna_ascension_rifle',
-			ingredient_id: 'ing_irradiated_valakkar_fang_adult',
-			quantity: 10,
-			unit: 'x'
-		},
-		{
-			id: 'ri_55',
-			reward_id: 'reward_karna_ascension_rifle',
-			ingredient_id: 'ing_irradiated_valakkar_fang_juvenile',
-			quantity: 10,
-			unit: 'x'
-		},
-		{
-			id: 'ri_56',
-			reward_id: 'reward_karna_ascension_rifle',
-			ingredient_id: 'ing_irradiated_kopion_horn',
-			quantity: 10,
-			unit: 'x'
-		},
-		{
-			id: 'ri_57',
-			reward_id: 'reward_karna_ascension_rifle',
-			ingredient_id: 'ing_irradiated_valakkar_pearl_grade_aaa',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_58',
-			reward_id: 'reward_s71_ascension_rifle',
-			ingredient_id: 'ing_s71_rifle',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_59',
-			reward_id: 'reward_s71_ascension_rifle',
-			ingredient_id: 'ing_carinite',
-			quantity: 10,
-			unit: 'x'
-		},
-		{
-			id: 'ri_60',
-			reward_id: 'reward_s71_ascension_rifle',
-			ingredient_id: 'ing_saldynium',
-			quantity: 10,
-			unit: 'x'
-		},
-		{
-			id: 'ri_61',
-			reward_id: 'reward_s71_ascension_rifle',
-			ingredient_id: 'ing_jaclium',
-			quantity: 10,
-			unit: 'x'
-		},
-		{
-			id: 'ri_62',
-			reward_id: 'reward_s71_ascension_rifle',
-			ingredient_id: 'ing_carinite_pure',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_63',
-			reward_id: 'reward_coda_ascension_pistol',
-			ingredient_id: 'ing_coda_pistol',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_64',
-			reward_id: 'reward_coda_ascension_pistol',
-			ingredient_id: 'ing_ace_interceptor_helmet',
-			quantity: 5,
-			unit: 'x'
-		},
-		{
-			id: 'ri_65',
-			reward_id: 'reward_coda_ascension_pistol',
-			ingredient_id: 'ing_tevarin_war_service_marker_pristine',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_66',
-			reward_id: 'reward_coda_ascension_pistol',
-			ingredient_id: 'ing_mg_scrip',
-			quantity: 30,
-			unit: 'x'
-		},
-		{
-			id: 'ri_67',
-			reward_id: 'reward_f55_mark_i_lmg',
-			ingredient_id: 'ing_f55_lmg',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_68',
-			reward_id: 'reward_f55_mark_i_lmg',
-			ingredient_id: 'ing_yormandi_eye',
-			quantity: 4,
-			unit: 'x'
-		},
-		{
-			id: 'ri_69',
-			reward_id: 'reward_f55_mark_i_lmg',
-			ingredient_id: 'ing_yormandi_tongue',
-			quantity: 2,
-			unit: 'x'
-		},
-		{
-			id: 'ri_70',
-			reward_id: 'reward_f55_mark_i_lmg',
-			ingredient_id: 'ing_carinite',
-			quantity: 20,
-			unit: 'x'
-		},
-		{
-			id: 'ri_71',
-			reward_id: 'reward_tripledown_hot_shot_pistol',
-			ingredient_id: 'ing_tripledown_hot_shot_pistol',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_72',
-			reward_id: 'reward_tripledown_hot_shot_pistol',
-			ingredient_id: 'ing_bluemoon_fungus',
-			quantity: 20,
-			unit: 'x'
-		},
-		{
-			id: 'ri_73',
-			reward_id: 'reward_tripledown_hot_shot_pistol',
-			ingredient_id: 'ing_carinite',
-			quantity: 20,
-			unit: 'x'
-		},
-		{
-			id: 'ri_74',
-			reward_id: 'reward_xanthule_ascension',
-			ingredient_id: 'ing_xanthule_suit',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_75',
-			reward_id: 'reward_xanthule_ascension',
-			ingredient_id: 'ing_xanthule_helmet',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_76',
-			reward_id: 'reward_xanthule_ascension',
-			ingredient_id: 'ing_ace_interceptor_helmet',
-			quantity: 10,
-			unit: 'x'
-		},
-		{
-			id: 'ri_77',
-			reward_id: 'reward_xanthule_ascension',
-			ingredient_id: 'ing_tevarin_war_service_marker_pristine',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_78',
-			reward_id: 'reward_xanthule_ascension',
-			ingredient_id: 'ing_mg_scrip',
-			quantity: 20,
-			unit: 'x'
-		},
-		{
-			id: 'ri_79',
-			reward_id: 'reward_novikov_ascension',
-			ingredient_id: 'ing_novikov_exploration_suit',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_80',
-			reward_id: 'reward_novikov_ascension',
-			ingredient_id: 'ing_novikov_helmet',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_81',
-			reward_id: 'reward_novikov_ascension',
-			ingredient_id: 'ing_mg_scrip',
-			quantity: 30,
-			unit: 'x'
-		},
-		{
-			id: 'ri_82',
-			reward_id: 'reward_novikov_ascension',
-			ingredient_id: 'ing_irradiated_valakkar_fang_adult',
-			quantity: 10,
-			unit: 'x'
-		},
-		{
-			id: 'ri_83',
-			reward_id: 'reward_novikov_ascension',
-			ingredient_id: 'ing_irradiated_valakkar_fang_juvenile',
-			quantity: 20,
-			unit: 'x'
-		},
-		{
-			id: 'ri_84',
-			reward_id: 'reward_novikov_ascension',
-			ingredient_id: 'ing_irradiated_valakkar_pearl_grade_aaa',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_85',
-			reward_id: 'reward_venture_ascension',
-			ingredient_id: 'ing_venture_arms',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_86',
-			reward_id: 'reward_venture_ascension',
-			ingredient_id: 'ing_venture_core',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_87',
-			reward_id: 'reward_venture_ascension',
-			ingredient_id: 'ing_venture_helmet_white',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_88',
-			reward_id: 'reward_venture_ascension',
-			ingredient_id: 'ing_venture_legs',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_89',
-			reward_id: 'reward_venture_ascension',
-			ingredient_id: 'ing_mg_scrip',
-			quantity: 30,
-			unit: 'x'
-		},
-		{
-			id: 'ri_90',
-			reward_id: 'reward_venture_ascension',
-			ingredient_id: 'ing_saldynium',
-			quantity: 10,
-			unit: 'x'
-		},
-		{
-			id: 'ri_91',
-			reward_id: 'reward_venture_ascension',
-			ingredient_id: 'ing_jaclium',
-			quantity: 10,
-			unit: 'x'
-		},
-		{
-			id: 'ri_92',
-			reward_id: 'reward_venture_ascension',
-			ingredient_id: 'ing_carinite_pure',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_93',
-			reward_id: 'reward_palatino_mark_1',
-			ingredient_id: 'ing_palatino_helmet',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_94',
-			reward_id: 'reward_palatino_mark_1',
-			ingredient_id: 'ing_palatino_arms',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_95',
-			reward_id: 'reward_palatino_mark_1',
-			ingredient_id: 'ing_palatino_legs',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_96',
-			reward_id: 'reward_palatino_mark_1',
-			ingredient_id: 'ing_palatino_core',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_97',
-			reward_id: 'reward_palatino_mark_1',
-			ingredient_id: 'ing_palatino_backpack',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_98',
-			reward_id: 'reward_palatino_mark_1',
-			ingredient_id: 'ing_yormandi_eye',
-			quantity: 14,
-			unit: 'x'
-		},
-		{
-			id: 'ri_99',
-			reward_id: 'reward_palatino_mark_1',
-			ingredient_id: 'ing_yormandi_tongue',
-			quantity: 7,
-			unit: 'x'
-		},
-		{
-			id: 'ri_100',
-			reward_id: 'reward_geist_snow_camo',
-			ingredient_id: 'ing_asd_secure_drive',
-			quantity: 10,
-			unit: 'x'
-		},
-		{
-			id: 'ri_101',
-			reward_id: 'reward_geist_snow_camo',
-			ingredient_id: 'ing_geist_armor_arms_asd_edition',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_102',
-			reward_id: 'reward_geist_snow_camo',
-			ingredient_id: 'ing_geist_armor_core_asd_edition',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_103',
-			reward_id: 'reward_geist_snow_camo',
-			ingredient_id: 'ing_geist_armor_helmet_asd_edition',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_104',
-			reward_id: 'reward_geist_snow_camo',
-			ingredient_id: 'ing_geist_armor_legs_asd_edition',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_105',
-			reward_id: 'reward_geist_snow_camo',
-			ingredient_id: 'ing_geist_backpack_asd_edition',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_106',
-			reward_id: 'reward_corbel_crush',
-			ingredient_id: 'ing_corbel_helmet_mire',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_107',
-			reward_id: 'reward_corbel_crush',
-			ingredient_id: 'ing_corbel_core_mire',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_108',
-			reward_id: 'reward_corbel_crush',
-			ingredient_id: 'ing_corbel_arms_mire',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_109',
-			reward_id: 'reward_corbel_crush',
-			ingredient_id: 'ing_corbel_legs_mire',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_110',
-			reward_id: 'reward_corbel_crush',
-			ingredient_id: 'ing_novikov_backpack_mire',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_111',
-			reward_id: 'reward_corbel_crush',
-			ingredient_id: 'ing_asd_secure_drive',
-			quantity: 10,
-			unit: 'x'
-		},
-		{
-			id: 'ri_112',
-			reward_id: 'reward_corbel_crush',
-			ingredient_id: 'ing_rcmbnt_rgl_1',
-			quantity: 5,
-			unit: 'x'
-		},
-		{
-			id: 'ri_113',
-			reward_id: 'reward_corbel_crush',
-			ingredient_id: 'ing_rcmbnt_rgl_2',
-			quantity: 5,
-			unit: 'x'
-		},
-		{
-			id: 'ri_114',
-			reward_id: 'reward_corbel_crush',
-			ingredient_id: 'ing_rcmbnt_rgl_3',
-			quantity: 5,
-			unit: 'x'
-		},
-		{
-			id: 'ri_115',
-			reward_id: 'reward_testudo_clanguard',
-			ingredient_id: 'ing_testudo_helmet_turfwar',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_116',
-			reward_id: 'reward_testudo_clanguard',
-			ingredient_id: 'ing_testudo_core_turfwar',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_117',
-			reward_id: 'reward_testudo_clanguard',
-			ingredient_id: 'ing_testudo_arms_turfwar',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_118',
-			reward_id: 'reward_testudo_clanguard',
-			ingredient_id: 'ing_testudo_legs_turfwar',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_119',
-			reward_id: 'reward_testudo_clanguard',
-			ingredient_id: 'ing_testudo_backpack_turfwar',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_120',
-			reward_id: 'reward_testudo_clanguard',
-			ingredient_id: 'ing_vanduul_plating',
-			quantity: 15,
-			unit: 'x'
-		},
-		{
-			id: 'ri_121',
-			reward_id: 'reward_testudo_clanguard',
-			ingredient_id: 'ing_vanduul_metal',
-			quantity: 15,
-			unit: 'x'
-		},
-		{
-			id: 'ri_122',
-			reward_id: 'reward_dcp_armor_jungle_camo',
-			ingredient_id: 'ing_wikelo_favor',
-			quantity: 3,
-			unit: 'x'
-		},
-		{
-			id: 'ri_123',
-			reward_id: 'reward_dcp_armor_jungle_camo',
-			ingredient_id: 'ing_ace_interceptor_helmet',
-			quantity: 5,
-			unit: 'x'
-		},
-		{
-			id: 'ri_124',
-			reward_id: 'reward_dcp_armor_jungle_camo',
-			ingredient_id: 'ing_valakkar_fang_juvenile',
-			quantity: 50,
-			unit: 'x'
-		},
-		{
-			id: 'ri_125',
-			reward_id: 'reward_dcp_armor_jungle_camo',
-			ingredient_id: 'ing_adp_mk4_core_woodland',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_126',
-			reward_id: 'reward_dcp_armor_jungle_camo',
-			ingredient_id: 'ing_adp_mk4_arms_woodland',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_127',
-			reward_id: 'reward_dcp_armor_jungle_camo',
-			ingredient_id: 'ing_adp_mk4_legs_woodland',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_128',
-			reward_id: 'reward_dcp_armor_jungle_camo',
-			ingredient_id: 'ing_adp_mk4_helmet_woodland',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_129',
-			reward_id: 'reward_dcp_armor_hunter_camo',
-			ingredient_id: 'ing_wikelo_favor',
-			quantity: 3,
-			unit: 'x'
-		},
-		{
-			id: 'ri_130',
-			reward_id: 'reward_dcp_armor_hunter_camo',
-			ingredient_id: 'ing_ace_interceptor_helmet',
-			quantity: 5,
-			unit: 'x'
-		},
-		{
-			id: 'ri_131',
-			reward_id: 'reward_dcp_armor_hunter_camo',
-			ingredient_id: 'ing_advocacy_badge_replica',
-			quantity: 20,
-			unit: 'x'
-		},
-		{
-			id: 'ri_132',
-			reward_id: 'reward_dcp_armor_hunter_camo',
-			ingredient_id: 'ing_adp_mk4_core_woodland',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_133',
-			reward_id: 'reward_dcp_armor_hunter_camo',
-			ingredient_id: 'ing_adp_mk4_arms_woodland',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_134',
-			reward_id: 'reward_dcp_armor_hunter_camo',
-			ingredient_id: 'ing_adp_mk4_legs_woodland',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_135',
-			reward_id: 'reward_dcp_armor_hunter_camo',
-			ingredient_id: 'ing_adp_mk4_helmet_woodland',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_136',
-			reward_id: 'reward_dcp_armor_cobalt_camo',
-			ingredient_id: 'ing_wikelo_favor',
-			quantity: 3,
-			unit: 'x'
-		},
-		{
-			id: 'ri_137',
-			reward_id: 'reward_dcp_armor_cobalt_camo',
-			ingredient_id: 'ing_ace_interceptor_helmet',
-			quantity: 5,
-			unit: 'x'
-		},
-		{
-			id: 'ri_138',
-			reward_id: 'reward_dcp_armor_cobalt_camo',
-			ingredient_id: 'ing_grassland_quasi_grazer_egg',
-			quantity: 50,
-			unit: 'x'
-		},
-		{
-			id: 'ri_139',
-			reward_id: 'reward_dcp_armor_cobalt_camo',
-			ingredient_id: 'ing_adp_mk4_core_woodland',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_140',
-			reward_id: 'reward_dcp_armor_cobalt_camo',
-			ingredient_id: 'ing_adp_mk4_arms_woodland',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_141',
-			reward_id: 'reward_dcp_armor_cobalt_camo',
-			ingredient_id: 'ing_adp_mk4_legs_woodland',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_142',
-			reward_id: 'reward_dcp_armor_cobalt_camo',
-			ingredient_id: 'ing_adp_mk4_helmet_woodland',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_143',
-			reward_id: 'reward_ana_armor_endro',
-			ingredient_id: 'ing_saldynium',
-			quantity: 30,
-			unit: 'x'
-		},
-		{
-			id: 'ri_144',
-			reward_id: 'reward_ana_armor_endro',
-			ingredient_id: 'ing_carinite',
-			quantity: 15,
-			unit: 'x'
-		},
-		{
-			id: 'ri_145',
-			reward_id: 'reward_ana_armor_endro',
-			ingredient_id: 'ing_jaclium',
-			quantity: 45,
-			unit: 'x'
-		},
-		{
-			id: 'ri_146',
-			reward_id: 'reward_ana_armor_endro',
-			ingredient_id: 'ing_carinite_pure',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_147',
-			reward_id: 'reward_ana_armor_endro',
-			ingredient_id: 'ing_antium_armor_core',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_148',
-			reward_id: 'reward_ana_armor_endro',
-			ingredient_id: 'ing_antium_armor_helmet',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_149',
-			reward_id: 'reward_ana_armor_endro',
-			ingredient_id: 'ing_antium_armor_legs',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_150',
-			reward_id: 'reward_ana_armor_endro',
-			ingredient_id: 'ing_antium_armor_arms',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_151',
-			reward_id: 'reward_bokto_set',
-			ingredient_id: 'ing_irradiated_valakkar_pearl_grade_aaa',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_152',
-			reward_id: 'reward_bokto_set',
-			ingredient_id: 'ing_antium_armor_core',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_153',
-			reward_id: 'reward_bokto_set',
-			ingredient_id: 'ing_antium_armor_helmet',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_154',
-			reward_id: 'reward_bokto_set',
-			ingredient_id: 'ing_antium_armor_legs',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_155',
-			reward_id: 'reward_bokto_set',
-			ingredient_id: 'ing_antium_armor_arms',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_156',
-			reward_id: 'reward_strata_lava',
-			ingredient_id: 'ing_strata_core',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_157',
-			reward_id: 'reward_strata_lava',
-			ingredient_id: 'ing_strata_helmet',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_158',
-			reward_id: 'reward_strata_lava',
-			ingredient_id: 'ing_strata_legs',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_159',
-			reward_id: 'reward_strata_lava',
-			ingredient_id: 'ing_strata_arms',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_160',
-			reward_id: 'reward_strata_lava',
-			ingredient_id: 'ing_strata_backpack',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_161',
-			reward_id: 'reward_strata_lava',
-			ingredient_id: 'ing_carinite',
-			quantity: 30,
-			unit: 'x'
-		},
-		{
-			id: 'ri_162',
-			reward_id: 'reward_strata_lava',
-			ingredient_id: 'ing_rcmbnt_pwl_1',
-			quantity: 4,
-			unit: 'x'
-		},
-		{
-			id: 'ri_163',
-			reward_id: 'reward_strata_lava',
-			ingredient_id: 'ing_rcmbnt_pwl_2',
-			quantity: 4,
-			unit: 'x'
-		},
-		{
-			id: 'ri_164',
-			reward_id: 'reward_strata_lava',
-			ingredient_id: 'ing_rcmbnt_pwl_3',
-			quantity: 4,
-			unit: 'x'
-		},
-		{
-			id: 'ri_165',
-			reward_id: 'reward_atls_ikti',
-			ingredient_id: 'ing_atls',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_166',
-			reward_id: 'reward_atls_ikti',
-			ingredient_id: 'ing_wikelo_favor',
-			quantity: 2,
-			unit: 'x'
-		},
-		{
-			id: 'ri_167',
-			reward_id: 'reward_atls_ikti',
-			ingredient_id: 'ing_irradiated_valakkar_fang_apex',
-			quantity: 5,
-			unit: 'x'
-		},
-		{
-			id: 'ri_168',
-			reward_id: 'reward_atls_ikti',
-			ingredient_id: 'ing_nn_13_cannon',
-			quantity: 2,
-			unit: 'x'
-		},
-		{
-			id: 'ri_169',
-			reward_id: 'reward_atls_geo_ikti',
-			ingredient_id: 'ing_atls_geo',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_170',
-			reward_id: 'reward_atls_geo_ikti',
-			ingredient_id: 'ing_atls_ikti',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_171',
-			reward_id: 'reward_atls_geo_ikti',
-			ingredient_id: 'ing_nn_13_cannon',
-			quantity: 2,
-			unit: 'x'
-		},
-		{
-			id: 'ri_172',
-			reward_id: 'reward_atls_geo_ikti',
-			ingredient_id: 'ing_wikelo_favor',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_173',
-			reward_id: 'reward_atls_geo_snowland',
-			ingredient_id: 'ing_wikelo_favor',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_174',
-			reward_id: 'reward_atls_geo_snowland',
-			ingredient_id: 'ing_irradiated_valakkar_fang_adult',
-			quantity: 5,
-			unit: 'x'
-		},
-		{
-			id: 'ri_175',
-			reward_id: 'reward_atls_geo_snowland',
-			ingredient_id: 'ing_irradiated_valakkar_pearl_grade_aaa',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_176',
-			reward_id: 'reward_atls_geo_snowland',
-			ingredient_id: 'ing_atls',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_177',
-			reward_id: 'reward_atls_geo_orange_line',
-			ingredient_id: 'ing_wikelo_favor',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_178',
-			reward_id: 'reward_atls_geo_orange_line',
-			ingredient_id: 'ing_atls',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_179',
-			reward_id: 'reward_atls_geo_cool_metal',
-			ingredient_id: 'ing_wikelo_favor',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_180',
-			reward_id: 'reward_atls_geo_cool_metal',
-			ingredient_id: 'ing_carinite',
-			quantity: 10,
-			unit: 'x'
-		},
-		{
-			id: 'ri_181',
-			reward_id: 'reward_atls_geo_cool_metal',
-			ingredient_id: 'ing_carinite_pure',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_182',
-			reward_id: 'reward_atls_geo_cool_metal',
-			ingredient_id: 'ing_atls',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_183',
-			reward_id: 'reward_nox',
-			ingredient_id: 'ing_wikelo_favor',
-			quantity: 4,
-			unit: 'x'
-		},
-		{
-			id: 'ri_184',
-			reward_id: 'reward_pulse',
-			ingredient_id: 'ing_wikelo_favor',
-			quantity: 4,
-			unit: 'x'
-		},
-		{
-			id: 'ri_185',
-			reward_id: 'reward_ursa_medivac',
-			ingredient_id: 'ing_wikelo_favor',
-			quantity: 4,
-			unit: 'x'
-		},
-		{
-			id: 'ri_186',
-			reward_id: 'reward_ursa_medivac',
-			ingredient_id: 'ing_saldynium',
-			quantity: 20,
-			unit: 'x'
-		},
-		{
-			id: 'ri_187',
-			reward_id: 'reward_ursa_medivac',
-			ingredient_id: 'ing_jaclium',
-			quantity: 20,
-			unit: 'x'
-		},
-		{
-			id: 'ri_188',
-			reward_id: 'reward_l_21_wolf',
-			ingredient_id: 'ing_wikelo_favor',
-			quantity: 10,
-			unit: 'x'
-		},
-		{
-			id: 'ri_189',
-			reward_id: 'reward_l_21_wolf',
-			ingredient_id: 'ing_vanduul_plating',
-			quantity: 10,
-			unit: 'x'
-		},
-		{
-			id: 'ri_190',
-			reward_id: 'reward_l_21_wolf',
-			ingredient_id: 'ing_vanduul_metal',
-			quantity: 10,
-			unit: 'x'
-		},
-		{
-			id: 'ri_191',
-			reward_id: 'reward_l_21_wolf',
-			ingredient_id: 'ing_large_artifact_fragment_pristine',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_192',
-			reward_id: 'reward_golem',
-			ingredient_id: 'ing_wikelo_favor',
-			quantity: 5,
-			unit: 'x'
-		},
-		{
-			id: 'ri_193',
-			reward_id: 'reward_golem',
-			ingredient_id: 'ing_asd_secure_drive',
-			quantity: 15,
-			unit: 'x'
-		},
-		{
-			id: 'ri_194',
-			reward_id: 'reward_intrepid',
-			ingredient_id: 'ing_government_cartography_agency_medal_pristine',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_195',
-			reward_id: 'reward_intrepid',
-			ingredient_id: 'ing_wikelo_favor',
-			quantity: 5,
-			unit: 'x'
-		},
-		{
-			id: 'ri_196',
-			reward_id: 'reward_fortune',
-			ingredient_id: 'ing_wikelo_favor',
-			quantity: 6,
-			unit: 'x'
-		},
-		{
-			id: 'ri_197',
-			reward_id: 'reward_fortune',
-			ingredient_id: 'ing_carinite_pure',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_198',
-			reward_id: 'reward_c1_spirit',
-			ingredient_id: 'ing_wikelo_favor',
-			quantity: 8,
-			unit: 'x'
-		},
-		{
-			id: 'ri_199',
-			reward_id: 'reward_c1_spirit',
-			ingredient_id: 'ing_tevarin_war_service_marker_pristine',
-			quantity: 2,
-			unit: 'x'
-		},
-		{
-			id: 'ri_200',
-			reward_id: 'reward_zeus_mk_ii_es',
-			ingredient_id: 'ing_wikelo_favor',
-			quantity: 10,
-			unit: 'x'
-		},
-		{
-			id: 'ri_201',
-			reward_id: 'reward_zeus_mk_ii_es',
-			ingredient_id: 'ing_uee_6th_platoon_medal_pristine',
-			quantity: 2,
-			unit: 'x'
-		},
-		{
-			id: 'ri_202',
-			reward_id: 'reward_zeus_mk_ii_cl',
-			ingredient_id: 'ing_wikelo_favor',
-			quantity: 30,
-			unit: 'x'
-		},
-		{
-			id: 'ri_203',
-			reward_id: 'reward_zeus_mk_ii_cl',
-			ingredient_id: 'ing_carinite',
-			quantity: 24,
-			unit: 'x'
-		},
-		{
-			id: 'ri_204',
-			reward_id: 'reward_zeus_mk_ii_cl',
-			ingredient_id: 'ing_ace_interceptor_helmet',
-			quantity: 15,
-			unit: 'x'
-		},
-		{
-			id: 'ri_205',
-			reward_id: 'reward_zeus_mk_ii_cl',
-			ingredient_id: 'ing_carinite_pure',
-			quantity: 2,
-			unit: 'x'
-		},
-		{
-			id: 'ri_206',
-			reward_id: 'reward_starlancer_max',
-			ingredient_id: 'ing_wikelo_favor',
-			quantity: 30,
-			unit: 'x'
-		},
-		{
-			id: 'ri_207',
-			reward_id: 'reward_starlancer_max',
-			ingredient_id: 'ing_ace_interceptor_helmet',
-			quantity: 15,
-			unit: 'x'
-		},
-		{
-			id: 'ri_208',
-			reward_id: 'reward_starlancer_max',
-			ingredient_id: 'ing_carinite_pure',
-			quantity: 5,
-			unit: 'x'
-		},
-		{
-			id: 'ri_209',
-			reward_id: 'reward_starlancer_max',
-			ingredient_id: 'ing_irradiated_valakkar_pearl_grade_aaa',
-			quantity: 5,
-			unit: 'x'
-		},
-		{
-			id: 'ri_210',
-			reward_id: 'reward_starlancer_max',
-			ingredient_id: 'ing_government_cartography_agency_medal_pristine',
-			quantity: 5,
-			unit: 'x'
-		},
-		{
-			id: 'ri_211',
-			reward_id: 'reward_constellation_taurus',
-			ingredient_id: 'ing_wikelo_favor',
-			quantity: 30,
-			unit: 'x'
-		},
-		{
-			id: 'ri_212',
-			reward_id: 'reward_constellation_taurus',
-			ingredient_id: 'ing_carinite_pure',
-			quantity: 5,
-			unit: 'x'
-		},
-		{
-			id: 'ri_213',
-			reward_id: 'reward_constellation_taurus',
-			ingredient_id: 'ing_irradiated_valakkar_pearl_grade_aaa',
-			quantity: 5,
-			unit: 'x'
-		},
-		{
-			id: 'ri_214',
-			reward_id: 'reward_constellation_taurus',
-			ingredient_id: 'ing_government_cartography_agency_medal_pristine',
-			quantity: 5,
-			unit: 'x'
-		},
-		{
-			id: 'ri_215',
-			reward_id: 'reward_sabre_peregrine',
-			ingredient_id: 'ing_wikelo_favor',
-			quantity: 8,
-			unit: 'x'
-		},
-		{
-			id: 'ri_216',
-			reward_id: 'reward_sabre_peregrine',
-			ingredient_id: 'ing_dchs_05_orbital_positioning_comp_board',
-			quantity: 4,
-			unit: 'x'
-		},
-		{
-			id: 'ri_217',
-			reward_id: 'reward_sabre_firebird',
-			ingredient_id: 'ing_wikelo_favor',
-			quantity: 20,
-			unit: 'x'
-		},
-		{
-			id: 'ri_218',
-			reward_id: 'reward_sabre_firebird',
-			ingredient_id: 'ing_polaris_bit',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_219',
-			reward_id: 'reward_sabre_firebird',
-			ingredient_id: 'ing_dchs_05_orbital_positioning_comp_board',
-			quantity: 6,
-			unit: 'x'
-		},
-		{
-			id: 'ri_220',
-			reward_id: 'reward_sabre_firebird',
-			ingredient_id: 'ing_government_cartography_agency_medal_pristine',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_221',
-			reward_id: 'reward_scorpius',
-			ingredient_id: 'ing_wikelo_favor',
-			quantity: 20,
-			unit: 'x'
-		},
-		{
-			id: 'ri_222',
-			reward_id: 'reward_scorpius',
-			ingredient_id: 'ing_dchs_05_orbital_positioning_comp_board',
-			quantity: 6,
-			unit: 'x'
-		},
-		{
-			id: 'ri_223',
-			reward_id: 'reward_scorpius',
-			ingredient_id: 'ing_carinite',
-			quantity: 10,
-			unit: 'x'
-		},
-		{
-			id: 'ri_224',
-			reward_id: 'reward_scorpius',
-			ingredient_id: 'ing_tevarin_war_service_marker_pristine',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_225',
-			reward_id: 'reward_f7c_m_super_hornet_mk_ii',
-			ingredient_id: 'ing_wikelo_favor',
-			quantity: 16,
-			unit: 'x'
-		},
-		{
-			id: 'ri_226',
-			reward_id: 'reward_f7c_m_super_hornet_mk_ii',
-			ingredient_id: 'ing_dchs_05_orbital_positioning_comp_board',
-			quantity: 3,
-			unit: 'x'
-		},
-		{
-			id: 'ri_227',
-			reward_id: 'reward_f7c_m_super_hornet_mk_ii',
-			ingredient_id: 'ing_ace_interceptor_helmet',
-			quantity: 5,
-			unit: 'x'
-		},
-		{
-			id: 'ri_228',
-			reward_id: 'reward_f7c_m_super_hornet_mk_ii',
-			ingredient_id: 'ing_government_cartography_agency_medal_pristine',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_229',
-			reward_id: 'reward_guardian',
-			ingredient_id: 'ing_wikelo_favor',
-			quantity: 30,
-			unit: 'x'
-		},
-		{
-			id: 'ri_230',
-			reward_id: 'reward_guardian',
-			ingredient_id: 'ing_irradiated_valakkar_pearl_grade_aa',
-			quantity: 24,
-			unit: 'x'
-		},
-		{
-			id: 'ri_231',
-			reward_id: 'reward_guardian',
-			ingredient_id: 'ing_ace_interceptor_helmet',
-			quantity: 15,
-			unit: 'x'
-		},
-		{
-			id: 'ri_232',
-			reward_id: 'reward_guardian',
-			ingredient_id: 'ing_tevarin_war_service_marker_pristine',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_233',
-			reward_id: 'reward_guardian_qi',
-			ingredient_id: 'ing_wikelo_favor',
-			quantity: 30,
-			unit: 'x'
-		},
-		{
-			id: 'ri_234',
-			reward_id: 'reward_guardian_qi',
-			ingredient_id: 'ing_irradiated_valakkar_pearl_grade_aa',
-			quantity: 15,
-			unit: 'x'
-		},
-		{
-			id: 'ri_235',
-			reward_id: 'reward_guardian_qi',
-			ingredient_id: 'ing_dchs_05_orbital_positioning_comp_board',
-			quantity: 15,
-			unit: 'x'
-		},
-		{
-			id: 'ri_236',
-			reward_id: 'reward_guardian_qi',
-			ingredient_id: 'ing_uee_6th_platoon_medal_pristine',
-			quantity: 5,
-			unit: 'x'
-		},
-		{
-			id: 'ri_237',
-			reward_id: 'reward_guardian_mx',
-			ingredient_id: 'ing_wikelo_favor',
-			quantity: 30,
-			unit: 'x'
-		},
-		{
-			id: 'ri_238',
-			reward_id: 'reward_guardian_mx',
-			ingredient_id: 'ing_ace_interceptor_helmet',
-			quantity: 15,
-			unit: 'x'
-		},
-		{
-			id: 'ri_239',
-			reward_id: 'reward_guardian_mx',
-			ingredient_id: 'ing_large_artifact_fragment_pristine',
-			quantity: 4,
-			unit: 'x'
-		},
-		{
-			id: 'ri_240',
-			reward_id: 'reward_guardian_mx',
-			ingredient_id: 'ing_vanduul_plating',
-			quantity: 30,
-			unit: 'x'
-		},
-		{
-			id: 'ri_241',
-			reward_id: 'reward_guardian_mx',
-			ingredient_id: 'ing_vanduul_metal',
-			quantity: 30,
-			unit: 'x'
-		},
-		{
-			id: 'ri_242',
-			reward_id: 'reward_f8c_lightning',
-			ingredient_id: 'ing_wikelo_favor',
-			quantity: 40,
-			unit: 'x'
-		},
-		{
-			id: 'ri_243',
-			reward_id: 'reward_f8c_lightning',
-			ingredient_id: 'ing_carinite_pure',
-			quantity: 4,
-			unit: 'x'
-		},
-		{
-			id: 'ri_244',
-			reward_id: 'reward_f8c_lightning',
-			ingredient_id: 'ing_irradiated_valakkar_pearl_grade_aaa',
-			quantity: 4,
-			unit: 'x'
-		},
-		{
-			id: 'ri_245',
-			reward_id: 'reward_f8c_lightning',
-			ingredient_id: 'ing_tevarin_war_service_marker_pristine',
-			quantity: 4,
-			unit: 'x'
-		},
-		{
-			id: 'ri_246',
-			reward_id: 'reward_f8c_lightning',
-			ingredient_id: 'ing_dchs_05_orbital_positioning_comp_board',
-			quantity: 20,
-			unit: 'x'
-		},
-		{
-			id: 'ri_247',
-			reward_id: 'reward_f8c_lightning',
-			ingredient_id: 'ing_carinite_pure',
-			quantity: 5,
-			unit: 'x'
-		},
-		{
-			id: 'ri_248',
-			reward_id: 'reward_f8c_lightning',
-			ingredient_id: 'ing_irradiated_valakkar_pearl_grade_aaa',
-			quantity: 5,
-			unit: 'x'
-		},
-		{
-			id: 'ri_249',
-			reward_id: 'reward_terrapin_medic',
-			ingredient_id: 'ing_wikelo_favor',
-			quantity: 15,
-			unit: 'x'
-		},
-		{
-			id: 'ri_250',
-			reward_id: 'reward_terrapin_medic',
-			ingredient_id: 'ing_asd_secure_drive',
-			quantity: 30,
-			unit: 'x'
-		},
-		{
-			id: 'ri_251',
-			reward_id: 'reward_terrapin_medic',
-			ingredient_id: 'ing_tevarin_war_service_marker_pristine',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_252',
-			reward_id: 'reward_starlancer_tac',
-			ingredient_id: 'ing_wikelo_favor',
-			quantity: 50,
-			unit: 'x'
-		},
-		{
-			id: 'ri_253',
-			reward_id: 'reward_starlancer_tac',
-			ingredient_id: 'ing_ace_interceptor_helmet',
-			quantity: 15,
-			unit: 'x'
-		},
-		{
-			id: 'ri_254',
-			reward_id: 'reward_starlancer_tac',
-			ingredient_id: 'ing_asd_secure_drive',
-			quantity: 50,
-			unit: 'x'
-		},
-		{
-			id: 'ri_255',
-			reward_id: 'reward_starlancer_tac',
-			ingredient_id: 'ing_irradiated_valakkar_pearl_grade_aaa',
-			quantity: 5,
-			unit: 'x'
-		},
-		{
-			id: 'ri_256',
-			reward_id: 'reward_starlancer_tac',
-			ingredient_id: 'ing_tevarin_war_service_marker_pristine',
-			quantity: 5,
-			unit: 'x'
-		},
-		{
-			id: 'ri_257',
-			reward_id: 'reward_starlancer_tac',
-			ingredient_id: 'ing_carinite_pure',
-			quantity: 5,
-			unit: 'x'
-		},
-		{
-			id: 'ri_258',
-			reward_id: 'reward_starlancer_tac',
-			ingredient_id: 'ing_dchs_05_orbital_positioning_comp_board',
-			quantity: 5,
-			unit: 'x'
-		},
-		{
-			id: 'ri_259',
-			reward_id: 'reward_ares_star_fighter_inferno',
-			ingredient_id: 'ing_wikelo_favor',
-			quantity: 15,
-			unit: 'x'
-		},
-		{
-			id: 'ri_260',
-			reward_id: 'reward_ares_star_fighter_inferno',
-			ingredient_id: 'ing_yormandi_tongue',
-			quantity: 5,
-			unit: 'x'
-		},
-		{
-			id: 'ri_261',
-			reward_id: 'reward_ares_star_fighter_inferno',
-			ingredient_id: 'ing_ace_interceptor_helmet',
-			quantity: 10,
-			unit: 'x'
-		},
-		{
-			id: 'ri_262',
-			reward_id: 'reward_ares_star_fighter_inferno',
-			ingredient_id: 'ing_uee_6th_platoon_medal_pristine',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_263',
-			reward_id: 'reward_ares_star_fighter_ion',
-			ingredient_id: 'ing_wikelo_favor',
-			quantity: 15,
-			unit: 'x'
-		},
-		{
-			id: 'ri_264',
-			reward_id: 'reward_ares_star_fighter_ion',
-			ingredient_id: 'ing_yormandi_eye',
-			quantity: 10,
-			unit: 'x'
-		},
-		{
-			id: 'ri_265',
-			reward_id: 'reward_ares_star_fighter_ion',
-			ingredient_id: 'ing_ace_interceptor_helmet',
-			quantity: 10,
-			unit: 'x'
-		},
-		{
-			id: 'ri_266',
-			reward_id: 'reward_ares_star_fighter_ion',
-			ingredient_id: 'ing_tevarin_war_service_marker_pristine',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_267',
-			reward_id: 'reward_prowler_utility',
-			ingredient_id: 'ing_wikelo_favor',
-			quantity: 40,
-			unit: 'x'
-		},
-		{
-			id: 'ri_268',
-			reward_id: 'reward_prowler_utility',
-			ingredient_id: 'ing_yormandi_eye',
-			quantity: 20,
-			unit: 'x'
-		},
-		{
-			id: 'ri_269',
-			reward_id: 'reward_prowler_utility',
-			ingredient_id: 'ing_yormandi_tongue',
-			quantity: 10,
-			unit: 'x'
-		},
-		{
-			id: 'ri_270',
-			reward_id: 'reward_prowler_utility',
-			ingredient_id: 'ing_irradiated_valakkar_pearl_grade_aaa',
-			quantity: 3,
-			unit: 'x'
-		},
-		{
-			id: 'ri_271',
-			reward_id: 'reward_prowler_utility',
-			ingredient_id: 'ing_carinite_pure',
-			quantity: 3,
-			unit: 'x'
-		},
-		{
-			id: 'ri_272',
-			reward_id: 'reward_a2_hercules_starlifter',
-			ingredient_id: 'ing_wikelo_favor',
-			quantity: 50,
-			unit: 'x'
-		},
-		{
-			id: 'ri_273',
-			reward_id: 'reward_a2_hercules_starlifter',
-			ingredient_id: 'ing_polaris_bit',
-			quantity: 20,
-			unit: 'x'
-		},
-		{
-			id: 'ri_274',
-			reward_id: 'reward_a2_hercules_starlifter',
-			ingredient_id: 'ing_mg_scrip',
-			quantity: 20,
-			unit: 'x'
-		},
-		{
-			id: 'ri_275',
-			reward_id: 'reward_a2_hercules_starlifter',
-			ingredient_id: 'ing_asd_secure_drive',
-			quantity: 10,
-			unit: 'x'
-		},
-		{
-			id: 'ri_276',
-			reward_id: 'reward_a2_hercules_starlifter',
-			ingredient_id: 'ing_irradiated_valakkar_pearl_grade_aaa',
-			quantity: 10,
-			unit: 'x'
-		},
-		{
-			id: 'ri_277',
-			reward_id: 'reward_a2_hercules_starlifter',
-			ingredient_id: 'ing_tevarin_war_service_marker_pristine',
-			quantity: 10,
-			unit: 'x'
-		},
-		{
-			id: 'ri_278',
-			reward_id: 'reward_a2_hercules_starlifter',
-			ingredient_id: 'ing_dchs_05_orbital_positioning_comp_board',
-			quantity: 10,
-			unit: 'x'
-		},
-		{
-			id: 'ri_279',
-			reward_id: 'reward_a2_hercules_starlifter',
-			ingredient_id: 'ing_carinite_pure',
-			quantity: 10,
-			unit: 'x'
-		},
-		{
-			id: 'ri_280',
-			reward_id: 'reward_asgard',
-			ingredient_id: 'ing_wikelo_favor',
-			quantity: 50,
-			unit: 'x'
-		},
-		{
-			id: 'ri_281',
-			reward_id: 'reward_asgard',
-			ingredient_id: 'ing_asd_secure_drive',
-			quantity: 3,
-			unit: 'x'
-		},
-		{
-			id: 'ri_282',
-			reward_id: 'reward_asgard',
-			ingredient_id: 'ing_rcmbnt_pwl_1',
-			quantity: 5,
-			unit: 'x'
-		},
-		{
-			id: 'ri_283',
-			reward_id: 'reward_asgard',
-			ingredient_id: 'ing_rcmbnt_pwl_2',
-			quantity: 5,
-			unit: 'x'
-		},
-		{
-			id: 'ri_284',
-			reward_id: 'reward_asgard',
-			ingredient_id: 'ing_rcmbnt_pwl_3',
-			quantity: 5,
-			unit: 'x'
-		},
-		{
-			id: 'ri_285',
-			reward_id: 'reward_asgard',
-			ingredient_id: 'ing_rcmbnt_rgl_1',
-			quantity: 5,
-			unit: 'x'
-		},
-		{
-			id: 'ri_286',
-			reward_id: 'reward_asgard',
-			ingredient_id: 'ing_rcmbnt_rgl_2',
-			quantity: 5,
-			unit: 'x'
-		},
-		{
-			id: 'ri_287',
-			reward_id: 'reward_asgard',
-			ingredient_id: 'ing_rcmbnt_rgl_3',
-			quantity: 5,
-			unit: 'x'
-		},
-		{
-			id: 'ri_288',
-			reward_id: 'reward_asgard',
-			ingredient_id: 'ing_rcmbnt_xtl_1',
-			quantity: 5,
-			unit: 'x'
-		},
-		{
-			id: 'ri_289',
-			reward_id: 'reward_asgard',
-			ingredient_id: 'ing_rcmbnt_xtl_2',
-			quantity: 5,
-			unit: 'x'
-		},
-		{
-			id: 'ri_290',
-			reward_id: 'reward_asgard',
-			ingredient_id: 'ing_rcmbnt_xtl_3',
-			quantity: 5,
-			unit: 'x'
-		},
-		{
-			id: 'ri_291',
-			reward_id: 'reward_meteor',
-			ingredient_id: 'ing_wikelo_favor',
-			quantity: 10,
-			unit: 'x'
-		},
-		{
-			id: 'ri_292',
-			reward_id: 'reward_meteor',
-			ingredient_id: 'ing_ace_interceptor_helmet',
-			quantity: 10,
-			unit: 'x'
-		},
-		{
-			id: 'ri_293',
-			reward_id: 'reward_meteor',
-			ingredient_id: 'ing_large_artifact_fragment_pristine',
-			quantity: 2,
-			unit: 'x'
-		},
-		{
-			id: 'ri_294',
-			reward_id: 'reward_meteor',
-			ingredient_id: 'ing_vanduul_plating',
-			quantity: 10,
-			unit: 'x'
-		},
-		{
-			id: 'ri_295',
-			reward_id: 'reward_meteor',
-			ingredient_id: 'ing_vanduul_metal',
-			quantity: 10,
-			unit: 'x'
-		},
-		{
-			id: 'ri_296',
-			reward_id: 'reward_polaris_wikelo_special',
-			ingredient_id: 'ing_wikelo_favor',
-			quantity: 50,
-			unit: 'x'
-		},
-		{
-			id: 'ri_297',
-			reward_id: 'reward_polaris_wikelo_special',
-			ingredient_id: 'ing_polaris_bit',
-			quantity: 15,
-			unit: 'x'
-		},
-		{
-			id: 'ri_298',
-			reward_id: 'reward_polaris_wikelo_special',
-			ingredient_id: 'ing_asd_secure_drive',
-			quantity: 15,
-			unit: 'x'
-		},
-		{
-			id: 'ri_299',
-			reward_id: 'reward_polaris_wikelo_special',
-			ingredient_id: 'ing_rcmbnt_pwl_1',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_300',
-			reward_id: 'reward_polaris_wikelo_special',
-			ingredient_id: 'ing_rcmbnt_pwl_2',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_301',
-			reward_id: 'reward_polaris_wikelo_special',
-			ingredient_id: 'ing_rcmbnt_pwl_3',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_302',
-			reward_id: 'reward_polaris_wikelo_special',
-			ingredient_id: 'ing_rcmbnt_rgl_1',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_303',
-			reward_id: 'reward_polaris_wikelo_special',
-			ingredient_id: 'ing_rcmbnt_rgl_2',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_304',
-			reward_id: 'reward_polaris_wikelo_special',
-			ingredient_id: 'ing_rcmbnt_rgl_3',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_305',
-			reward_id: 'reward_polaris_wikelo_special',
-			ingredient_id: 'ing_rcmbnt_xtl_1',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_306',
-			reward_id: 'reward_polaris_wikelo_special',
-			ingredient_id: 'ing_rcmbnt_xtl_2',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_307',
-			reward_id: 'reward_polaris_wikelo_special',
-			ingredient_id: 'ing_rcmbnt_xtl_3',
-			quantity: 1,
-			unit: 'x'
-		},
-		{
-			id: 'ri_308',
-			reward_id: 'reward_polaris_wikelo_special',
-			ingredient_id: 'ing_dchs_05_orbital_positioning_comp_board',
-			quantity: 10,
-			unit: 'x'
-		},
-		{
-			id: 'ri_309',
-			reward_id: 'reward_polaris_wikelo_special',
-			ingredient_id: 'ing_carinite',
-			quantity: 20,
-			unit: 'x'
-		},
-		{
-			id: 'ri_310',
-			reward_id: 'reward_polaris_wikelo_special',
-			ingredient_id: 'ing_irradiated_valakkar_fang_apex',
-			quantity: 20,
-			unit: 'x'
-		},
-		{
-			id: 'ri_311',
-			reward_id: 'reward_polaris_wikelo_special',
-			ingredient_id: 'ing_mg_scrip',
-			quantity: 20,
-			unit: 'x'
-		},
-		{
-			id: 'ri_312',
-			reward_id: 'reward_polaris_wikelo_special',
-			ingredient_id: 'ing_ace_interceptor_helmet',
-			quantity: 15,
-			unit: 'x'
-		},
-		{
-			id: 'ri_313',
-			reward_id: 'reward_polaris_wikelo_special',
-			ingredient_id: 'ing_irradiated_valakkar_pearl_grade_aaa',
-			quantity: 15,
-			unit: 'x'
-		},
-		{
-			id: 'ri_314',
-			reward_id: 'reward_polaris_wikelo_special',
-			ingredient_id: 'ing_uee_6th_platoon_medal_pristine',
-			quantity: 15,
-			unit: 'x'
-		},
-		{
-			id: 'ri_315',
-			reward_id: 'reward_polaris_wikelo_special',
-			ingredient_id: 'ing_carinite_pure',
-			quantity: 15,
-			unit: 'x'
-		},
-		{
-			id: 'ri_316',
+			id: 'ri_idris_1',
 			reward_id: 'reward_idris_p',
 			ingredient_id: 'ing_wikelo_favor',
 			quantity: 50,
 			unit: 'x'
 		},
 		{
-			id: 'ri_317',
+			id: 'ri_idris_2',
 			reward_id: 'reward_idris_p',
 			ingredient_id: 'ing_polaris_bit',
 			quantity: 50,
 			unit: 'x'
 		},
 		{
-			id: 'ri_318',
+			id: 'ri_idris_3',
 			reward_id: 'reward_idris_p',
 			ingredient_id: 'ing_dchs_05_orbital_positioning_comp_board',
 			quantity: 50,
 			unit: 'x'
 		},
 		{
-			id: 'ri_319',
+			id: 'ri_idris_4',
 			reward_id: 'reward_idris_p',
 			ingredient_id: 'ing_carinite',
 			quantity: 50,
 			unit: 'x'
 		},
 		{
-			id: 'ri_320',
+			id: 'ri_idris_5',
 			reward_id: 'reward_idris_p',
 			ingredient_id: 'ing_irradiated_valakkar_fang_apex',
 			quantity: 50,
 			unit: 'x'
 		},
 		{
-			id: 'ri_321',
+			id: 'ri_idris_6',
 			reward_id: 'reward_idris_p',
 			ingredient_id: 'ing_mg_scrip',
 			quantity: 50,
 			unit: 'x'
 		},
 		{
-			id: 'ri_322',
+			id: 'ri_idris_7',
 			reward_id: 'reward_idris_p',
 			ingredient_id: 'ing_ace_interceptor_helmet',
 			quantity: 50,
 			unit: 'x'
 		},
 		{
-			id: 'ri_323',
+			id: 'ri_idris_8',
 			reward_id: 'reward_idris_p',
 			ingredient_id: 'ing_irradiated_valakkar_pearl_grade_aaa',
 			quantity: 30,
 			unit: 'x'
 		},
 		{
-			id: 'ri_324',
+			id: 'ri_idris_9',
 			reward_id: 'reward_idris_p',
 			ingredient_id: 'ing_uee_6th_platoon_medal_pristine',
 			quantity: 30,
 			unit: 'x'
 		},
 		{
-			id: 'ri_325',
+			id: 'ri_idris_10',
 			reward_id: 'reward_idris_p',
 			ingredient_id: 'ing_carinite_pure',
 			quantity: 30,
 			unit: 'x'
 		},
 		{
-			id: 'ri_326',
+			id: 'ri_idris_11',
 			reward_id: 'reward_idris_p',
 			ingredient_id: 'ing_asd_secure_drive',
 			quantity: 30,
 			unit: 'x'
 		},
 		{
-			id: 'ri_327',
+			id: 'ri_idris_12',
 			reward_id: 'reward_idris_p',
 			ingredient_id: 'ing_rcmbnt_pwl_1',
 			quantity: 5,
 			unit: 'x'
 		},
 		{
-			id: 'ri_328',
+			id: 'ri_idris_13',
 			reward_id: 'reward_idris_p',
 			ingredient_id: 'ing_rcmbnt_pwl_2',
 			quantity: 5,
 			unit: 'x'
 		},
 		{
-			id: 'ri_329',
+			id: 'ri_idris_14',
 			reward_id: 'reward_idris_p',
 			ingredient_id: 'ing_rcmbnt_pwl_3',
 			quantity: 5,
 			unit: 'x'
 		},
 		{
-			id: 'ri_330',
+			id: 'ri_idris_15',
 			reward_id: 'reward_idris_p',
 			ingredient_id: 'ing_rcmbnt_rgl_1',
 			quantity: 5,
 			unit: 'x'
 		},
 		{
-			id: 'ri_331',
+			id: 'ri_idris_16',
 			reward_id: 'reward_idris_p',
 			ingredient_id: 'ing_rcmbnt_rgl_2',
 			quantity: 5,
 			unit: 'x'
 		},
 		{
-			id: 'ri_332',
+			id: 'ri_idris_17',
 			reward_id: 'reward_idris_p',
 			ingredient_id: 'ing_rcmbnt_rgl_3',
 			quantity: 5,
 			unit: 'x'
 		},
 		{
-			id: 'ri_333',
+			id: 'ri_idris_18',
 			reward_id: 'reward_idris_p',
 			ingredient_id: 'ing_rcmbnt_xtl_1',
 			quantity: 5,
 			unit: 'x'
 		},
 		{
-			id: 'ri_334',
+			id: 'ri_idris_19',
 			reward_id: 'reward_idris_p',
 			ingredient_id: 'ing_rcmbnt_xtl_2',
 			quantity: 5,
 			unit: 'x'
 		},
 		{
-			id: 'ri_335',
+			id: 'ri_idris_20',
 			reward_id: 'reward_idris_p',
 			ingredient_id: 'ing_rcmbnt_xtl_3',
-			quantity: 5,
-			unit: 'x'
-		},
-		{
-			id: 'ri_336',
-			reward_id: 'reward_karna',
-			ingredient_id: 'ing_jaclium',
-			quantity: 4,
-			unit: 'x'
-		},
-		{
-			id: 'ri_337',
-			reward_id: 'reward_polaris',
-			ingredient_id: 'ing_jaclium',
-			quantity: 20,
-			unit: 'x'
-		},
-		{
-			id: 'ri_338',
-			reward_id: 'reward_polaris',
-			ingredient_id: 'ing_irradiated_valakkar_fang_apex',
 			quantity: 5,
 			unit: 'x'
 		}
@@ -4808,8 +2309,8 @@ export const mockDb = {
 		{
 			id: 'sug_1',
 			item_type: 'ingredient',
-			item_id: 'ing_jaclium',
-			item_name: 'Jaclium',
+			item_id: 'ing_carinite',
+			item_name: 'Carinite',
 			suggestion_type: 'location_update',
 			content: 'Found in larger quantities around Pyro outposts in 4.1.',
 			user_email: 'tester@example.com',
