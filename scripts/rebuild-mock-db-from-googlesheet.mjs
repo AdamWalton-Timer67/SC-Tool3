@@ -1,14 +1,7 @@
 #!/usr/bin/env node
 import fs from 'node:fs/promises';
-import https from 'node:https';
 
-const SHEET_ID = process.env.SHEET_ID || '1ji0q_pp6iW35RG1YyFEsv-lsmZOaCStJXGdIEdLLwhM';
-const DEFAULT_GID = process.env.SHEET_DEFAULT_GID || '265426743';
-const MANUAL_GIDS = (process.env.SHEET_GIDS || '')
-	.split(',')
-	.map((v) => v.trim())
-	.filter(Boolean);
-
+const SHEET_ID = '1ji0q_pp6iW35RG1YyFEsv-lsmZOaCStJXGdIEdLLwhM';
 const HTML_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/htmlview`;
 const OUTPUT_PATH = 'src/lib/mock-db.generated.json';
 
@@ -16,22 +9,6 @@ function parseGvizPayload(raw) {
 	const match = raw.match(/setResponse\((.*)\);?\s*$/s);
 	if (!match) throw new Error('Unable to parse GViz response payload.');
 	return JSON.parse(match[1]);
-}
-
-function extractSheetRefsFromHtml(html) {
-	const byMenu = Array.from(html.matchAll(/<a[^>]+href="([^"]*gid=(\d+)[^"]*)"[^>]*>(.*?)<\/a>/gis)).map(
-		(m) => ({ gid: m[2], name: m[3].replace(/<[^>]+>/g, '').trim() || `gid_${m[2]}` })
-	);
-	if (byMenu.length > 0) {
-		const dedup = new Map();
-		for (const item of byMenu) if (!dedup.has(item.gid)) dedup.set(item.gid, item);
-		return [...dedup.values()];
-	}
-
-	const gids = [...new Set(Array.from(html.matchAll(/gid=(\d+)/g), (m) => m[1]))];
-	if (gids.length > 0) return gids.map((gid) => ({ gid, name: `gid_${gid}` }));
-
-	return [];
 }
 
 function dateValue(cell) {
@@ -65,81 +42,38 @@ function sheetTableToRows(payload) {
 	});
 }
 
-function fetchText(url, timeoutMs = 30000) {
-	return new Promise((resolve, reject) => {
-		const req = https.get(
-			url,
-			{
-				headers: {
-					'user-agent': 'Mozilla/5.0 (compatible; SC-Tool3-Rebuild/1.0)'
-				}
-			},
-			(res) => {
-				if (res.statusCode && res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
-					res.resume();
-					resolve(fetchText(res.headers.location, timeoutMs));
-					return;
-				}
-				if (!res.statusCode || res.statusCode < 200 || res.statusCode >= 300) {
-					reject(new Error(`HTTP ${res.statusCode ?? 'unknown'} for ${url}`));
-					res.resume();
-					return;
-				}
-				let data = '';
-				res.setEncoding('utf8');
-				res.on('data', (chunk) => (data += chunk));
-				res.on('end', () => resolve(data));
-			}
-		);
-		req.setTimeout(timeoutMs, () => req.destroy(new Error(`Timeout after ${timeoutMs}ms: ${url}`)));
-		req.on('error', reject);
-	});
-}
-
-async function fetchSheetByGid(gid) {
-	const gvizUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?gid=${encodeURIComponent(gid)}&tqx=out:json`;
-	const payload = parseGvizPayload(await fetchText(gvizUrl));
-	return sheetTableToRows(payload);
+async function fetchText(url) {
+	const res = await fetch(url);
+	if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}`);
+	return res.text();
 }
 
 async function main() {
 	console.log('Downloading sheet index...');
+	const html = await fetchText(HTML_URL);
 
-	let sheetRefs = [];
+	const names = Array.from(
+		html.matchAll(/<td[^>]*>([^<]+)<\/td>/g),
+		(m) => m[1].trim()
+	)
+		.filter(Boolean)
+		.filter((value, i, arr) => arr.indexOf(value) === i);
 
-	if (MANUAL_GIDS.length > 0) {
-		sheetRefs = MANUAL_GIDS.map((gid) => ({ gid, name: `gid_${gid}` }));
-		console.log(`Using SHEET_GIDS override with ${sheetRefs.length} gid(s).`);
-	} else {
-		try {
-			const html = await fetchText(HTML_URL);
-			sheetRefs = extractSheetRefsFromHtml(html);
-		} catch (error) {
-			console.warn(`Could not fetch/parse htmlview index: ${error.message}`);
-		}
+	if (names.length === 0) {
+		throw new Error('No sheet names found in htmlview export.');
 	}
 
-	if (sheetRefs.length === 0) {
-		console.warn(`Falling back to default gid ${DEFAULT_GID}.`);
-		sheetRefs = [{ gid: DEFAULT_GID, name: `gid_${DEFAULT_GID}` }];
-	}
-
-	console.log(`Found ${sheetRefs.length} sheet reference(s). Rebuilding from oldest entries to latest updates...`);
+	console.log(`Found ${names.length} tabs. Rebuilding from oldest entries to latest updates...`);
 
 	const rawSheets = {};
 	const mergedByKey = new Map();
 	const events = [];
 
-	for (const { gid, name } of sheetRefs) {
-		let rows = [];
-		try {
-			rows = await fetchSheetByGid(gid);
-		} catch (error) {
-			console.warn(`Skipping gid ${gid} (${name}): ${error.message}`);
-			continue;
-		}
-
-		rawSheets[name] = rows;
+	for (const sheetName of names) {
+		const gvizUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=${encodeURIComponent(sheetName)}&tqx=out:json`;
+		const payload = parseGvizPayload(await fetchText(gvizUrl));
+		const rows = sheetTableToRows(payload);
+		rawSheets[sheetName] = rows;
 
 		for (const row of rows) {
 			const values = Object.values(row);
@@ -147,13 +81,12 @@ async function main() {
 			if (!firstText) continue;
 
 			const key = normalizeKey(row.id ?? row.ID ?? row.Name ?? row.name ?? firstText);
-			const parsedDate = values.map((v) => dateValue(typeof v === 'object' ? v : { v })).find(Boolean);
-			events.push({ key, sheetName: name, parsedDate, row });
-		}
-	}
+			const parsedDate = values
+				.map((v) => dateValue(typeof v === 'object' ? v : { v }))
+				.find(Boolean);
 
-	if (events.length === 0) {
-		throw new Error('No rows extracted from available sheet references. Ensure the sheet is public and try SHEET_GIDS override.');
+			events.push({ key, sheetName, parsedDate, row });
+		}
 	}
 
 	events.sort((a, b) => {
@@ -177,11 +110,11 @@ async function main() {
 		meta: {
 			sheetId: SHEET_ID,
 			generatedAt: new Date().toISOString(),
-			sheetRefCount: sheetRefs.length,
+			tabCount: names.length,
 			rowEventCount: events.length,
 			rebuildMode: 'oldest-first-then-update'
 		},
-		tabs: sheetRefs,
+		tabs: names,
 		rawSheets,
 		mergedEntries: Array.from(mergedByKey.values())
 	};
@@ -192,5 +125,5 @@ async function main() {
 
 main().catch((error) => {
 	console.error('Failed to rebuild mock database from Google Sheet:', error.message);
-	process.exitCode = 1;
+	process.exit(1);
 });

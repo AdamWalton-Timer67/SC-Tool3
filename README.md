@@ -18,30 +18,13 @@ npm install
 npm run dev
 ```
 
-### Rebuild mock database from Google Sheet
-
-```bash
-npm run rebuild:sheet-db
-```
-
-This command pulls all visible tabs from the Google Sheet, processes entries from oldest to newest, and writes `src/lib/mock-db.generated.json`.
-Optional overrides:
-- `SHEET_ID=<google_sheet_id>`
-- `SHEET_DEFAULT_GID=<gid>` (used if tab discovery fails)
-- `SHEET_GIDS=<gid1,gid2,...>` (skip html tab discovery and force exact gid list)
-
-
 - Application: http://localhost:5173
 
 ## 📦 Tech
 
 - **Frontend**: SvelteKit 5, TailwindCSS 4
-- **Backend**: None (free NAS mode)
+- **Backend**: Supabase (Auth + Database)
 - **Deployment**: Self-hosted (QNAP NAS / Docker)
-
-## NAS migration (QNAP TS-251+ / QTS 5.2.8)
-
-This repository is prepared for a NAS self-hosted deployment with **no Supabase requirement**:
 
 - **Supabase removed completely** from runtime and dependencies.
 - **Analytics removed** from frontend runtime.
@@ -55,10 +38,11 @@ Read the full NAS guide in [`NAS_QNAP_DEPLOYMENT.md`](NAS_QNAP_DEPLOYMENT.md).
 The application was designed to be FR/EN only.
 However, it was initially intended for FR only, hence the absence of advanced i18n tools such as svelte-i18n.
 
+## NAS migration (QNAP TS-251+ / QTS 5.2.8)
 
-### Windows / PowerShell example
+This repository is now prepared for a NAS self-hosted deployment:
 
-```powershell
-$env:SHEET_GIDS="265426743"
-npm run rebuild:sheet-db
-```
+- **Supabase remains supported**, but should be self-hosted locally on the NAS (Container Station / Docker).
+- **Analytics were removed** from the frontend code.
+
+Read the full NAS guide in [`NAS_QNAP_DEPLOYMENT.md`](NAS_QNAP_DEPLOYMENT.md).
