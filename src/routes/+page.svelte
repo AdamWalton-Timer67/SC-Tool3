@@ -5,7 +5,7 @@
 	import AuthButton from '$lib/components/AuthButton.svelte';
 	import DataSources from '$lib/components/wikelo/DataSources.svelte';
 	import { wikeloStore } from '$lib/stores/wikelo.svelte';
-	import posthog from 'posthog-js';
+	import { captureEvent } from '$lib/analytics';
 
 	let mounted = $state(false);
 	let patchNotes = $state<any>(null);
@@ -16,7 +16,7 @@
 		// Force English as default on home page
 		wikeloStore.currentLang = 'en';
 		// Track home page view
-		posthog.capture('home_page_viewed', {
+		captureEvent('home_page_viewed', {
 			timestamp: new Date().toISOString()
 		});
 
@@ -378,7 +378,7 @@
 			<a
 				href="/wikelo"
 				onclick={() => {
-					posthog.capture('navigation_clicked', {
+					captureEvent('navigation_clicked', {
 						from: 'home',
 						to: 'wikelo',
 						timestamp: new Date().toISOString()
@@ -433,7 +433,7 @@
 			<a
 				href="/inventory"
 				onclick={() => {
-					posthog.capture('navigation_clicked', {
+					captureEvent('navigation_clicked', {
 						from: 'home',
 						to: 'inventory',
 						timestamp: new Date().toISOString()
@@ -484,7 +484,7 @@
 			<a
 				href="/locations"
 				onclick={() => {
-					posthog.capture('navigation_clicked', {
+					captureEvent('navigation_clicked', {
 						from: 'home',
 						to: 'locations',
 						timestamp: new Date().toISOString()
@@ -539,7 +539,7 @@
 			<a
 				href="/organizations"
 				onclick={() => {
-					posthog.capture('navigation_clicked', {
+					captureEvent('navigation_clicked', {
 						from: 'home',
 						to: 'organizations',
 						timestamp: new Date().toISOString()

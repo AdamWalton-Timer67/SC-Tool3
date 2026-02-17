@@ -1,5 +1,5 @@
 import { supabase } from '$lib/supabase';
-import type { User } from '@supabase/supabase-js';
+import type { User } from '$lib/supabase';
 import { invalidateAll } from '$app/navigation';
 import { browser } from '$app/environment';
 import { env } from '$env/dynamic/public';
@@ -38,7 +38,7 @@ class AuthStore {
 
 		// Listen for auth changes
 		try {
-			supabase.auth.onAuthStateChange(async (event, session) => {
+			supabase.auth.onAuthStateChange(async (event: any, session: any) => {
 				try {
 					if (event === 'SIGNED_IN' && session?.user) {
 						// Verify the user with getUser() for security
