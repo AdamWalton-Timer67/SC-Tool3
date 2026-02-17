@@ -63,30 +63,7 @@
 						],
 						cta: "Gérer l'inventaire"
 					},
-					locationsCard: {
-						title: "Points d'Intérêt",
-						description:
-							'Explorez les lieux remarquables et installations importantes de Star Citizen.',
-						features: [
-							"Points d'intérêt (Pyro)",
-							'Installations souterraines',
-							'Plateformes orbitales',
-							'Guides détaillés par localisation'
-						],
-						cta: "Explorer les points d'intérêt"
-					},
-					organizationsCard: {
-						title: 'Organisations',
-						description:
-							'Créez ou rejoignez des organisations. Collaborez avec d\'autres joueurs.',
-						features: [
-							'Créez votre propre organisation',
-							'Gérez les membres et rôles',
-							'Système de demandes d\'adhésion',
-							'Découvrez les organisations publiques'
-						],
-						cta: 'Explorer les organisations'
-					},
+
 					comingSoon: {
 						title: 'Bientôt disponible',
 						description: "D'autres outils communautaires arrivent prochainement..."
@@ -129,29 +106,7 @@
 						],
 						cta: 'Manage inventory'
 					},
-					locationsCard: {
-						title: 'Points of Interest',
-						description: 'Explore remarkable locations and important facilities in Star Citizen.',
-						features: [
-							'Hator',
-							'Underground Facilities',
-							'Orbital Platforms',
-							'Contested zones',
-							'Warehouse'
-						],
-						cta: 'Explore points of interest'
-					},
-					organizationsCard: {
-						title: 'Organizations',
-						description: 'Create or join organizations. Collaborate with other players.',
-						features: [
-							'Create your own organization',
-							'Manage members and roles',
-							'Join request system',
-							'Discover public organizations'
-						],
-						cta: 'Explore organizations'
-					},
+
 					comingSoon: {
 						title: 'Coming Soon',
 						description: 'More community tools are coming soon...'
@@ -480,115 +435,6 @@
 				</div>
 			</a>
 
-			<!-- Locations Card -->
-			<a
-				href="/locations"
-				onclick={() => {
-					captureEvent('navigation_clicked', {
-						from: 'home',
-						to: 'locations',
-						timestamp: new Date().toISOString()
-					});
-				}}
-				class="group relative overflow-hidden rounded-xl border border-white/10 bg-slate-900/80 p-8 backdrop-blur-xl transition-all hover:scale-[1.02] hover:border-blue-400/50 hover:shadow-2xl hover:shadow-blue-400/20"
-			>
-				<!-- Animated border on hover -->
-				<div
-					class="absolute inset-0 bg-linear-to-r from-blue-400 via-cyan-500 to-blue-600 opacity-0 blur-xl transition-opacity group-hover:opacity-20"
-				></div>
-
-				<div class="relative">
-					<!-- Icon -->
-					<div class="mb-6 text-6xl">
-						<span
-							class="inline-block transition-transform group-hover:scale-110 group-hover:rotate-12"
-						>
-							🗺️
-						</span>
-					</div>
-
-					<!-- Title -->
-					<h2 class="font-orbitron mb-3 text-2xl font-bold text-blue-400">
-						{t.locationsCard.title}
-					</h2>
-
-					<!-- Description -->
-					<p class="mb-4 text-gray-400">
-						{t.locationsCard.description}
-					</p>
-
-					<!-- Features -->
-					<ul class="space-y-2 text-sm text-gray-500">
-						{#each t.locationsCard.features as feature}
-							<li class="flex items-center gap-2">
-								<span class="text-green-400">✓</span>
-								{feature}
-							</li>
-						{/each}
-					</ul>
-
-					<!-- CTA -->
-					<div class="mt-6 flex items-center gap-2 font-semibold text-cyan-400">
-						<span>{t.locationsCard.cta}</span>
-						<span class="transition-transform group-hover:translate-x-2">→</span>
-					</div>
-				</div>
-			</a>
-
-			<!-- Organizations Card -->
-			<a
-				href="/organizations"
-				onclick={() => {
-					captureEvent('navigation_clicked', {
-						from: 'home',
-						to: 'organizations',
-						timestamp: new Date().toISOString()
-					});
-				}}
-				class="group relative overflow-hidden rounded-xl border border-white/10 bg-slate-900/80 p-8 backdrop-blur-xl transition-all hover:scale-[1.02] hover:border-yellow-400/50 hover:shadow-2xl hover:shadow-yellow-400/20"
-			>
-				<!-- Animated border on hover -->
-				<div
-					class="absolute inset-0 bg-linear-to-r from-yellow-400 via-orange-500 to-yellow-400 opacity-0 blur-xl transition-opacity group-hover:opacity-20"
-				></div>
-
-				<div class="relative">
-					<!-- Icon -->
-					<div class="mb-6 text-6xl">
-						<span
-							class="inline-block transition-transform group-hover:scale-110 group-hover:rotate-12"
-						>
-							👥
-						</span>
-					</div>
-
-					<!-- Title -->
-					<h2 class="font-orbitron mb-3 text-2xl font-bold text-yellow-400">
-						{t.organizationsCard.title}
-					</h2>
-
-					<!-- Description -->
-					<p class="mb-4 text-gray-400">
-						{t.organizationsCard.description}
-					</p>
-
-					<!-- Features -->
-					<ul class="space-y-2 text-sm text-gray-500">
-						{#each t.organizationsCard.features as feature}
-							<li class="flex items-center gap-2">
-								<span class="text-green-400">✓</span>
-								{feature}
-							</li>
-						{/each}
-					</ul>
-
-					<!-- CTA -->
-					<div class="mt-6 flex items-center gap-2 font-semibold text-cyan-400">
-						<span>{t.organizationsCard.cta}</span>
-						<span class="transition-transform group-hover:translate-x-2">→</span>
-					</div>
-				</div>
-			</a>
 		</div>
 
 		<!-- Patch Notes Section -->
