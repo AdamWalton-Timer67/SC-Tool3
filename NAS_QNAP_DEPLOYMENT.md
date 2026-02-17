@@ -1,9 +1,9 @@
 # QNAP TS-251+ (QTS 5.2.8.3359) deployment guide (local-only mode)
 
-This project now runs fully on NAS equipment **without Supabase and without S3**:
+This project now runs fully on NAS equipment using:
 
 1. The SvelteKit web app
-2. Local JSON/in-memory data layer (`src/lib/mock-db.ts`)
+2. MariaDB for users, rewards, ingredients, requirements, and admin CRUD
 3. Local file uploads written into `static/uploads/*`
 
 > Recommended: use QNAP **Container Station** with Docker Compose support.
@@ -16,6 +16,15 @@ Copy `.env.example` to `.env` and set only what you need for your LAN deployment
 - auth provider toggles (`PUBLIC_ENABLE_*`) as desired
 
 No Supabase or S3 credentials are required in this local-only deployment mode.
+
+Required MariaDB variables:
+
+- `MARIADB_HOST`
+- `MARIADB_PORT` (default `3306`)
+- `MARIADB_USER`
+- `MARIADB_PASSWORD`
+- `MARIADB_DATABASE`
+
 
 ### Example (NAS LAN)
 

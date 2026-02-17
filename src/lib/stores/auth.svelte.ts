@@ -20,62 +20,32 @@ class AuthStore {
 		// Set loading to false immediately to not block UI
 		this.loading = false;
 
-		// Get initial user (secure method) with timeout
 		try {
-			const timeoutPromise = new Promise<never>((_, reject) =>
-				setTimeout(() => reject(new Error('Auth timeout')), 3000)
-			);
-
-			const authPromise = supabase.auth.getUser();
-
-			const result = await Promise.race([authPromise, timeoutPromise]);
-
-			this.user = result.error ? null : result.data.user;
+			const response = await fetch('/api/auth/session');
+			const payload = await response.json();
+			this.user = response.ok ? (payload?.user ?? null) : null;
 		} catch (err) {
-			console.warn('Auth initialization timeout or error - Supabase may be unavailable:', err);
+			console.warn('Auth initialization error:', err);
 			this.user = null;
-		}
-
-		// Listen for auth changes
-		try {
-			supabase.auth.onAuthStateChange(async (event: any, session: any) => {
-				try {
-					if (event === 'SIGNED_IN' && session?.user) {
-						// Verify the user with getUser() for security
-						const {
-							data: { user },
-							error
-						} = await supabase.auth.getUser();
-						this.user = !error ? user : null;
-					} else if (event === 'SIGNED_OUT') {
-						this.user = null;
-					}
-					// Invalidate all data to refresh isAdmin status (client-only)
-					if (browser) {
-						await invalidateAll();
-					}
-				} catch (err) {
-					console.warn('Error handling auth state change:', err);
-				}
-			});
-		} catch (err) {
-			console.warn('Error setting up auth listener - Supabase may be unavailable:', err);
 		}
 	}
 
 	async signIn(email: string, password: string) {
-		const { data, error } = await supabase.auth.signInWithPassword({
-			email,
-			password
+		const response = await fetch('/api/auth/signin', {
+			method: 'POST',
+			headers: { 'content-type': 'application/json' },
+			body: JSON.stringify({ email, password })
 		});
 
-		if (error) throw error;
+		const payload = await response.json();
+		if (!response.ok) throw new Error(payload?.error || 'Sign in failed.');
+
+		this.user = payload?.user ?? null;
 		this.showAuthDialog = false;
-		// Invalidate to refresh isAdmin status (client-only)
 		if (browser) {
 			await invalidateAll();
 		}
-		return data;
+		return payload;
 	}
 
 	async signUp(email: string, password: string, displayName: string | null = null) {
@@ -98,9 +68,9 @@ class AuthStore {
 	}
 
 	async signOut() {
-		const { error } = await supabase.auth.signOut();
-		if (error) throw error;
-		// Invalidate to refresh isAdmin status (client-only)
+		const response = await fetch('/api/auth/signout', { method: 'POST' });
+		if (!response.ok) throw new Error('Sign out failed.');
+		this.user = null;
 		if (browser) {
 			await invalidateAll();
 		}
