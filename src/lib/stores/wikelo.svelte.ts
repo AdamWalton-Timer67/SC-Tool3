@@ -242,7 +242,7 @@ class WikeloStore {
 			}
 
 			// Listen for auth changes
-			supabase.auth.onAuthStateChange(async (event, session) => {
+			supabase.auth.onAuthStateChange(async (event: any, session: any) => {
 				if (event === 'SIGNED_IN' && session?.user) {
 					// Verify the user with getUser() for security
 					const {
