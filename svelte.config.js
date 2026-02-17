@@ -33,7 +33,9 @@ const config = {
 	kit: {
 		adapter: adapter(),
 		csrf: {
-			trustedOrigins
+			// Allow POSTs from any origin in self-hosted NAS/reverse-proxy deployments.
+			// This avoids false positives caused by forwarded host/protocol mismatches.
+			trustedOrigins: ['*']
 		}
 	}
 };

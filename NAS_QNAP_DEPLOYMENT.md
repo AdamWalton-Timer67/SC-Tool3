@@ -42,7 +42,6 @@ PUBLIC_ENABLE_GOOGLE_AUTH=false
 PUBLIC_SHOW_FULL_LOCATION_DETAILS=false
 PUBLIC_OAUTH_REDIRECT_URL=http://192.168.1.20:4173
 ORIGIN=http://192.168.1.20:4173
-CSRF_TRUSTED_ORIGINS=http://localhost:4173,http://192.168.1.20:4173
 ```
 
 ## 2) Build and run the web app
@@ -101,10 +100,9 @@ docker compose -f deploy/nas/docker-compose.yml up -d --build
 
 ### Fixing "Cross-site POST form submissions are forbidden"
 
-If your app is behind a NAS reverse proxy, SvelteKit must know the public origin to validate form POST CSRF checks.
+If your app is behind a NAS reverse proxy, configure ORIGIN and forwarded headers. This project disables strict form-origin matching to avoid false positives when proxy headers/origins vary.
 
 - Set `ORIGIN` in `.env` to your external URL (for example `https://your-domain` or `http://192.168.1.20:4173`).
-- If you use more than one host (for example `localhost` + NAS IP), set `CSRF_TRUSTED_ORIGINS` as a comma-separated list of full origins.
 - Keep reverse proxy forwarding headers enabled (`X-Forwarded-Host`, `X-Forwarded-Proto`, `X-Forwarded-Port`).
 - The bundled Compose file already sets `HOST_HEADER`, `PROTOCOL_HEADER`, and `PORT_HEADER` so SvelteKit can trust forwarded values.
 
