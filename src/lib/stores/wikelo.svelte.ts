@@ -606,11 +606,13 @@ class WikeloStore {
 	async setInventoryQuantity(ingredientId: string, quantity: number) {
 		if (!this.currentUser) return; // Block if not authenticated
 
+		const nextInventory = { ...this.inventory };
 		if (quantity <= 0) {
-			delete this.inventory[ingredientId];
+			delete nextInventory[ingredientId];
 		} else {
-			this.inventory[ingredientId] = quantity;
+			nextInventory[ingredientId] = quantity;
 		}
+		this.inventory = nextInventory;
 
 		await this.saveInventoryToSupabase(ingredientId, quantity);
 	}
@@ -896,11 +898,8 @@ class WikeloStore {
 	async toggleRequirement(rewardId: string, requirementId: string) {
 		if (!this.currentUser) return; // Block if not authenticated
 
-		if (!this.userProgress[rewardId]) {
-			this.userProgress[rewardId] = {};
-		}
-
-		const wasChecked = this.userProgress[rewardId][requirementId] ?? false;
+		const currentRewardProgress = this.userProgress[rewardId] ?? {};
+		const wasChecked = currentRewardProgress[requirementId] ?? false;
 		const isNowChecked = !wasChecked;
 
 		// Si on décoche (wasChecked = true), afficher la dialog de confirmation
@@ -920,7 +919,13 @@ class WikeloStore {
 		}
 
 		// Si on coche, procéder normalement
-		this.userProgress[rewardId][requirementId] = isNowChecked;
+		this.userProgress = {
+			...this.userProgress,
+			[rewardId]: {
+				...currentRewardProgress,
+				[requirementId]: isNowChecked
+			}
+		};
 		await this.saveRewardIngredientToSupabase(rewardId, requirementId, isNowChecked);
 
 		// Get the requirement details to know the quantity
@@ -953,7 +958,13 @@ class WikeloStore {
 		const { rewardId, requirementId, quantity } = this.uncheckConfirmDialog;
 
 		// Décocher l'élément
-		this.userProgress[rewardId][requirementId] = false;
+		this.userProgress = {
+			...this.userProgress,
+			[rewardId]: {
+				...(this.userProgress[rewardId] ?? {}),
+				[requirementId]: false
+			}
+		};
 		await this.saveRewardIngredientToSupabase(rewardId, requirementId, false);
 
 		// Ajouter les ingrédients à l'inventaire
@@ -970,7 +981,13 @@ class WikeloStore {
 		const { rewardId, requirementId } = this.uncheckConfirmDialog;
 
 		// Décocher l'élément sans modifier l'inventaire
-		this.userProgress[rewardId][requirementId] = false;
+		this.userProgress = {
+			...this.userProgress,
+			[rewardId]: {
+				...(this.userProgress[rewardId] ?? {}),
+				[requirementId]: false
+			}
+		};
 		await this.saveRewardIngredientToSupabase(rewardId, requirementId, false);
 
 		// Fermer la dialog
@@ -1000,12 +1017,14 @@ class WikeloStore {
 		const current = this.getInventoryQuantity(ingredientId);
 		const newQuantity = Math.max(0, current + delta);
 
-		// Update local state
+		// Update local state with immutable write so Svelte reacts to every click
+		const nextInventory = { ...this.inventory };
 		if (newQuantity <= 0) {
-			delete this.inventory[ingredientId];
+			delete nextInventory[ingredientId];
 		} else {
-			this.inventory[ingredientId] = newQuantity;
+			nextInventory[ingredientId] = newQuantity;
 		}
+		this.inventory = nextInventory;
 
 		await this.saveInventoryToSupabase(ingredientId, newQuantity);
 	}
@@ -1121,10 +1140,15 @@ class WikeloStore {
 
 		// Uncheck all requirements
 		if (this.userProgress[rewardId]) {
-			for (const requirementId of Object.keys(this.userProgress[rewardId])) {
-				this.userProgress[rewardId][requirementId] = false;
+			const updatedRewardProgress = { ...(this.userProgress[rewardId] ?? {}) };
+			for (const requirementId of Object.keys(updatedRewardProgress)) {
+				updatedRewardProgress[requirementId] = false;
 				await this.saveRewardIngredientToSupabase(rewardId, requirementId, false);
 			}
+			this.userProgress = {
+				...this.userProgress,
+				[rewardId]: updatedRewardProgress
+			};
 		}
 	}
 

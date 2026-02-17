@@ -172,13 +172,28 @@ class QueryBuilder {
 	upsert(payload: any): QueryResult<null> {
 		const table = getTable(this.tableName);
 		const items = Array.isArray(payload) ? payload : [payload];
+		const conflictFields = (options?.onConflict ?? '')
+			.split(',')
+			.map((field) => field.trim())
+			.filter(Boolean);
+
 		for (const item of items) {
-			const idx = table.findIndex((r: any) => r.id && item.id && r.id === item.id);
-			if (idx >= 0) table[idx] = { ...table[idx], ...item };
-			else table.push({ id: item.id ?? `mock_${Date.now()}`, ...item });
+			let idx = -1;
+
+			if (conflictFields.length > 0) {
+				idx = table.findIndex((row) =>
+					conflictFields.every((field) => row[field] !== undefined && row[field] === item[field])
+				);
+			} else if (item.id) {
+				idx = table.findIndex((row) => row.id === item.id);
+			}
+
+			if (idx >= 0) {
+				table[idx] = { ...table[idx], ...item };
+			} else {
+				table.push({ id: item.id ?? `mock_${Date.now()}_${Math.random()}`, ...item });
+			}
 		}
-		return Promise.resolve({ data: null, error: null });
-	}
 
 	eq(field: string, value: any): this { this.filters.push({ type: 'eq', field, value }); return this; }
 	neq(..._args: any[]): this { return this; }
