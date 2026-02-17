@@ -5,6 +5,9 @@ import { sveltekit } from '@sveltejs/kit/vite';
 
 export default defineConfig({
 	plugins: [tailwindcss(), sveltekit(), devtoolsJson()],
+	preview: {
+		allowedHosts: ['wikelo.info']
+	},
 	test: {
 		expect: { requireAssertions: true },
 		projects: [
