@@ -15,11 +15,6 @@
 		"lint": "prettier --check . && eslint .",
 		"test:unit": "vitest",
 		"test": "npm run test:unit -- --run",
-		"supabase:start": "supabase start",
-		"supabase:stop": "supabase stop",
-		"supabase:status": "supabase status",
-		"supabase:reset": "supabase db reset",
-		"supabase:studio": "echo 'Studio URL: http://127.0.0.1:54323'",
 		"migrate:images": "tsx scripts/migrate-images-to-s3.ts",
 		"check:image-urls": "tsx scripts/update-urls-to-s3.ts",
 		"check:db-urls": "tsx scripts/check-db-urls.ts"
