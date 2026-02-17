@@ -8,4 +8,18 @@ CREATE TABLE IF NOT EXISTS users (
   approved_at TIMESTAMP NULL DEFAULT NULL
 );
 
-CREATE INDEX idx_users_approved_created ON users (approved, created_at);
+SET @idx_exists := (
+  SELECT COUNT(*)
+  FROM information_schema.statistics
+  WHERE table_schema = DATABASE()
+    AND table_name = 'users'
+    AND index_name = 'idx_users_approved_created'
+);
+SET @create_idx_sql := IF(
+  @idx_exists = 0,
+  'CREATE INDEX idx_users_approved_created ON users (approved, created_at)',
+  'SELECT 1'
+);
+PREPARE stmt FROM @create_idx_sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
