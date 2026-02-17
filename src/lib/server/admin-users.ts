@@ -1,11 +1,24 @@
 import { createAdminClient } from '$lib/server/admin';
 
 function isApproved(user: any): boolean {
-	if (user?.approved === true) return true;
+	if (user?.approved === true || user?.approved === 1 || user?.approved === '1') return true;
 	if (user?.raw_user_meta_data?.approved === true) return true;
 	if (user?.user_metadata?.approved === true) return true;
 	if (user?.app_metadata?.approved === true) return true;
 	return false;
+}
+
+
+function readMeta(user: any): any {
+	const value = user?.raw_user_meta_data;
+	if (typeof value === 'string') {
+		try {
+			return JSON.parse(value);
+		} catch {
+			return {};
+		}
+	}
+	return value ?? {};
 }
 
 function toPendingUser(user: any) {
@@ -13,11 +26,7 @@ function toPendingUser(user: any) {
 		id: user.id,
 		email: user.email,
 		created_at: user.created_at,
-		display_name:
-			user.raw_user_meta_data?.display_name ??
-			user.user_metadata?.display_name ??
-			user.email ??
-			'Unknown'
+		display_name: readMeta(user)?.display_name ?? user.user_metadata?.display_name ?? user.email ?? 'Unknown'
 	};
 }
 

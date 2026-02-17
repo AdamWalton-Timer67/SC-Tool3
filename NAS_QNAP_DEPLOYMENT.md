@@ -1,9 +1,9 @@
 # QNAP TS-251+ (QTS 5.2.8.3359) deployment guide (local-only mode)
 
-This project now runs fully on NAS equipment **without Supabase and without S3**:
+This project now runs fully on NAS equipment using:
 
 1. The SvelteKit web app
-2. Local JSON/in-memory data layer (`src/lib/mock-db.ts`)
+2. MariaDB for users, rewards, ingredients, requirements, and admin CRUD
 3. Local file uploads written into `static/uploads/*`
 
 > Recommended: use QNAP **Container Station** with Docker Compose support.
@@ -16,6 +16,15 @@ Copy `.env.example` to `.env` and set only what you need for your LAN deployment
 - auth provider toggles (`PUBLIC_ENABLE_*`) as desired
 
 No Supabase or S3 credentials are required in this local-only deployment mode.
+
+Required MariaDB variables:
+
+- `MARIADB_HOST`
+- `MARIADB_PORT` (default `3306`)
+- `MARIADB_USER`
+- `MARIADB_PASSWORD`
+- `MARIADB_DATABASE`
+
 
 ### Example (NAS LAN)
 
@@ -37,38 +46,64 @@ npm run preview -- --host 0.0.0.0 --port 4173
 
 ## 3) Optional: run app in Docker on NAS
 
-A compose file is included at `deploy/nas/docker-compose.yml`.
+The NAS deployment now uses a dedicated image build (`deploy/nas/Dockerfile`) instead of bind-mounting the source tree into a generic Node container. This makes installs deterministic and avoids host/container dependency drift.
 
-Run from the **repository root** (folder containing `deploy/`):
+### Build and run
 
-```bash
-docker compose -f deploy/nas/docker-compose.yml up -d --build
-```
-
-Or run from inside `deploy/nas`:
+From the repository root (recommended):
 
 ```bash
-docker compose up -d --build
+docker compose --env-file .env -f deploy/nas/docker-compose.yml up -d --build
 ```
 
-If you see `no such file or directory`, verify:
+Or from inside `deploy/nas`:
 
-- you are inside the checked-out repository
-- the file `deploy/nas/docker-compose.yml` exists
-- the file `.env` exists at the repository root (compose loads `../../.env`)
+```bash
+docker compose --env-file ../../.env up -d --build
+```
 
-The app will be exposed on `4173`.
+The app is exposed on `4173` and includes a container healthcheck.
 
-If you see a Rollup error like `Cannot find module @rollup/rollup-linux-x64-musl`, clean old dependencies and recreate:
+> Why `--env-file`? QNAP Container Station can mis-resolve relative `env_file` entries inside compose YAML (for example as `/.env`). Passing `--env-file` on the CLI avoids this path-conversion issue.
+
+### Why this fixes the Rollup musl error
+
+- The old setup used `node:20-alpine` + a mounted `node_modules` volume, which could leave optional native dependencies in a broken state between rebuilds.
+- The new setup builds everything in-image on Debian (`node:20-bookworm-slim`) using `npm ci --include=optional`, so Rollup optional packages are resolved consistently at build time.
+- Runtime only mounts `static/uploads` for persistent local uploads.
+
+### Clean rebuild commands (recommended after migration)
 
 ```bash
 # from repo root
-docker compose -f deploy/nas/docker-compose.yml down -v
-rm -rf node_modules
-docker compose -f deploy/nas/docker-compose.yml up -d --build
+docker compose --env-file .env -f deploy/nas/docker-compose.yml down --remove-orphans
+docker image rm sc-tool3-web:nas 2>/dev/null || true
+docker compose --env-file .env -f deploy/nas/docker-compose.yml up -d --build
 ```
 
-The compose file mounts a dedicated Docker volume at `/app/node_modules` so dependencies are installed for the container OS/arch (Alpine musl), avoiding host/container binary mismatches.
+
+### MariaDB health checks
+
+From NAS shell, verify the API can read DB-backed session state:
+
+```bash
+curl -s http://127.0.0.1:4173/api/auth/session
+```
+
+Test signup path (writes `auth_users`, `profiles`, `user_roles`):
+
+```bash
+curl -i http://127.0.0.1:4173/api/auth/signup \
+  -H 'content-type: application/json' \
+  -d '{"email":"healthcheck@example.com","password":"pass1234","displayName":"Health Check"}'
+```
+
+Optional direct DB checks (replace credentials):
+
+```bash
+mysql -h "$MARIADB_HOST" -P "$MARIADB_PORT" -u "$MARIADB_USER" -p"$MARIADB_PASSWORD" "$MARIADB_DATABASE" \
+  -e "SELECT COUNT(*) AS users FROM auth_users; SELECT COUNT(*) AS rewards FROM rewards; SELECT COUNT(*) AS ingredients FROM ingredients;"
+```
 
 ## 4) Reverse proxy / SSL (recommended)
 

@@ -194,6 +194,7 @@ class QueryBuilder {
 				table.push({ id: item.id ?? `mock_${Date.now()}_${Math.random()}`, ...item });
 			}
 		}
+		return Promise.resolve({ data: null, error: null });
 	}
 	eq(field: string, value: any): this { this.filters.push({ type: 'eq', field, value }); return this; }
 	neq(..._args: any[]): this { return this; }
