@@ -1,80 +1,81 @@
-import { getMariaPool, hasMariaConfig } from '$lib/server/maria';
-import type { ResultSetHeader } from 'mysql2';
+import { createAdminClient } from '$lib/server/admin';
 
-type PendingUser = {
-	id: string;
-	email: string;
-	created_at: string;
-	display_name: string;
-};
-
-function requireMaria() {
-	if (!hasMariaConfig()) {
-		throw new Error(
-			'MariaDB is not configured. Set MARIADB_HOST, MARIADB_USER and MARIADB_DATABASE.'
-		);
-	}
-
-	return getMariaPool();
+function isApproved(user: any): boolean {
+	if (user?.approved === true) return true;
+	if (user?.raw_user_meta_data?.approved === true) return true;
+	if (user?.user_metadata?.approved === true) return true;
+	if (user?.app_metadata?.approved === true) return true;
+	return false;
 }
 
-export async function listPendingUsers() {
-	const pool = requireMaria();
-	const [rows] = await pool.query(
-		`SELECT id, email, created_at, display_name
-		 FROM users
-		 WHERE approved = 0
-		 ORDER BY created_at ASC`
-	);
-
-	return { data: rows as PendingUser[], error: null };
+function toPendingUser(user: any) {
+	return {
+		id: user.id,
+		email: user.email,
+		created_at: user.created_at,
+		display_name:
+			user.raw_user_meta_data?.display_name ??
+			user.user_metadata?.display_name ??
+			user.email ??
+			'Unknown'
+	};
 }
 
-export async function approveUserById(userId: string) {
-	const pool = requireMaria();
-	const [result] = await pool.query<ResultSetHeader>(
-		`UPDATE users SET approved = 1, approved_at = NOW() WHERE id = ?`,
-		[userId]
-	);
+export async function listPendingUsers(userSupabase: any) {
+	const adminSupabase = createAdminClient();
 
-	if (result.affectedRows === 0) {
-		return { data: null, error: null };
+	if (adminSupabase) {
+		const { data, error } = await adminSupabase.auth.admin.listUsers({ page: 1, perPage: 1000 });
+		if (error) return { data: null, error };
+
+		const pendingUsers = (data?.users ?? [])
+			.filter((user: any) => !isApproved(user))
+			.map(toPendingUser);
+		return { data: pendingUsers, error: null };
 	}
 
-	return { data: { id: userId, approved: true }, error: null };
+	const { data: users, error } = await userSupabase.from('auth.users').select('*');
+	if (error) return { data: null, error };
+
+	const pendingUsers = (users ?? []).filter((user: any) => !isApproved(user)).map(toPendingUser);
+	return { data: pendingUsers, error: null };
 }
 
-export async function rejectUserById(userId: string) {
-	const pool = requireMaria();
-	const [result] = await pool.query<ResultSetHeader>(`DELETE FROM users WHERE id = ?`, [userId]);
+export async function approveUserById(userSupabase: any, userId: string) {
+	const adminSupabase = createAdminClient();
 
-	if (result.affectedRows === 0) {
-		return { error: { message: 'User not found.' } };
+	if (adminSupabase) {
+		const { data, error } = await adminSupabase.auth.admin.updateUserById(userId, {
+			user_metadata: { approved: true }
+		});
+		if (error) return { data: null, error };
+		return { data, error: null };
 	}
 
+	const { data, error } = await userSupabase
+		.from('auth.users')
+		.update({ approved: true })
+		.eq('id', userId)
+		.select('id');
+	return { data, error };
+}
+
+export async function rejectUserById(userSupabase: any, userId: string) {
+	const adminSupabase = createAdminClient();
+
+	if (adminSupabase) {
+		const { error } = await adminSupabase.auth.admin.deleteUser(userId);
+		if (error) return { error };
+
+		await userSupabase.from('profiles').delete().eq('id', userId);
+		await userSupabase.from('user_roles').delete().eq('user_id', userId);
+		return { error: null };
+	}
+
+	const { error } = await userSupabase.from('auth.users').delete().eq('id', userId);
+	if (error) return { error };
+
+	await userSupabase.from('profiles').delete().eq('id', userId);
+	await userSupabase.from('user_roles').delete().eq('user_id', userId);
 	return { error: null };
-}
-
-export async function createPendingUser(input: {
-	email: string;
-	passwordHash: string;
-	displayName: string;
-}) {
-	const pool = requireMaria();
-	const id = crypto.randomUUID();
-
-	const [existing] = await pool.query(`SELECT id FROM users WHERE email = ? LIMIT 1`, [
-		input.email
-	]);
-	if (Array.isArray(existing) && existing.length > 0) {
-		return { data: null, error: { message: 'An account with this email already exists.' } };
-	}
-
-	await pool.query(
-		`INSERT INTO users (id, email, password_hash, display_name, approved, created_at)
-		 VALUES (?, ?, ?, ?, 0, NOW())`,
-		[id, input.email, input.passwordHash, input.displayName]
-	);
-
-	return { data: { id, email: input.email, display_name: input.displayName }, error: null };
 }

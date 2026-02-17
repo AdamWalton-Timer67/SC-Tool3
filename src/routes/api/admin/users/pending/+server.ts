@@ -7,12 +7,21 @@ export const GET: RequestHandler = async ({ locals }) => {
 	try {
 		await requireAdmin(locals.supabase);
 
-		const { data: pendingUsers, error } = await listPendingUsers();
+		const { data: pendingUsers, error } = await listPendingUsers(locals.supabase);
 		if (error) {
 			return json({ error: 'Failed to load users' }, { status: 500 });
 		}
 
-		return json({ pendingUsers: pendingUsers ?? [] });
+		const pendingUsers = (users || [])
+			.filter((user: any) => user.approved !== true)
+			.map((user: any) => ({
+				id: user.id,
+				email: user.email,
+				created_at: user.created_at,
+				display_name: user.raw_user_meta_data?.display_name ?? null
+			}));
+
+		return json({ pendingUsers });
 	} catch (error) {
 		return json({ error: (error as Error).message }, { status: 403 });
 	}

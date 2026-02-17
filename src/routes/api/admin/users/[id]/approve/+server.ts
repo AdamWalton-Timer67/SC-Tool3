@@ -8,7 +8,7 @@ export const POST: RequestHandler = async ({ params, locals }) => {
 		await requireAdmin(locals.supabase);
 		const userId = params.id;
 
-		const { data, error } = await approveUserById(userId);
+		const { data, error } = await approveUserById(locals.supabase, userId);
 
 		if (error) {
 			return json({ error: 'Failed to approve user' }, { status: 500 });
