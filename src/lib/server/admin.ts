@@ -4,6 +4,8 @@
 
 import { env } from '$env/dynamic/private';
 import { createClient } from '@supabase/supabase-js';
+import { createMariaSupabaseClient } from '$lib/server/maria-supabase';
+import { hasMariaConfig } from '$lib/server/maria';
 
 export async function isUserAdmin(supabase: any): Promise<boolean> {
 	const {
@@ -28,12 +30,18 @@ export function createAdminClient(): any | null {
 	const url = env.SUPABASE_URL;
 	const serviceRoleKey = env.SUPABASE_SERVICE_ROLE_KEY;
 
-	if (!url || !serviceRoleKey) return null;
+	if (url && serviceRoleKey) {
+		return createClient(url, serviceRoleKey, {
+			auth: {
+				autoRefreshToken: false,
+				persistSession: false
+			}
+		});
+	}
 
-	return createClient(url, serviceRoleKey, {
-		auth: {
-			autoRefreshToken: false,
-			persistSession: false
-		}
-	});
+	if (hasMariaConfig()) {
+		return createMariaSupabaseClient();
+	}
+
+	return null;
 }
