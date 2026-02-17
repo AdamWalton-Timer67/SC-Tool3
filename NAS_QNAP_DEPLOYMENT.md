@@ -37,38 +37,38 @@ npm run preview -- --host 0.0.0.0 --port 4173
 
 ## 3) Optional: run app in Docker on NAS
 
-A compose file is included at `deploy/nas/docker-compose.yml`.
+The NAS deployment now uses a dedicated image build (`deploy/nas/Dockerfile`) instead of bind-mounting the source tree into a generic Node container. This makes installs deterministic and avoids host/container dependency drift.
 
-Run from the **repository root** (folder containing `deploy/`):
+### Build and run
+
+From the repository root:
 
 ```bash
 docker compose -f deploy/nas/docker-compose.yml up -d --build
 ```
 
-Or run from inside `deploy/nas`:
+Or from inside `deploy/nas`:
 
 ```bash
 docker compose up -d --build
 ```
 
-If you see `no such file or directory`, verify:
+The app is exposed on `4173` and includes a container healthcheck.
 
-- you are inside the checked-out repository
-- the file `deploy/nas/docker-compose.yml` exists
-- the file `.env` exists at the repository root (compose loads `../../.env`)
+### Why this fixes the Rollup musl error
 
-The app will be exposed on `4173`.
+- The old setup used `node:20-alpine` + a mounted `node_modules` volume, which could leave optional native dependencies in a broken state between rebuilds.
+- The new setup builds everything in-image on Debian (`node:20-bookworm-slim`) using `npm ci --include=optional`, so Rollup optional packages are resolved consistently at build time.
+- Runtime only mounts `static/uploads` for persistent local uploads.
 
-If you see a Rollup error like `Cannot find module @rollup/rollup-linux-x64-musl`, clean old dependencies and recreate:
+### Clean rebuild commands (recommended after migration)
 
 ```bash
 # from repo root
-docker compose -f deploy/nas/docker-compose.yml down -v
-rm -rf node_modules
+docker compose -f deploy/nas/docker-compose.yml down --remove-orphans
+docker image rm sc-tool3-web:nas 2>/dev/null || true
 docker compose -f deploy/nas/docker-compose.yml up -d --build
 ```
-
-The compose file mounts a dedicated Docker volume at `/app/node_modules` so dependencies are installed for the container OS/arch (Alpine musl), avoiding host/container binary mismatches.
 
 ## 4) Reverse proxy / SSL (recommended)
 
