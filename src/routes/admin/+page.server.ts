@@ -3,6 +3,29 @@ import type { Actions, PageServerLoad } from './$types';
 
 const DEFAULT_LOCAL_ADMIN_ID = 'local-user-1';
 
+function isApproved(value: unknown): boolean {
+	return value === true || value === 1 || value === '1';
+}
+
+function getDisplayName(rawUserMetaData: unknown): string {
+	if (!rawUserMetaData) return 'Unknown';
+	if (typeof rawUserMetaData === 'string') {
+		try {
+			const parsed = JSON.parse(rawUserMetaData);
+			return typeof parsed?.display_name === 'string' && parsed.display_name.trim()
+				? parsed.display_name
+				: 'Unknown';
+		} catch {
+			return 'Unknown';
+		}
+	}
+	if (typeof rawUserMetaData === 'object' && rawUserMetaData !== null) {
+		const displayName = (rawUserMetaData as { display_name?: unknown }).display_name;
+		if (typeof displayName === 'string' && displayName.trim()) return displayName;
+	}
+	return 'Unknown';
+}
+
 export const load: PageServerLoad = async ({ locals }) => {
 	const supabase = locals.supabase;
 
@@ -15,11 +38,11 @@ export const load: PageServerLoad = async ({ locals }) => {
 	const { data: authUsersData } = await supabase.from('auth.users').select('*');
 
 	const pendingUsers = (authUsersData ?? [])
-		.filter((user: any) => user.approved !== true)
+		.filter((user: any) => !isApproved(user.approved))
 		.map((user: any) => ({
 			id: user.id,
 			email: user.email,
-			characterName: user.raw_user_meta_data?.display_name ?? 'Unknown',
+			characterName: getDisplayName(user.raw_user_meta_data),
 			createdAt: user.created_at ?? null
 		}));
 
@@ -46,7 +69,7 @@ export const actions: Actions = {
 
 		const { error, data } = await locals.supabase
 			.from('auth.users')
-			.update({ approved: true })
+			.update({ approved: 1 })
 			.eq('id', userId)
 			.select('id');
 
@@ -71,7 +94,7 @@ export const actions: Actions = {
 
 		const { error, data } = await locals.supabase
 			.from('auth.users')
-			.update({ approved: true })
+			.update({ approved: 1 })
 			.eq('id', userId)
 			.select('id');
 
