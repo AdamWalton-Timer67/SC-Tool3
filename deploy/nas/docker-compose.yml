@@ -7,7 +7,7 @@ services:
     ports:
       - '4173:4173'
     env_file:
-      - ../../.env
+      - /share/Public2/Container/SC-Tools3/.env
     volumes:
       - ../../:/app
     restart: unless-stopped
