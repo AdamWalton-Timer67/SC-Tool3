@@ -1,11 +1,11 @@
-CREATE TABLE IF NOT EXISTS users (
+CREATE TABLE IF NOT EXISTS auth_users (
   id CHAR(36) PRIMARY KEY,
   email VARCHAR(255) NOT NULL UNIQUE,
-  password_hash VARCHAR(255) NOT NULL,
-  display_name VARCHAR(120) NOT NULL,
+  password VARCHAR(255) NOT NULL,
   approved TINYINT(1) NOT NULL DEFAULT 0,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  approved_at TIMESTAMP NULL DEFAULT NULL
+  last_sign_in_at TIMESTAMP NULL DEFAULT NULL,
+  raw_user_meta_data LONGTEXT NULL
 );
 
 SET @idx_exists := (
