@@ -1,42 +1,33 @@
-# QNAP TS-251+ (QTS 5.2.8.3359) deployment guide
+# QNAP TS-251+ (QTS 5.2.8.3359) deployment guide (local-only mode)
 
-This project can run fully on a NAS by self-hosting:
+This project now runs fully on NAS equipment **without Supabase and without S3**:
 
 1. The SvelteKit web app
-2. A local Supabase stack (Auth + Postgres + Storage)
+2. Local JSON/in-memory data layer (`src/lib/mock-db.ts`)
+3. Local file uploads written into `static/uploads/*`
 
 > Recommended: use QNAP **Container Station** with Docker Compose support.
 
 ## 1) Prepare environment variables
 
-Copy `.env.example` to `.env` and set:
+Copy `.env.example` to `.env` and set only what you need for your LAN deployment:
 
-- `PUBLIC_SUPABASE_URL` to your NAS local Supabase API endpoint
-- `PUBLIC_SUPABASE_ANON_KEY` from your self-hosted Supabase instance
-- `SUPABASE_SERVICE_ROLE_KEY` from your self-hosted Supabase instance
-- S3-compatible values if you keep object storage external (or point to local S3-compatible service)
+- `PUBLIC_OAUTH_REDIRECT_URL` (if you expose auth provider redirects)
+- auth provider toggles (`PUBLIC_ENABLE_*`) as desired
+
+No Supabase or S3 credentials are required in this local-only deployment mode.
 
 ### Example (NAS LAN)
 
 ```env
-PUBLIC_SUPABASE_URL=http://192.168.1.20:8000
-PUBLIC_SUPABASE_ANON_KEY=<anon-key>
-SUPABASE_SERVICE_ROLE_KEY=<service-role-key>
+PUBLIC_ENABLE_DISCORD_AUTH=false
+PUBLIC_ENABLE_TWITCH_AUTH=false
+PUBLIC_ENABLE_GOOGLE_AUTH=false
+PUBLIC_SHOW_FULL_LOCATION_DETAILS=false
 PUBLIC_OAUTH_REDIRECT_URL=http://192.168.1.20:4173
 ```
 
-## 2) Run Supabase locally on NAS
-
-On the NAS (or from a remote shell against the NAS Docker engine):
-
-```bash
-supabase start
-supabase status
-```
-
-Use the resulting URL/keys in `.env`.
-
-## 3) Build and run the web app
+## 2) Build and run the web app
 
 ```bash
 npm install
@@ -44,7 +35,7 @@ npm run build
 npm run preview -- --host 0.0.0.0 --port 4173
 ```
 
-## 4) Optional: run app in Docker on NAS
+## 3) Optional: run app in Docker on NAS
 
 A compose file is included at `deploy/nas/docker-compose.yml`.
 
@@ -52,17 +43,36 @@ A compose file is included at `deploy/nas/docker-compose.yml`.
 docker compose -f deploy/nas/docker-compose.yml up -d --build
 ```
 
-The app will be exposed on `4173` and should point to your NAS Supabase URL.
+The app will be exposed on `4173`.
 
-## 5) Reverse proxy / SSL (recommended)
+## 4) Reverse proxy / SSL (recommended)
 
 Using QNAP reverse proxy (or Traefik/Nginx), map:
 
 - `https://your-domain` -> `http://nas-ip:4173`
-- Ensure `PUBLIC_OAUTH_REDIRECT_URL` matches your public URL.
+- Ensure `PUBLIC_OAUTH_REDIRECT_URL` matches your public URL if auth is enabled.
+
+## Local uploads on NAS
+
+Image uploads are stored locally at runtime under:
+
+- `static/uploads/images/*`
+
+For persistence across container recreations, mount `static/uploads` to a NAS volume.
+
+
+## Local login + admin approval flow
+
+- Default local admin:
+  - Email: `local@test.lan`
+  - Password: `admin123`
+- New accounts created from the signup dialog are stored as `approved: false`.
+- Admin must approve accounts before first login using:
+  - `GET /api/admin/users/pending`
+  - `POST /api/admin/users/:id/approve`
 
 ## Notes specific to TS-251+
 
 - Keep container memory limits conservative (2–4 GB total if RAM is limited).
-- Prefer SSD volume for Postgres/Supabase data for better performance.
-- Regularly back up Supabase/Postgres volumes.
+- Use an SSD-backed volume for better responsiveness.
+- Back up your NAS volume containing app code and `static/uploads` regularly.
