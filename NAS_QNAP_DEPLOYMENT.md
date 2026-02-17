@@ -19,16 +19,23 @@ No Supabase or S3 credentials are required in this local-only deployment mode.
 
 Required MariaDB variables:
 
-- `MARIADB_HOST`
+- `MARIADB_HOST` (`mariadb` when using the bundled Docker Compose stack)
 - `MARIADB_PORT` (default `3306`)
 - `MARIADB_USER`
 - `MARIADB_PASSWORD`
 - `MARIADB_DATABASE`
 
 
-### Example (NAS LAN)
+### Example (NAS LAN with bundled MariaDB container)
 
 ```env
+MARIADB_HOST=mariadb
+MARIADB_PORT=3306
+MARIADB_USER=wikelo
+MARIADB_PASSWORD=change-me
+MARIADB_DATABASE=wikelo
+MARIADB_ROOT_PASSWORD=change-root-password
+
 PUBLIC_ENABLE_DISCORD_AUTH=false
 PUBLIC_ENABLE_TWITCH_AUTH=false
 PUBLIC_ENABLE_GOOGLE_AUTH=false
@@ -63,6 +70,16 @@ docker compose --env-file ../../.env up -d --build
 ```
 
 The app is exposed on `4173` and includes a container healthcheck.
+
+This Compose stack also runs a local `mariadb` service with a persistent volume (`sc-tool3-mariadb-data`) so the web app does not need to reach a LAN database IP.
+
+### Initialize MariaDB schema (first run)
+
+After containers are up, import the auth schema into the MariaDB container:
+
+```bash
+docker exec -i sc-tool3-mariadb mariadb -uroot -p"$MARIADB_ROOT_PASSWORD" "$MARIADB_DATABASE" < MARIADB_AUTH_SCHEMA.sql
+```
 
 ### Why this fixes the Rollup musl error
 
