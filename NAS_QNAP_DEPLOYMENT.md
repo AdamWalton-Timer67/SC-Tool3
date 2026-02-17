@@ -41,7 +41,7 @@ The NAS deployment now uses a dedicated image build (`deploy/nas/Dockerfile`) in
 
 ### Build and run
 
-From the repository root (recommended):
+From the repository root:
 
 ```bash
 docker compose --env-file .env -f deploy/nas/docker-compose.yml up -d --build
@@ -55,8 +55,6 @@ docker compose --env-file ../../.env up -d --build
 
 The app is exposed on `4173` and includes a container healthcheck.
 
-> Why `--env-file`? QNAP Container Station can mis-resolve relative `env_file` entries inside compose YAML (for example as `/.env`). Passing `--env-file` on the CLI avoids this path-conversion issue.
-
 ### Why this fixes the Rollup musl error
 
 - The old setup used `node:20-alpine` + a mounted `node_modules` volume, which could leave optional native dependencies in a broken state between rebuilds.
@@ -67,9 +65,9 @@ The app is exposed on `4173` and includes a container healthcheck.
 
 ```bash
 # from repo root
-docker compose --env-file .env -f deploy/nas/docker-compose.yml down --remove-orphans
+docker compose -f deploy/nas/docker-compose.yml down --remove-orphans
 docker image rm sc-tool3-web:nas 2>/dev/null || true
-docker compose --env-file .env -f deploy/nas/docker-compose.yml up -d --build
+docker compose -f deploy/nas/docker-compose.yml up -d --build
 ```
 
 ## 4) Reverse proxy / SSL (recommended)
