@@ -61,14 +61,18 @@ The NAS deployment now uses a dedicated image build (`deploy/nas/Dockerfile`) in
 From the repository root:
 
 ```bash
-docker compose -f deploy/nas/docker-compose.yml --env-file .env up -d --build
+bash ./deploy/nas/compose.sh up -d --build
 ```
 
 Or from inside `deploy/nas` (use an absolute env path to avoid path resolution issues in Container Station):
 
 ```bash
-docker compose --env-file /share/Container/sc-tool3/.env up -d --build
+bash ./compose.sh up -d --build
 ```
+
+`compose.sh` disables BuildKit by default (`DOCKER_BUILDKIT=0`) to avoid QNAP Container Station
+errors like `failed to open writer ... buildkit/content/ingest/...: no such file or directory`
+during image export. Set `NAS_FORCE_BUILDKIT=1` if you explicitly want BuildKit enabled.
 
 The app is exposed on `4173` and includes a container healthcheck.
 
@@ -110,9 +114,9 @@ grep -nE "schemaCompatibilityPromise|seedDataPromise" src/lib/server/maria-seed.
 # expected: one schemaCompatibilityPromise declaration, no seedDataPromise
 
 # 4) Rebuild using clean commands
-docker compose -f deploy/nas/docker-compose.yml --env-file .env down --remove-orphans
+bash ./deploy/nas/compose.sh down --remove-orphans
 docker image rm sc-tool3-web:nas 2>/dev/null || true
-docker compose -f deploy/nas/docker-compose.yml --env-file .env up -d --build
+bash ./deploy/nas/compose.sh up -d --build
 ```
 
 Optional sanity check before Docker build:
@@ -126,11 +130,28 @@ npm run build
 
 ```bash
 # from repo root
-docker compose -f deploy/nas/docker-compose.yml --env-file .env down --remove-orphans
+bash ./deploy/nas/compose.sh down --remove-orphans
 docker image rm sc-tool3-web:nas 2>/dev/null || true
-docker compose -f deploy/nas/docker-compose.yml --env-file .env up -d --build
+bash ./deploy/nas/compose.sh up -d --build
 ```
 
+
+### Troubleshooting: `failed to register layer ... overlay2/.../link: no such file or directory`
+
+If you hit this error during image build/export, the issue is typically Docker/Container Station
+storage metadata corruption on the NAS, not application source.
+
+Run these recovery commands from the repository root:
+
+```bash
+bash ./deploy/nas/compose.sh down --remove-orphans
+docker builder prune -af
+docker system prune -af
+# then restart Container Station (or reboot NAS)
+bash ./deploy/nas/compose.sh up -d --build
+```
+
+The `deploy/nas/compose.sh` wrapper also detects this error pattern and prints the same recovery hint.
 
 ### Fixing "Cross-site POST form submissions are forbidden"
 

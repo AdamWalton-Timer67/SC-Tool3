@@ -21,4 +21,39 @@ if [[ $# -eq 0 ]]; then
   exit 1
 fi
 
-exec docker compose -f "$COMPOSE_FILE" --env-file "$ENV_FILE" "$@"
+if [[ "${NAS_FORCE_BUILDKIT:-0}" != "1" ]]; then
+  # QNAP Container Station can intermittently fail while exporting BuildKit layers
+  # with missing ingest directories; disable BuildKit by default for NAS deploys.
+  export DOCKER_BUILDKIT=0
+  export COMPOSE_DOCKER_CLI_BUILD=0
+fi
+
+OUTPUT_FILE="$(mktemp)"
+cleanup() {
+  rm -f "$OUTPUT_FILE"
+}
+trap cleanup EXIT
+
+if docker compose -f "$COMPOSE_FILE" --env-file "$ENV_FILE" "$@" 2>&1 | tee "$OUTPUT_FILE"; then
+  exit 0
+fi
+
+STATUS=${PIPESTATUS[0]}
+
+if grep -Eq "failed to register layer: open .*overlay2/.*/link: no such file or directory" "$OUTPUT_FILE"; then
+  cat >&2 <<'EOF'
+
+Detected a Docker overlay2 metadata error on NAS (missing layer link file).
+This is a Docker/Container Station storage issue, not an app-code issue.
+
+Recommended recovery steps on QNAP:
+  1) docker compose -f deploy/nas/docker-compose.yml --env-file .env down --remove-orphans
+  2) docker builder prune -af
+  3) docker system prune -af
+  4) Restart Container Station (or reboot NAS)
+  5) Rebuild with: bash ./deploy/nas/compose.sh up -d --build
+
+EOF
+fi
+
+exit "$STATUS"
