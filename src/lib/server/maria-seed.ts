@@ -37,16 +37,36 @@ async function ensureSchemaCompatibility() {
 	await pool.query('ALTER TABLE reputation_requirements ADD COLUMN IF NOT EXISTS required_level INT NULL');
 }
 
+let schemaCompatibilityPromise: Promise<void> | null = null;
+let seedDataPromise: Promise<void> | null = null;
+
+async function ensureSchemaCompatibilityOnce() {
+	if (!schemaCompatibilityPromise) {
+		schemaCompatibilityPromise = ensureSchemaCompatibility().catch((error) => {
+			schemaCompatibilityPromise = null;
+			throw error;
+		});
+	}
+	await schemaCompatibilityPromise;
+}
+
 export async function ensureMariaWikeloSeedData(): Promise<void> {
 	if (!hasMariaConfig()) return;
-	await ensureSchemaCompatibility();
 
-	const pool = getMariaPool();
-	const [countRows] = await pool.query<any[]>('SELECT COUNT(*) AS c FROM rewards');
-	if ((countRows?.[0]?.c ?? 0) > 0) return;
+	if (seedDataPromise) {
+		await seedDataPromise;
+		return;
+	}
 
-	for (const location of mockDb.locations as any[]) {
-		await pool.query(
+	seedDataPromise = (async () => {
+		await ensureSchemaCompatibilityOnce();
+
+		const pool = getMariaPool();
+		const [countRows] = await pool.query<any[]>('SELECT COUNT(*) AS c FROM rewards');
+		if ((countRows?.[0]?.c ?? 0) > 0) return;
+
+		for (const location of mockDb.locations as any[]) {
+			await pool.query(
 			`INSERT IGNORE INTO locations (
 				id, slug, type, system, planet, moon,
 				name_en, name_fr,
@@ -85,11 +105,11 @@ export async function ensureMariaWikeloSeedData(): Promise<void> {
 				location.difficulty ?? null,
 				location.coordinates ?? null
 			]
-		);
-	}
+			);
+		}
 
-	for (const ingredient of mockDb.ingredients as any[]) {
-		await pool.query(
+		for (const ingredient of mockDb.ingredients as any[]) {
+			await pool.query(
 			`INSERT IGNORE INTO ingredients (
 				id, category, rarity, name_en, name_fr,
 				image_url, image_credit,
@@ -119,11 +139,11 @@ export async function ensureMariaWikeloSeedData(): Promise<void> {
 				ingredient.source_details_fr ?? null,
 				ingredient.source_url ?? null
 			]
-		);
-	}
+			);
+		}
 
-	for (const reward of mockDb.rewards as any[]) {
-		await pool.query(
+		for (const reward of mockDb.rewards as any[]) {
+			await pool.query(
 			`INSERT IGNORE INTO rewards (
 				id, category, rarity,
 				name_en, name_fr, type_en, type_fr,
@@ -161,18 +181,18 @@ export async function ensureMariaWikeloSeedData(): Promise<void> {
 				reward.source_details_fr ?? null,
 				reward.source_url ?? null
 			]
-		);
-	}
+			);
+		}
 
-	for (const row of mockDb.reward_ingredients as any[]) {
-		await pool.query(
+		for (const row of mockDb.reward_ingredients as any[]) {
+			await pool.query(
 			'INSERT IGNORE INTO reward_ingredients (id, reward_id, ingredient_id, quantity, unit) VALUES (?, ?, ?, ?, ?)',
 			[row.id, row.reward_id, row.ingredient_id, row.quantity ?? 1, row.unit ?? null]
-		);
-	}
+			);
+		}
 
-	for (const row of mockDb.reputation_requirements as any[]) {
-		await pool.query(
+		for (const row of mockDb.reputation_requirements as any[]) {
+			await pool.query(
 			`INSERT IGNORE INTO reputation_requirements (
 				id, reward_id, faction, level, reputation_name_en, reputation_name_fr, required_level
 			) VALUES (?, ?, ?, ?, ?, ?, ?)`,
@@ -185,6 +205,14 @@ export async function ensureMariaWikeloSeedData(): Promise<void> {
 				row.reputation_name_fr ?? null,
 				row.required_level ?? row.level ?? 1
 			]
-		);
+			);
+		}
+	})();
+
+	try {
+		await seedDataPromise;
+	} catch (error) {
+		seedDataPromise = null;
+		throw error;
 	}
 }
