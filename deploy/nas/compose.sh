@@ -21,4 +21,11 @@ if [[ $# -eq 0 ]]; then
   exit 1
 fi
 
+if [[ "${NAS_FORCE_BUILDKIT:-0}" != "1" ]]; then
+  # QNAP Container Station can intermittently fail while exporting BuildKit layers
+  # with missing ingest directories; disable BuildKit by default for NAS deploys.
+  export DOCKER_BUILDKIT=0
+  export COMPOSE_DOCKER_CLI_BUILD=0
+fi
+
 exec docker compose -f "$COMPOSE_FILE" --env-file "$ENV_FILE" "$@"
