@@ -8,7 +8,7 @@
 	import AuthButton from '$lib/components/AuthButton.svelte';
 
 	let { data }: { data: PageData } = $props();
-	let currentLang: 'en' | 'fr' = $state('fr');
+	let currentLang = $state<'en' | 'fr'>('en');
 
 	const location = data.location;
 	const showFullDetails = env.PUBLIC_SHOW_FULL_LOCATION_DETAILS === 'true';
@@ -74,11 +74,7 @@
 	});
 
 	onMount(() => {
-		// Try to get language from localStorage
-		const savedLang = typeof window !== 'undefined' ? localStorage.getItem('wikelo-lang') : null;
-		if (savedLang === 'en' || savedLang === 'fr') {
-			currentLang = savedLang;
-		}
+		currentLang = 'en';
 	});
 </script>
 
