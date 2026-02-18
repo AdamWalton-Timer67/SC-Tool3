@@ -10,6 +10,7 @@
 	// Use stats from server load
 	const stats = $derived(data.stats);
 	const pendingUsers = $derived(data.pendingUsers);
+	const dbStatus = $derived(data.dbStatus);
 </script>
 
 <div class="space-y-6">
@@ -285,7 +286,7 @@
 			<h3
 				class="font-orbitron text-lg font-semibold tracking-wider text-cyan-300 uppercase sm:text-xl"
 			>
-				🖥️ System Status
+				🖥️ Database Status
 			</h3>
 			<div class="h-px flex-1 bg-linear-to-r from-transparent via-cyan-400/50 to-transparent"></div>
 		</div>
@@ -295,30 +296,16 @@
 		>
 			<div class="space-y-3 text-sm sm:text-base">
 				<div
-					class="flex items-center gap-3 rounded-lg border border-green-500/30 bg-green-500/10 p-3"
+					class="flex items-center gap-3 rounded-lg border p-3 {dbStatus.connected
+						? 'border-green-500/30 bg-green-500/10'
+						: 'border-red-500/30 bg-red-500/10'}"
 				>
-					<span class="text-2xl">✅</span>
+					<span class="text-2xl">{dbStatus.connected ? '✅' : '❌'}</span>
 					<div>
-						<span class="font-orbitron font-bold text-green-300">Database:</span>
-						<span class="ml-2 text-green-300/80">Connected & Operational</span>
-					</div>
-				</div>
-				<div
-					class="flex items-center gap-3 rounded-lg border border-green-500/30 bg-green-500/10 p-3"
-				>
-					<span class="text-2xl">✅</span>
-					<div>
-						<span class="font-orbitron font-bold text-green-300">Authentication:</span>
-						<span class="ml-2 text-green-300/80">Active (Supabase Auth)</span>
-					</div>
-				</div>
-				<div
-					class="flex items-center gap-3 rounded-lg border border-green-500/30 bg-green-500/10 p-3"
-				>
-					<span class="text-2xl">✅</span>
-					<div>
-						<span class="font-orbitron font-bold text-green-300">Image Upload:</span>
-						<span class="ml-2 text-green-300/80">Configured (AWS S3)</span>
+						<span class="font-orbitron font-bold {dbStatus.connected ? 'text-green-300' : 'text-red-300'}">MariaDB:</span>
+						<span class="ml-2 {dbStatus.connected ? 'text-green-300/80' : 'text-red-300/80'}">
+							{dbStatus.connected ? 'Connected & Operational' : dbStatus.error || 'Connection failed'}
+						</span>
 					</div>
 				</div>
 			</div>
