@@ -101,6 +101,8 @@
 				<!-- Back Button -->
 				<a
 					href="/organizations"
+					aria-label="Back to organizations"
+					title="Back to organizations"
 					class="rounded-lg border border-cyan-500/30 bg-slate-900/50 p-2 text-cyan-400 transition-all hover:border-cyan-500/70 hover:bg-slate-900 hover:text-cyan-300"
 				>
 					<svg
