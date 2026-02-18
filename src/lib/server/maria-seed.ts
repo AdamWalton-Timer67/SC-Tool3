@@ -32,16 +32,20 @@ async function ensureSchemaCompatibility() {
 	await pool.query('ALTER TABLE reputation_requirements ADD COLUMN IF NOT EXISTS required_level INT NULL');
 }
 
-let schemaCompatibilityPromise: Promise<void> | null = null;
-async function ensureSchemaCompatibilityOnce() {
-	if (!schemaCompatibilityPromise) {
-		schemaCompatibilityPromise = ensureSchemaCompatibility().catch((error) => {
-			schemaCompatibilityPromise = null;
-			throw error;
-		});
-	}
-	await schemaCompatibilityPromise;
-}
+const ensureSchemaCompatibilityOnce = (() => {
+	let schemaCompatibilityPromise: Promise<void> | null = null;
+
+	return async () => {
+		if (!schemaCompatibilityPromise) {
+			schemaCompatibilityPromise = ensureSchemaCompatibility().catch((error) => {
+				schemaCompatibilityPromise = null;
+				throw error;
+			});
+		}
+
+		await schemaCompatibilityPromise;
+	};
+})();
 
 export async function ensureMariaWikeloSeedData(): Promise<void> {
 	if (!hasMariaConfig()) return;
