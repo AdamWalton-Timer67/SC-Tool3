@@ -136,6 +136,23 @@ bash ./deploy/nas/compose.sh up -d --build
 ```
 
 
+### Troubleshooting: `failed to register layer ... overlay2/.../link: no such file or directory`
+
+If you hit this error during image build/export, the issue is typically Docker/Container Station
+storage metadata corruption on the NAS, not application source.
+
+Run these recovery commands from the repository root:
+
+```bash
+bash ./deploy/nas/compose.sh down --remove-orphans
+docker builder prune -af
+docker system prune -af
+# then restart Container Station (or reboot NAS)
+bash ./deploy/nas/compose.sh up -d --build
+```
+
+The `deploy/nas/compose.sh` wrapper also detects this error pattern and prints the same recovery hint.
+
 ### Fixing "Cross-site POST form submissions are forbidden"
 
 If your app is behind a NAS reverse proxy, configure ORIGIN and forwarded headers. This project disables strict form-origin matching to avoid false positives when proxy headers/origins vary.
