@@ -1,7 +1,5 @@
 import { hasMariaConfig } from '$lib/server/maria';
 
-let schemaCompatibilityPromise: Promise<void> | null = null;
-
 async function ensureSchemaCompatibility() {
 	const { getMariaPool } = await import('$lib/server/maria');
 	const pool = getMariaPool();
