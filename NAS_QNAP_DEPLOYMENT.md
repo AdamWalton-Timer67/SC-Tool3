@@ -61,13 +61,13 @@ The NAS deployment now uses a dedicated image build (`deploy/nas/Dockerfile`) in
 From the repository root:
 
 ```bash
-./deploy/nas/compose.sh up -d --build
+bash ./deploy/nas/compose.sh up -d --build
 ```
 
 Or from inside `deploy/nas` (use an absolute env path to avoid path resolution issues in Container Station):
 
 ```bash
-./compose.sh up -d --build
+bash ./compose.sh up -d --build
 ```
 
 `compose.sh` disables BuildKit by default (`DOCKER_BUILDKIT=0`) to avoid QNAP Container Station
@@ -114,9 +114,9 @@ grep -nE "schemaCompatibilityPromise|seedDataPromise" src/lib/server/maria-seed.
 # expected: one schemaCompatibilityPromise declaration, no seedDataPromise
 
 # 4) Rebuild using clean commands
-./deploy/nas/compose.sh down --remove-orphans
+bash ./deploy/nas/compose.sh down --remove-orphans
 docker image rm sc-tool3-web:nas 2>/dev/null || true
-./deploy/nas/compose.sh up -d --build
+bash ./deploy/nas/compose.sh up -d --build
 ```
 
 Optional sanity check before Docker build:
@@ -130,9 +130,9 @@ npm run build
 
 ```bash
 # from repo root
-./deploy/nas/compose.sh down --remove-orphans
+bash ./deploy/nas/compose.sh down --remove-orphans
 docker image rm sc-tool3-web:nas 2>/dev/null || true
-./deploy/nas/compose.sh up -d --build
+bash ./deploy/nas/compose.sh up -d --build
 ```
 
 
