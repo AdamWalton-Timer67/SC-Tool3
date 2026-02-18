@@ -33,8 +33,6 @@ async function ensureSchemaCompatibility() {
 }
 
 let schemaCompatibilityPromise: Promise<void> | null = null;
-let seedDataPromise: Promise<void> | null = null;
-
 async function ensureSchemaCompatibilityOnce() {
 	if (!schemaCompatibilityPromise) {
 		schemaCompatibilityPromise = ensureSchemaCompatibility().catch((error) => {
@@ -47,11 +45,5 @@ async function ensureSchemaCompatibilityOnce() {
 
 export async function ensureMariaWikeloSeedData(): Promise<void> {
 	if (!hasMariaConfig()) return;
-	if (!schemaCompatibilityPromise) {
-		schemaCompatibilityPromise = ensureSchemaCompatibility().catch((error) => {
-			schemaCompatibilityPromise = null;
-			throw error;
-		});
-	}
-	await schemaCompatibilityPromise;
+	await ensureSchemaCompatibilityOnce();
 }
