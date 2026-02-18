@@ -128,7 +128,7 @@ function applyFilters(rows: any[], filters: Filter[]) {
 }
 
 
-const BROWSER_MARIA_WIKELO_TABLES = new Set(['rewards', 'ingredients', 'reward_ingredients', 'reputation_requirements']);
+const BROWSER_MARIA_WIKELO_TABLES = new Set(['rewards', 'ingredients', 'locations', 'reward_ingredients', 'reputation_requirements']);
 
 async function fetchWikeloTableFromServer(tableName: string): Promise<any[] | null> {
 	if (!browser || !BROWSER_MARIA_WIKELO_TABLES.has(tableName)) return null;
@@ -141,17 +141,40 @@ async function fetchWikeloTableFromServer(tableName: string): Promise<any[] | nu
 		return null;
 	}
 }
-function maybeWithRelations(tableName: string, rows: any[]) {
+function maybeWithRelations(
+	tableName: string,
+	rows: any[],
+	relations?: { ingredients?: any[]; locations?: any[] }
+) {
+	const resolveIngredientById = (ingredientId: string) => {
+		if (!ingredientId) return null;
+		return (
+			relations?.ingredients?.find((i) => i.id === ingredientId) ??
+			mockDb.ingredients.find((i) => i.id === ingredientId) ??
+			null
+		);
+	};
+
+	const resolveLocationById = (locationId: string) => {
+		if (!locationId) return null;
+		return (
+			relations?.locations?.find((l) => l.id === locationId) ??
+			mockDb.locations.find((l) => l.id === locationId) ??
+			null
+		);
+	};
+
 	if (tableName === 'reward_ingredients') {
 		return rows.map((ri) => ({
 			...ri,
-			ingredients: mockDb.ingredients.find((i) => i.id === ri.ingredient_id) ?? null
+			ingredients:
+				ri.ingredients ?? resolveIngredientById(ri.ingredient_id)
 		}));
 	}
 
 	if (tableName === 'ingredients') {
 		return rows.map((ingredient) => {
-			const location = mockDb.locations.find((l) => l.id === ingredient.location_id);
+			const location = ingredient.locations ?? resolveLocationById(ingredient.location_id);
 			return {
 				...ingredient,
 				locations: location
@@ -268,7 +291,15 @@ class QueryBuilder {
 			return { data: clone(filtered), error: null };
 		}
 
-		let rows = maybeWithRelations(this.tableName, applyFilters(table, this.filters));
+		const relationRows: { ingredients?: any[]; locations?: any[] } = {};
+		if (serverRows && this.tableName === 'reward_ingredients') {
+			relationRows.ingredients = await fetchWikeloTableFromServer('ingredients') ?? [];
+		}
+		if (serverRows && this.tableName === 'ingredients') {
+			relationRows.locations = await fetchWikeloTableFromServer('locations') ?? [];
+		}
+
+		let rows = maybeWithRelations(this.tableName, applyFilters(table, this.filters), relationRows);
 		if (this.ordering) {
 			const { field, ascending } = this.ordering;
 			rows = [...rows].sort((a, b) =>

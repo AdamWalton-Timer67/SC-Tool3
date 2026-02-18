@@ -86,14 +86,7 @@
 				}
 	);
 
-	function handleCheckboxClick(event: Event, requirementId: string) {
-		if (!wikeloStore.currentUser) {
-			// Inverse l'état de la checkbox pour revenir à l'état d'origine
-			(event.target as HTMLInputElement).checked = !(event.target as HTMLInputElement).checked;
-			onLoginRequired?.();
-			return;
-		}
-
+	function handleCheckboxClick(_event: Event, requirementId: string) {
 		const requirement = reward.requirements.find((r) => r.id === requirementId);
 		wikeloStore.toggleRequirement(reward.id, requirementId);
 		captureEvent('wikelo_requirement_checkbox_toggled', {
