@@ -106,7 +106,7 @@ mkdir -p /share/Public2/Container/SC-Tools3
 
 # 3) Verify expected source before building
 cd /share/Public2/Container/SC-Tools3
-rg -n "schemaCompatibilityPromise|seedDataPromise" src/lib/server/maria-seed.ts
+grep -nE "schemaCompatibilityPromise|seedDataPromise" src/lib/server/maria-seed.ts
 # expected: one schemaCompatibilityPromise declaration, no seedDataPromise
 
 # 4) Rebuild using clean commands
