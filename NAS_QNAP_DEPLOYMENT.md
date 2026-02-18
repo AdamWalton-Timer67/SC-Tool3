@@ -61,14 +61,18 @@ The NAS deployment now uses a dedicated image build (`deploy/nas/Dockerfile`) in
 From the repository root:
 
 ```bash
-docker compose -f deploy/nas/docker-compose.yml --env-file .env up -d --build
+bash ./deploy/nas/compose.sh up -d --build
 ```
 
 Or from inside `deploy/nas` (use an absolute env path to avoid path resolution issues in Container Station):
 
 ```bash
-docker compose --env-file /share/Container/sc-tool3/.env up -d --build
+bash ./compose.sh up -d --build
 ```
+
+`compose.sh` disables BuildKit by default (`DOCKER_BUILDKIT=0`) to avoid QNAP Container Station
+errors like `failed to open writer ... buildkit/content/ingest/...: no such file or directory`
+during image export. Set `NAS_FORCE_BUILDKIT=1` if you explicitly want BuildKit enabled.
 
 The app is exposed on `4173` and includes a container healthcheck.
 
@@ -110,9 +114,9 @@ grep -nE "schemaCompatibilityPromise|seedDataPromise" src/lib/server/maria-seed.
 # expected: one schemaCompatibilityPromise declaration, no seedDataPromise
 
 # 4) Rebuild using clean commands
-docker compose -f deploy/nas/docker-compose.yml --env-file .env down --remove-orphans
+bash ./deploy/nas/compose.sh down --remove-orphans
 docker image rm sc-tool3-web:nas 2>/dev/null || true
-docker compose -f deploy/nas/docker-compose.yml --env-file .env up -d --build
+bash ./deploy/nas/compose.sh up -d --build
 ```
 
 Optional sanity check before Docker build:
@@ -126,11 +130,72 @@ npm run build
 
 ```bash
 # from repo root
-docker compose -f deploy/nas/docker-compose.yml --env-file .env down --remove-orphans
+bash ./deploy/nas/compose.sh down --remove-orphans
 docker image rm sc-tool3-web:nas 2>/dev/null || true
-docker compose -f deploy/nas/docker-compose.yml --env-file .env up -d --build
+bash ./deploy/nas/compose.sh up -d --build
 ```
 
+
+### Troubleshooting: `failed to register layer ... overlay2/.../link: no such file or directory`
+
+If you hit this error during image build/export, the issue is typically Docker/Container Station
+storage metadata corruption on the NAS, not application source.
+
+Run these recovery commands from the repository root:
+
+```bash
+bash ./deploy/nas/compose.sh down --remove-orphans
+docker builder prune -af
+docker system prune -af
+# then restart Container Station (or reboot NAS)
+bash ./deploy/nas/compose.sh up -d --build
+```
+
+The `deploy/nas/compose.sh` wrapper also detects this error pattern and prints the same recovery hint.
+
+### Troubleshooting: `mkdir .../lib/docker/containers/<id>: no such file or directory`
+
+If build/start fails with a missing `lib/docker/containers/...` directory, Container Station's Docker
+runtime metadata path is inconsistent on the NAS host.
+
+Recommended recovery on QNAP:
+
+```bash
+# 1) from QTS App Center: stop Container Station
+# 2) verify this directory exists on NAS:
+#    /share/CACHEDEV1_DATA/Public2/Container/container-station-data/lib/docker
+# 3) start Container Station again (or reboot NAS)
+# 4) rerun build
+bash ./deploy/nas/compose.sh up -d --build
+```
+
+If this persists after restart/reboot, back up and reinstall Container Station.
+
+### Troubleshooting: QNAP App Center cannot download/reinstall Container Station
+
+If Container Station was removed and QTS cannot download it again, this is usually a NAS connectivity,
+DNS/time, or QNAP repository availability issue.
+
+Recommended recovery sequence:
+
+```bash
+# 1) Verify NAS time is correct (TLS downloads fail if clock is wrong)
+# 2) Verify DNS on NAS (try 1.1.1.1 or 8.8.8.8 in Network settings)
+# 3) Retry install from QTS App Center
+```
+
+If App Center still fails:
+
+1. Download the Container Station `.qpkg` manually from QNAP's official package source on another machine.
+2. In QTS App Center, use **Install Manually** and upload the `.qpkg`.
+3. Start Container Station once installed, then rerun deployment:
+
+```bash
+bash ./deploy/nas/compose.sh up -d --build
+```
+
+If manual install also fails, reboot NAS and repeat the manual install; persistent failures usually
+indicate NAS firmware/App Center repository issues that need QNAP support.
 
 ### Fixing "Cross-site POST form submissions are forbidden"
 

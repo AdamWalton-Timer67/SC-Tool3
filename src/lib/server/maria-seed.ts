@@ -1,7 +1,5 @@
 import { hasMariaConfig } from '$lib/server/maria';
 
-let schemaCompatibilityPromise: Promise<void> | null = null;
-
 async function ensureSchemaCompatibility() {
 	const { getMariaPool } = await import('$lib/server/maria');
 	const pool = getMariaPool();
@@ -34,26 +32,22 @@ async function ensureSchemaCompatibility() {
 	await pool.query('ALTER TABLE reputation_requirements ADD COLUMN IF NOT EXISTS required_level INT NULL');
 }
 
-let schemaCompatibilityPromise: Promise<void> | null = null;
-let seedDataPromise: Promise<void> | null = null;
+const ensureSchemaCompatibilityOnce = (() => {
+	let schemaCompatibilityPromise: Promise<void> | null = null;
 
-async function ensureSchemaCompatibilityOnce() {
-	if (!schemaCompatibilityPromise) {
-		schemaCompatibilityPromise = ensureSchemaCompatibility().catch((error) => {
-			schemaCompatibilityPromise = null;
-			throw error;
-		});
-	}
-	await schemaCompatibilityPromise;
-}
+	return async () => {
+		if (!schemaCompatibilityPromise) {
+			schemaCompatibilityPromise = ensureSchemaCompatibility().catch((error) => {
+				schemaCompatibilityPromise = null;
+				throw error;
+			});
+		}
+
+		await schemaCompatibilityPromise;
+	};
+})();
 
 export async function ensureMariaWikeloSeedData(): Promise<void> {
 	if (!hasMariaConfig()) return;
-	if (!schemaCompatibilityPromise) {
-		schemaCompatibilityPromise = ensureSchemaCompatibility().catch((error) => {
-			schemaCompatibilityPromise = null;
-			throw error;
-		});
-	}
-	await schemaCompatibilityPromise;
+	await ensureSchemaCompatibilityOnce();
 }
