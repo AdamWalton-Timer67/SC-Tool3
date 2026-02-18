@@ -92,9 +92,10 @@ docker exec -i sc-tool3-mariadb mariadb -uroot -p"$MARIADB_ROOT_PASSWORD" "$MARI
 
 ```bash
 # from repo root
-docker compose -f deploy/nas/docker-compose.yml down --remove-orphans
+docker compose -f deploy/nas/docker-compose.yml --env-file .env down --remove-orphans
 docker image rm sc-tool3-web:nas 2>/dev/null || true
-docker compose -f deploy/nas/docker-compose.yml up -d --build
+docker compose -f deploy/nas/docker-compose.yml --env-file .env up -d --build
+
 ```
 
 
