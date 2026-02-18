@@ -153,6 +153,50 @@ bash ./deploy/nas/compose.sh up -d --build
 
 The `deploy/nas/compose.sh` wrapper also detects this error pattern and prints the same recovery hint.
 
+### Troubleshooting: `mkdir .../lib/docker/containers/<id>: no such file or directory`
+
+If build/start fails with a missing `lib/docker/containers/...` directory, Container Station's Docker
+runtime metadata path is inconsistent on the NAS host.
+
+Recommended recovery on QNAP:
+
+```bash
+# 1) from QTS App Center: stop Container Station
+# 2) verify this directory exists on NAS:
+#    /share/CACHEDEV1_DATA/Public2/Container/container-station-data/lib/docker
+# 3) start Container Station again (or reboot NAS)
+# 4) rerun build
+bash ./deploy/nas/compose.sh up -d --build
+```
+
+If this persists after restart/reboot, back up and reinstall Container Station.
+
+### Troubleshooting: QNAP App Center cannot download/reinstall Container Station
+
+If Container Station was removed and QTS cannot download it again, this is usually a NAS connectivity,
+DNS/time, or QNAP repository availability issue.
+
+Recommended recovery sequence:
+
+```bash
+# 1) Verify NAS time is correct (TLS downloads fail if clock is wrong)
+# 2) Verify DNS on NAS (try 1.1.1.1 or 8.8.8.8 in Network settings)
+# 3) Retry install from QTS App Center
+```
+
+If App Center still fails:
+
+1. Download the Container Station `.qpkg` manually from QNAP's official package source on another machine.
+2. In QTS App Center, use **Install Manually** and upload the `.qpkg`.
+3. Start Container Station once installed, then rerun deployment:
+
+```bash
+bash ./deploy/nas/compose.sh up -d --build
+```
+
+If manual install also fails, reboot NAS and repeat the manual install; persistent failures usually
+indicate NAS firmware/App Center repository issues that need QNAP support.
+
 ### Fixing "Cross-site POST form submissions are forbidden"
 
 If your app is behind a NAS reverse proxy, configure ORIGIN and forwarded headers. This project disables strict form-origin matching to avoid false positives when proxy headers/origins vary.

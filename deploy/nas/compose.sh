@@ -56,4 +56,22 @@ Recommended recovery steps on QNAP:
 EOF
 fi
 
+if grep -Eq "mkdir .*/lib/docker/containers/[a-f0-9]+: no such file or directory" "$OUTPUT_FILE"; then
+  cat >&2 <<'EOF'
+
+Detected a Docker container metadata directory error on NAS (missing lib/docker/containers path).
+This indicates Container Station's Docker data root is inconsistent or partially missing.
+
+Recommended recovery steps on QNAP:
+  1) Stop Container Station from QTS App Center.
+  2) Verify the data-root parent exists:
+     /share/CACHEDEV1_DATA/Public2/Container/container-station-data/lib/docker
+  3) Start Container Station again (it should recreate missing runtime directories).
+  4) If it still fails, reboot NAS and rerun:
+     bash ./deploy/nas/compose.sh up -d --build
+  5) Last resort: back up containers/volumes and reinstall Container Station.
+
+EOF
+fi
+
 exit "$STATUS"
