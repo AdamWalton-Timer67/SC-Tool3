@@ -1,5 +1,4 @@
 import { browser } from '$app/environment';
-import { getTable, mockDb } from '$lib/mock-db';
 
 export type User = {
 	id: string;
@@ -18,54 +17,18 @@ type QueryResult<T = any> = Promise<{ data: T; error: any }>;
 type Filter = { type: 'eq'; field: string; value: any };
 type AuthCallback = (event: string, session: Session | null) => void;
 
-const SESSION_COOKIE = 'nas_session_user_id';
 const SESSION_STORAGE_KEY = 'nas-session-user-id';
+export const SESSION_COOKIE = 'nas_session_user_id';
 
-let browserSessionUserId: string | null = null;
 const authCallbacks = new Set<AuthCallback>();
+let browserSessionUserId: string | null = null;
 
 function clone<T>(value: T): T {
 	return JSON.parse(JSON.stringify(value));
 }
 
-function ensureSeedAdmin() {
-	const authUsers = mockDb.auth_users as any[];
-	const existingAdmin = authUsers.find((u) => u.id === 'local-user-1');
-	if (!existingAdmin) {
-		authUsers.push({
-			id: 'local-user-1',
-			email: 'local@test.lan',
-			password: 'admin123',
-			approved: true,
-			raw_user_meta_data: { role: 'admin' }
-		});
-	}
-
-	if (!mockDb.user_roles.some((r: any) => r.user_id === 'local-user-1' && r.role === 'admin')) {
-		mockDb.user_roles.push({ id: `role_${Date.now()}`, user_id: 'local-user-1', role: 'admin' });
-	}
-}
-
-function buildUser(authUser: any): User {
-	return {
-		id: authUser.id,
-		email: authUser.email,
-		created_at: authUser.created_at,
-		last_sign_in_at: authUser.last_sign_in_at,
-		user_metadata: authUser.raw_user_meta_data ?? {}
-	};
-}
-
-function makeSessionFromUser(authUser: any): Session {
-	return {
-		access_token: `nas-token-${authUser.id}`,
-		user: buildUser(authUser)
-	};
-}
-
 function getBrowserSessionUserId(): string | null {
 	if (!browser) return null;
-
 	if (browserSessionUserId) return browserSessionUserId;
 
 	const fromStorage = window.localStorage.getItem(SESSION_STORAGE_KEY);
@@ -80,25 +43,20 @@ function getBrowserSessionUserId(): string | null {
 		.find((c) => c.startsWith(`${SESSION_COOKIE}=`))
 		?.split('=')[1];
 
-	if (cookieValue) {
-		browserSessionUserId = decodeURIComponent(cookieValue);
-		window.localStorage.setItem(SESSION_STORAGE_KEY, browserSessionUserId);
-		return browserSessionUserId;
-	}
-
-	return null;
+	if (!cookieValue) return null;
+	browserSessionUserId = decodeURIComponent(cookieValue);
+	window.localStorage.setItem(SESSION_STORAGE_KEY, browserSessionUserId);
+	return browserSessionUserId;
 }
 
 function persistBrowserSession(userId: string | null) {
 	if (!browser) return;
-
 	browserSessionUserId = userId;
+
 	if (userId) {
 		window.localStorage.setItem(SESSION_STORAGE_KEY, userId);
-		document.cookie = `${SESSION_COOKIE}=${encodeURIComponent(userId)}; Path=/; Max-Age=${60 * 60 * 24 * 30}; SameSite=Lax`;
 	} else {
 		window.localStorage.removeItem(SESSION_STORAGE_KEY);
-		document.cookie = `${SESSION_COOKIE}=; Path=/; Max-Age=0; SameSite=Lax`;
 	}
 }
 
@@ -112,61 +70,115 @@ function emitAuth(event: string, session: Session | null) {
 	}
 }
 
-function findAuthUserById(id: string | null | undefined) {
-	if (!id) return null;
-	return (mockDb.auth_users as any[]).find((u) => u.id === id) ?? null;
-}
-
-function findAuthUserByEmail(email: string | undefined) {
-	if (!email) return null;
-	const normalized = email.trim().toLowerCase();
-	return (mockDb.auth_users as any[]).find((u) => String(u.email ?? '').toLowerCase() === normalized) ?? null;
-}
-
-function applyFilters(rows: any[], filters: Filter[]) {
-	return rows.filter((row) => filters.every((f) => (f.type === 'eq' ? row[f.field] === f.value : true)));
-}
-
-
-const BROWSER_MARIA_WIKELO_TABLES = new Set(['rewards', 'ingredients', 'reward_ingredients', 'reputation_requirements']);
-
-async function fetchWikeloTableFromServer(tableName: string): Promise<any[] | null> {
-	if (!browser || !BROWSER_MARIA_WIKELO_TABLES.has(tableName)) return null;
-	try {
-		const response = await fetch(`/api/wikelo/${tableName}`);
-		if (!response.ok) return null;
-		const payload = await response.json();
-		return Array.isArray(payload?.data) ? payload.data : [];
-	} catch {
-		return null;
+async function parseJsonResponse(response: Response): Promise<any> {
+	const payload = await response.json().catch(() => ({}));
+	if (!response.ok) {
+		const message = payload?.error || payload?.message || `Request failed (${response.status})`;
+		throw new Error(message);
 	}
+	return payload;
 }
-function maybeWithRelations(tableName: string, rows: any[]) {
-	if (tableName === 'reward_ingredients') {
-		return rows.map((ri) => ({
-			...ri,
-			ingredients: mockDb.ingredients.find((i) => i.id === ri.ingredient_id) ?? null
-		}));
-	}
 
-	if (tableName === 'ingredients') {
-		return rows.map((ingredient) => {
-			const location = mockDb.locations.find((l) => l.id === ingredient.location_id);
-			return {
-				...ingredient,
-				locations: location
+function makeAuthApi() {
+	return {
+		getSession: async () => {
+			if (!browser) return { data: { session: null }, error: null };
+			try {
+				const response = await fetch('/api/auth/session');
+				const payload = await parseJsonResponse(response);
+				const user = payload?.user ?? null;
+				if (!user) return { data: { session: null }, error: null };
+				persistBrowserSession(user.id ?? null);
+				return {
+					data: {
+						session: {
+							access_token: `nas-token-${user.id}`,
+							user
+						}
+					},
+					error: null
+				};
+			} catch (error) {
+				return { data: { session: null }, error };
+			}
+		},
+		getUser: async () => {
+			if (!browser) return { data: { user: null }, error: null };
+			try {
+				const response = await fetch('/api/auth/session');
+				const payload = await parseJsonResponse(response);
+				const user = payload?.user ?? null;
+				persistBrowserSession(user?.id ?? null);
+				return { data: { user }, error: null };
+			} catch (error) {
+				return { data: { user: null }, error };
+			}
+		},
+		signInWithPassword: async ({ email, password }: { email: string; password: string }) => {
+			try {
+				const response = await fetch('/api/auth/signin', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ email, password })
+				});
+				const payload = await parseJsonResponse(response);
+				const user = payload?.user ?? null;
+				if (!user) return { data: null, error: { message: 'Invalid email or password.' } };
+
+				persistBrowserSession(user.id ?? null);
+				const session: Session = {
+					access_token: `nas-token-${user.id}`,
+					user
+				};
+				emitAuth('SIGNED_IN', session);
+				return { data: { user, session }, error: null };
+			} catch (error) {
+				return { data: null, error };
+			}
+		},
+		signUp: async ({ email, password, options }: { email: string; password: string; options?: any }) => {
+			try {
+				const response = await fetch('/api/auth/signup', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ email, password, displayName: options?.data?.display_name })
+				});
+				const payload = await parseJsonResponse(response);
+				return { data: { user: payload?.user ?? null, session: null }, error: null };
+			} catch (error) {
+				return { data: null, error };
+			}
+		},
+		signOut: async () => {
+			try {
+				await fetch('/api/auth/signout', { method: 'POST' });
+			} finally {
+				persistBrowserSession(null);
+				emitAuth('SIGNED_OUT', null);
+			}
+			return { error: null };
+		},
+		signInWithOAuth: async () => ({ data: null, error: { message: 'OAuth disabled in Maria mode.' } }),
+		onAuthStateChange: (callback: AuthCallback) => {
+			authCallbacks.add(callback);
+			void (async () => {
+				const {
+					data: { user }
+				} = await supabase.auth.getUser();
+				const session = user
 					? {
-						id: location.id,
-						slug: location.slug,
-						name_en: location.name_en,
-						name_fr: location.name_fr
+						access_token: `nas-token-${user.id}`,
+						user
 					}
-					: null
+					: null;
+				callback('INITIAL_SESSION', session);
+			})();
+			return {
+				data: { subscription: { unsubscribe: () => authCallbacks.delete(callback) } },
+				error: null
 			};
-		});
-	}
-
-	return rows;
+		}
+	};
 }
 
 class QueryBuilder {
@@ -175,40 +187,20 @@ class QueryBuilder {
 	private limitCount: number | null = null;
 	private writeMode: 'insert' | 'update' | 'delete' | 'upsert' | null = null;
 	private payload: any;
+	private selectClause = '*';
+	private upsertConflict: string | undefined;
 
 	constructor(private tableName: string) {}
 
-	select(..._args: any[]): this { return this; }
+	select(fields = '*'): this { this.selectClause = fields; return this; }
 	insert(payload: any): this { this.writeMode = 'insert'; this.payload = payload; return this; }
 	update(payload: any): this { this.writeMode = 'update'; this.payload = payload; return this; }
 	delete(..._args: any[]): this { this.writeMode = 'delete'; return this; }
-
-	upsert(payload: any, options?: { onConflict?: string }): QueryResult<null> {
-		const table = getTable(this.tableName) as any[];
-		const items = Array.isArray(payload) ? payload : [payload];
-		const conflictFields = (options?.onConflict ?? '')
-			.split(',')
-			.map((field) => field.trim())
-			.filter(Boolean);
-
-		for (const item of items) {
-			let idx = -1;
-
-			if (conflictFields.length > 0) {
-				idx = table.findIndex((row) =>
-					conflictFields.every((field) => row[field] !== undefined && row[field] === item[field])
-				);
-			} else if (item.id) {
-				idx = table.findIndex((row) => row.id === item.id);
-			}
-
-			if (idx >= 0) {
-				table[idx] = { ...table[idx], ...item };
-			} else {
-				table.push({ id: item.id ?? `mock_${Date.now()}_${Math.random()}`, ...item });
-			}
-		}
-		return Promise.resolve({ data: null, error: null });
+	upsert(payload: any, options?: { onConflict?: string }): this {
+		this.writeMode = 'upsert';
+		this.payload = payload;
+		this.upsertConflict = options?.onConflict;
+		return this;
 	}
 	eq(field: string, value: any): this { this.filters.push({ type: 'eq', field, value }); return this; }
 	neq(..._args: any[]): this { return this; }
@@ -246,39 +238,29 @@ class QueryBuilder {
 	}
 
 	private async execute(): QueryResult<any> {
-		const serverRows = this.writeMode ? null : await fetchWikeloTableFromServer(this.tableName);
-		const table = serverRows ?? getTable(this.tableName);
-		if (this.writeMode === 'insert') {
-			const rows = Array.isArray(this.payload) ? this.payload : [this.payload];
-			const created = rows.map((row) => ({ id: row.id ?? `mock_${Date.now()}_${Math.random()}`, ...row }));
-			table.push(...created);
-			return { data: clone(created), error: null };
-		}
-		if (this.writeMode === 'update') {
-			const filtered = applyFilters(table, this.filters);
-			for (const row of filtered) Object.assign(row, this.payload);
-			return { data: clone(filtered), error: null };
-		}
-		if (this.writeMode === 'delete') {
-			const filtered = applyFilters(table, this.filters);
-			for (const row of filtered) {
-				const idx = table.indexOf(row);
-				if (idx >= 0) table.splice(idx, 1);
-			}
-			return { data: clone(filtered), error: null };
+		if (!browser) {
+			return { data: null, error: { message: 'Client query attempted during SSR.' } };
 		}
 
-		let rows = maybeWithRelations(this.tableName, applyFilters(table, this.filters));
-		if (this.ordering) {
-			const { field, ascending } = this.ordering;
-			rows = [...rows].sort((a, b) =>
-				ascending
-					? String(a[field] ?? '').localeCompare(String(b[field] ?? ''))
-					: String(b[field] ?? '').localeCompare(String(a[field] ?? ''))
-			);
+		try {
+			const response = await fetch(`/api/db/${this.tableName}`, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					action: this.writeMode ?? 'select',
+					filters: this.filters,
+					ordering: this.ordering,
+					limit: this.limitCount,
+					payload: this.payload,
+					select: this.selectClause,
+					onConflict: this.upsertConflict
+				})
+			});
+			const payload = await parseJsonResponse(response);
+			return { data: clone(payload?.data ?? null), error: null };
+		} catch (error) {
+			return { data: null, error };
 		}
-		if (this.limitCount !== null) rows = rows.slice(0, this.limitCount);
-		return { data: clone(rows), error: null };
 	}
 
 	then<TResult1 = { data: any; error: any }, TResult2 = never>(
@@ -289,152 +271,30 @@ class QueryBuilder {
 	}
 }
 
-function searchLocations(params: any) {
-	const search = (params?.search_term ?? '').toString().toLowerCase();
-	return mockDb.locations
-		.filter((l) => !search || l.name_en.toLowerCase().includes(search) || l.name_fr.toLowerCase().includes(search))
-		.map((l) => ({ ...l, ingredient_count: mockDb.ingredients.filter((i) => i.location_id === l.id).length }));
-}
-
-function searchOrganizations(params: any) {
-	const search = (params?.search_term ?? '').toString().toLowerCase();
-	const limit = params?.limit_count ?? 50;
-	return mockDb.organizations
-		.filter((o) => !search || o.name.toLowerCase().includes(search) || o.slug.toLowerCase().includes(search))
-		.slice(0, limit)
-		.map((o) => ({ ...o, member_count: mockDb.organization_members.filter((m) => m.organization_id === o.id).length }));
-}
-
-function getOrgMembers(orgId: string) {
-	return mockDb.organization_members
-		.filter((m) => m.organization_id === orgId)
-		.map((m) => ({
-			...m,
-			user_display_name: mockDb.profiles.find((p) => p.id === m.user_id)?.display_name ?? 'Unknown',
-			unique_ingredients_count: 0,
-			total_ingredients_count: 0
-		}));
-}
-
-function runRpc(fn: string, params: any) {
-	switch (fn) {
-		case 'search_locations': return searchLocations(params);
-		case 'search_organizations': return searchOrganizations(params);
-		case 'get_user_organizations': return searchOrganizations({ limit_count: 20 });
-		case 'get_org_member_count': return mockDb.organization_members.filter((m) => m.organization_id === params?.org_id).length;
-		case 'is_org_member': return mockDb.organization_members.some((m) => m.organization_id === params?.org_id);
-		case 'is_org_manager': return true;
-		case 'generate_org_slug':
-			return (params?.org_name ?? 'organization').toString().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-		case 'get_org_members_with_user_info': return getOrgMembers(params?.org_id);
-		case 'get_org_join_requests_with_user_info': return [];
-		case 'get_org_aggregated_inventory': return [];
-		case 'get_org_ingredient_breakdown': return [];
-		default: return [];
-	}
-}
-
-function createAuthApi(requestUserId?: string | null) {
-	ensureSeedAdmin();
-	const authUsers = mockDb.auth_users as any[];
-
-	const getCurrentAuthUser = () => {
-		if (requestUserId !== undefined) return findAuthUserById(requestUserId);
-		return findAuthUserById(getBrowserSessionUserId());
-	};
-
-	return {
-		getSession: async () => {
-			const authUser = getCurrentAuthUser();
-			if (!authUser || authUser.approved === false) return { data: { session: null }, error: null };
-			return { data: { session: makeSessionFromUser(authUser) }, error: null };
-		},
-		getUser: async () => {
-			const authUser = getCurrentAuthUser();
-			if (!authUser || authUser.approved === false) return { data: { user: null }, error: null };
-			return { data: { user: buildUser(authUser) }, error: null };
-		},
-		signInWithPassword: async ({ email, password }: { email: string; password: string }) => {
-			const authUser = findAuthUserByEmail(email);
-			if (!authUser || authUser.password !== password) {
-				return { data: null, error: { message: 'Invalid email or password.' } };
-			}
-			if (authUser.approved === false) {
-				return { data: null, error: { message: 'Account pending admin approval.' } };
-			}
-
-			authUser.last_sign_in_at = new Date().toISOString();
-			persistBrowserSession(authUser.id);
-			const session = makeSessionFromUser(authUser);
-			emitAuth('SIGNED_IN', session);
-			return { data: { user: buildUser(authUser), session }, error: null };
-		},
-		signUp: async ({ email, password, options }: { email: string; password: string; options?: any }) => {
-			if (!email || !password) {
-				return { data: null, error: { message: 'Email and password are required.' } };
-			}
-			if (findAuthUserByEmail(email)) {
-				return { data: null, error: { message: 'An account with this email already exists.' } };
-			}
-
-			const id = `local-user-${Date.now()}`;
-			const createdAt = new Date().toISOString();
-			const displayName = options?.data?.display_name || email.split('@')[0];
-
-			authUsers.push({
-				id,
-				email: email.trim().toLowerCase(),
-				password,
-				approved: false,
-				created_at: createdAt,
-				raw_user_meta_data: { role: 'user', display_name: displayName }
-			});
-			mockDb.profiles.push({ id, display_name: displayName, created_at: createdAt });
-			mockDb.user_roles.push({ id: `role_${Date.now()}`, user_id: id, role: 'user' });
-
-			return {
-				data: {
-					user: { id, email: email.trim().toLowerCase(), user_metadata: { display_name: displayName } },
-					session: null
-				},
-				error: null
-			};
-		},
-		signOut: async () => {
-			persistBrowserSession(null);
-			emitAuth('SIGNED_OUT', null);
-			return { error: null };
-		},
-		signInWithOAuth: async (..._args: any[]) => ({
-			data: null,
-			error: { message: 'OAuth is disabled in local NAS auth mode.' }
-		}),
-		onAuthStateChange: (callback: AuthCallback) => {
-			authCallbacks.add(callback);
-			callback('INITIAL_SESSION', getCurrentAuthUser()?.approved === false ? null : (getCurrentAuthUser() ? makeSessionFromUser(getCurrentAuthUser()) : null));
-			return {
-				data: {
-					subscription: {
-						unsubscribe: () => authCallbacks.delete(callback)
-					}
-				},
-				error: null
-			};
-		}
-	};
-}
-
-export function createSupabaseClient(options?: { requestUserId?: string | null }): any {
+export function createSupabaseClient(_options?: { requestUserId?: string | null }): any {
 	return {
 		from: (table: string) => new QueryBuilder(table),
-		rpc: (fn: string, params?: any) => Promise.resolve({ data: clone(runRpc(fn, params)), error: null }),
-		auth: createAuthApi(options?.requestUserId),
+		rpc: async (fn: string, params?: any) => {
+			if (!browser) return { data: null, error: { message: 'RPC unavailable during SSR.' } };
+			try {
+				const response = await fetch(`/api/rpc/${fn}`, {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ params: params ?? {} })
+				});
+				const payload = await parseJsonResponse(response);
+				return { data: payload?.data ?? null, error: null };
+			} catch (error) {
+				return { data: null, error };
+			}
+		},
+		auth: makeAuthApi(),
 		storage: {
 			from: () => ({
-				upload: () => Promise.resolve({ data: null, error: null }),
-				download: () => Promise.resolve({ data: null, error: null }),
-				remove: () => Promise.resolve({ data: null, error: null }),
-				list: () => Promise.resolve({ data: [], error: null }),
+				upload: async () => ({ data: null, error: { message: 'Storage not implemented in Maria mode.' } }),
+				download: async () => ({ data: null, error: { message: 'Storage not implemented in Maria mode.' } }),
+				remove: async () => ({ data: null, error: { message: 'Storage not implemented in Maria mode.' } }),
+				list: async () => ({ data: [], error: null }),
 				getPublicUrl: () => ({ data: { publicUrl: '' } })
 			})
 		}
@@ -442,4 +302,9 @@ export function createSupabaseClient(options?: { requestUserId?: string | null }
 }
 
 export const supabase: any = createSupabaseClient();
-export { SESSION_COOKIE, findAuthUserById };
+
+export function findAuthUserById(_id: string | null | undefined) {
+	return null;
+}
+
+void getBrowserSessionUserId();

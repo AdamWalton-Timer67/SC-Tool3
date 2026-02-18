@@ -2,7 +2,7 @@ import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { ensureMariaWikeloSeedData } from '$lib/server/maria-seed';
 
-const ALLOWED_TABLES = new Set(['rewards', 'ingredients', 'reward_ingredients', 'reputation_requirements']);
+const ALLOWED_TABLES = new Set(['rewards', 'ingredients', 'locations', 'reward_ingredients', 'reputation_requirements']);
 
 export const GET: RequestHandler = async ({ params, locals }) => {
 	const table = params.table;
@@ -13,7 +13,7 @@ export const GET: RequestHandler = async ({ params, locals }) => {
 	try {
 		await ensureMariaWikeloSeedData();
 		let query = locals.supabase.from(table).select('*');
-		if (table === 'rewards' || table === 'ingredients') {
+		if (table === 'rewards' || table === 'ingredients' || table === 'locations') {
 			query = query.order('name_en', { ascending: true });
 		}
 

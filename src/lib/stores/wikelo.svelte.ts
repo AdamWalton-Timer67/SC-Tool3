@@ -236,7 +236,6 @@ class WikeloStore {
 				// Load data from Supabase when user is authenticated
 				await this.loadInventoryFromSupabase();
 				await this.loadRewardIngredientsFromSupabase();
-				await this.loadRewardIngredientsFromSupabase();
 				await this.loadRewardCompletionsFromSupabase();
 				await this.loadFavoritesFromSupabase();
 			}
@@ -441,16 +440,28 @@ class WikeloStore {
 								fr: reward.mission_name_fr
 							}
 						: undefined,
-				requirements: (reward.reward_ingredients || []).map((ri) => ({
-					id: ri.ingredient_id,
-					name: {
-						en: ri.ingredients.name_en,
-						fr: ri.ingredients.name_fr
-					},
-					quantity: ri.quantity,
-					unit: ri.unit,
-					obtained: false
-				})),
+				requirements: Array.from(
+					(reward.reward_ingredients || []).reduce((acc, ri) => {
+						const existing = acc.get(ri.ingredient_id);
+						if (existing) {
+							existing.quantity += ri.quantity;
+							return acc;
+						}
+
+						acc.set(ri.ingredient_id, {
+							id: ri.ingredient_id,
+							name: {
+								en: ri.ingredients.name_en,
+								fr: ri.ingredients.name_fr
+							},
+							quantity: ri.quantity,
+							unit: ri.unit,
+							obtained: false
+						});
+						return acc;
+					}, new Map<string, Requirement>())
+					.values()
+				),
 				reputationRequirements: (reward.reputation_requirements || []).map((rr) => ({
 					id: rr.id,
 					reputation_name: {
@@ -896,11 +907,20 @@ class WikeloStore {
 
 	// Toggle requirement completion
 	async toggleRequirement(rewardId: string, requirementId: string) {
-		if (!this.currentUser) return; // Block if not authenticated
-
 		const currentRewardProgress = this.userProgress[rewardId] ?? {};
 		const wasChecked = currentRewardProgress[requirementId] ?? false;
 		const isNowChecked = !wasChecked;
+
+		if (!this.currentUser) {
+			this.userProgress = {
+				...this.userProgress,
+				[rewardId]: {
+					...currentRewardProgress,
+					[requirementId]: isNowChecked
+				}
+			};
+			return;
+		}
 
 		// Si on décoche (wasChecked = true), afficher la dialog de confirmation
 		if (wasChecked) {

@@ -88,13 +88,47 @@ docker exec -i sc-tool3-mariadb mariadb -uroot -p"$MARIADB_ROOT_PASSWORD" "$MARI
 - The new setup builds everything in-image on Debian (`node:20-bookworm-slim`) using `npm ci --include=optional`, so Rollup optional packages are resolved consistently at build time.
 - Runtime only mounts `static/uploads` for persistent local uploads.
 
+
+### Manual ZIP deployment workflow (GitHub download/upload)
+
+If you deploy by downloading a GitHub ZIP and uploading it manually, do a **clean folder replace** each time.
+Do not unzip over an existing project directory, because deleted/old files can remain and cause mismatched builds.
+
+Recommended workflow:
+
+```bash
+# 1) In QNAP shell, keep a backup then replace folder completely
+mv /share/Public2/Container/SC-Tools3 /share/Public2/Container/SC-Tools3.bak.$(date +%s)
+mkdir -p /share/Public2/Container/SC-Tools3
+
+# 2) Upload and extract ZIP contents into the new folder
+#    (ensure extracted root contains package.json, src/, deploy/, etc.)
+
+# 3) Verify expected source before building
+cd /share/Public2/Container/SC-Tools3
+grep -nE "schemaCompatibilityPromise|seedDataPromise" src/lib/server/maria-seed.ts
+# expected: one schemaCompatibilityPromise declaration, no seedDataPromise
+
+# 4) Rebuild using clean commands
+docker compose -f deploy/nas/docker-compose.yml --env-file .env down --remove-orphans
+docker image rm sc-tool3-web:nas 2>/dev/null || true
+docker compose -f deploy/nas/docker-compose.yml --env-file .env up -d --build
+```
+
+Optional sanity check before Docker build:
+
+```bash
+npm ci --include=optional
+npm run build
+```
+
 ### Clean rebuild commands (recommended after migration)
 
 ```bash
 # from repo root
-docker compose -f deploy/nas/docker-compose.yml down --remove-orphans
+docker compose -f deploy/nas/docker-compose.yml --env-file .env down --remove-orphans
 docker image rm sc-tool3-web:nas 2>/dev/null || true
-docker compose -f deploy/nas/docker-compose.yml up -d --build
+docker compose -f deploy/nas/docker-compose.yml --env-file .env up -d --build
 ```
 
 

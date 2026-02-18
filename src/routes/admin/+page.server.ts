@@ -14,6 +14,13 @@ function isApproved(value: unknown): boolean {
 	return false;
 }
 
+
+async function getCount(supabase: any, table: string): Promise<{ count: number; error: string | null }> {
+	const { data, error } = await supabase.from(table).select('count');
+	if (error) return { count: 0, error: error.message || `Failed to count ${table}` };
+	return { count: data?.[0]?.count || 0, error: null };
+}
+
 function getDisplayName(rawUserMetaData: unknown): string {
 	if (!rawUserMetaData) return 'Unknown';
 	if (typeof rawUserMetaData === 'string') {
@@ -36,13 +43,25 @@ function getDisplayName(rawUserMetaData: unknown): string {
 export const load: PageServerLoad = async ({ locals }) => {
 	const supabase = locals.supabase;
 
-	// Load statistics
-	const { data: ingredientsData } = await supabase.from('ingredients').select('count');
-	const { data: rewardsData } = await supabase.from('rewards').select('count');
-	const { data: locationsData } = await supabase.from('locations').select('count');
-	const { data: usersData } = await supabase.from('user_roles').select('count');
-	const { data: suggestionsData } = await supabase.from('suggestions').select('count');
-	const { data: authUsersData } = await supabase.from('auth.users').select('*');
+	const [ingredientsResult, rewardsResult, locationsResult, usersResult, suggestionsResult, authUsersResult] =
+		await Promise.all([
+			getCount(supabase, 'ingredients'),
+			getCount(supabase, 'rewards'),
+			getCount(supabase, 'locations'),
+			getCount(supabase, 'user_roles'),
+			getCount(supabase, 'suggestions'),
+			supabase.from('auth.users').select('*')
+		]);
+
+	const authUsersData = authUsersResult.data ?? [];
+	const dbStatusError =
+		ingredientsResult.error ||
+		rewardsResult.error ||
+		locationsResult.error ||
+		usersResult.error ||
+		suggestionsResult.error ||
+		authUsersResult.error?.message ||
+		null;
 
 	const pendingUsers = (authUsersData ?? [])
 		.filter((user: any) => !isApproved(user.approved))
@@ -55,13 +74,17 @@ export const load: PageServerLoad = async ({ locals }) => {
 
 	return {
 		stats: {
-			ingredients: ingredientsData?.[0]?.count || 0,
-			rewards: rewardsData?.[0]?.count || 0,
-			locations: locationsData?.[0]?.count || 0,
-			users: usersData?.[0]?.count || 0,
-			suggestions: suggestionsData?.[0]?.count || 0
+			ingredients: ingredientsResult.count,
+			rewards: rewardsResult.count,
+			locations: locationsResult.count,
+			users: usersResult.count,
+			suggestions: suggestionsResult.count
 		},
-		pendingUsers
+		pendingUsers,
+		dbStatus: {
+			connected: dbStatusError === null,
+			error: dbStatusError
+		}
 	};
 };
 
