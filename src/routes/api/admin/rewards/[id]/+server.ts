@@ -28,7 +28,6 @@ export const PUT: RequestHandler = async ({ params, request, locals }) => {
 		const body = await request.json();
 		const { id } = params;
 
-
 		const { ...updateData } = body;
 
 		// Normalize category to plural form
@@ -37,12 +36,13 @@ export const PUT: RequestHandler = async ({ params, request, locals }) => {
 		}
 
 		// Use admin client to bypass RLS
-		const adminClient = createAdminClient();
+		const adminClient = createAdminClient() ?? supabase;
 		const { data, error } = await adminClient
 			.from('rewards')
-			.upsert({ id, ...updateData }, { onConflict: 'id' })
+			.update(updateData)
+			.eq('id', id)
 			.select()
-			.maybeSingle();
+			.single();
 
 		if (error) {
 			console.error('Error updating reward:', error);
@@ -50,8 +50,8 @@ export const PUT: RequestHandler = async ({ params, request, locals }) => {
 		}
 
 		if (!data) {
-			console.error('No data returned after update for reward:', id);
-			return json({ error: 'Update failed - no data returned' }, { status: 500 });
+			console.error('Reward not found for update:', id);
+			return json({ error: 'Reward not found' }, { status: 404 });
 		}
 
 		return json({ success: true, data });
@@ -70,7 +70,7 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
 		const { id } = params;
 
 		// Use admin client to bypass RLS
-		const adminClient = createAdminClient();
+		const adminClient = createAdminClient() ?? supabase;
 		const { error } = await adminClient.from('rewards').delete().eq('id', id);
 
 		if (error) {

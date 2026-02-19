@@ -9,6 +9,24 @@ import { json } from '@sveltejs/kit';
 import { requireAdmin, createAdminClient } from '$lib/server/admin';
 import type { RequestHandler } from './$types';
 
+function toIngredientPayload(body: Record<string, unknown>) {
+	return {
+		name_en: body.name_en,
+		name_fr: body.name_fr,
+		category: body.category,
+		rarity: body.rarity,
+		image_url: body.image_url ?? null,
+		image_credit: body.image_credit ?? null,
+		description_en: body.description_en ?? null,
+		description_fr: body.description_fr ?? null,
+		how_to_obtain_en: body.how_to_obtain_en ?? null,
+		how_to_obtain_fr: body.how_to_obtain_fr ?? null,
+		locations_en: body.locations_en ?? null,
+		locations_fr: body.locations_fr ?? null,
+		location_id: body.location_id ?? null
+	};
+}
+
 export const PUT: RequestHandler = async ({ params, request, locals }) => {
 	const supabase = locals.supabase;
 
@@ -18,21 +36,19 @@ export const PUT: RequestHandler = async ({ params, request, locals }) => {
 
 		// Parse request body
 		const body = await request.json();
+		const updateData = toIngredientPayload(body);
 		const { id } = params;
 
 		// Validate required fields
-		if (!body.name_en || !body.name_fr || !body.category || !body.rarity) {
+		if (!updateData.name_en || !updateData.name_fr || !updateData.category || !updateData.rarity) {
 			return json(
 				{ error: 'Missing required fields: name_en, name_fr, category, rarity' },
 				{ status: 400 }
 			);
 		}
 
-		// Remove id from body (cannot update id)
-		const { id: _, ...updateData } = body;
-
 		// Update ingredient using admin client to bypass RLS
-		const adminClient = createAdminClient();
+		const adminClient = createAdminClient() ?? supabase;
 		const { data, error } = await adminClient
 			.from('ingredients')
 			.update(updateData)
@@ -69,7 +85,7 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
 		const { id } = params;
 
 		// Delete ingredient using admin client to bypass RLS
-		const adminClient = createAdminClient();
+		const adminClient = createAdminClient() ?? supabase;
 		const { error } = await adminClient.from('ingredients').delete().eq('id', id);
 
 		if (error) {

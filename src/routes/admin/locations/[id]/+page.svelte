@@ -2,6 +2,7 @@
 	import { goto } from '$app/navigation';
 	import type { PageData } from './$types';
 	import { uploadImage } from '$lib/upload';
+	import { normalizeImageUrl } from '$lib/utils/imageUrl';
 
 	interface Props {
 		data: PageData;
@@ -19,8 +20,8 @@
 		moon: data.location?.moon || '',
 		type: data.location?.type || 'contested_zone',
 		difficulty: data.location?.difficulty || 'medium',
-		image_url: data.location?.image_url || '',
-		cheatsheet_image_url: data.location?.cheatsheet_image_url || '',
+		image_url: normalizeImageUrl(data.location?.image_url) || '',
+		cheatsheet_image_url: normalizeImageUrl(data.location?.cheatsheet_image_url) || '',
 		short_description_en: data.location?.short_description_en || '',
 		short_description_fr: data.location?.short_description_fr || '',
 		description_en: data.location?.description_en || '',
@@ -84,8 +85,8 @@
 				moon: form.moon || null,
 				type: form.type,
 				difficulty: form.difficulty || null,
-				image_url: form.image_url || null,
-				cheatsheet_image_url: form.cheatsheet_image_url || null,
+				image_url: normalizeImageUrl(form.image_url) || null,
+				cheatsheet_image_url: normalizeImageUrl(form.cheatsheet_image_url) || null,
 				short_description_en: form.short_description_en || null,
 				short_description_fr: form.short_description_fr || null,
 				description_en: form.description_en || null,
@@ -120,7 +121,7 @@
 			});
 
 			if (response.ok) {
-				goto('/admin/locations');
+				goto('/admin/locations', { invalidateAll: true });
 			} else {
 				const error = await response.json();
 				alert(`Error: ${error.message || 'Failed to save location'}`);
@@ -145,7 +146,7 @@
 		}
 
 		try {
-			const url = await uploadImage(files[0]);
+			const url = normalizeImageUrl(await uploadImage(files[0]));
 			if (type === 'main') {
 				form.image_url = url;
 			} else {
@@ -349,9 +350,9 @@
 					</label>
 					<input
 						id="loc-image-url"
-						type="url"
+						type="text"
 						bind:value={form.image_url}
-						placeholder="https://..."
+						placeholder="https://... or /images/..."
 						class="w-full rounded-lg border border-purple-500/30 bg-slate-800 px-3 py-2 text-white"
 					/>
 					<div class="mt-2">
@@ -380,9 +381,9 @@
 					</label>
 					<input
 						id="loc-cheatsheet-url"
-						type="url"
+						type="text"
 						bind:value={form.cheatsheet_image_url}
-						placeholder="https://..."
+						placeholder="https://... or /images/..."
 						class="w-full rounded-lg border border-purple-500/30 bg-slate-800 px-3 py-2 text-white"
 					/>
 					<div class="mt-2">

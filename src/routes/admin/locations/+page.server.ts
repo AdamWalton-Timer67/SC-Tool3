@@ -1,4 +1,5 @@
 import type { PageServerLoad } from './$types';
+import { normalizeImageUrl } from '$lib/utils/imageUrl';
 
 export const load: PageServerLoad = async ({ url, locals }) => {
 	const supabase = locals.supabase;
@@ -43,7 +44,11 @@ export const load: PageServerLoad = async ({ url, locals }) => {
 	const uniqueSystems = [...new Set(systems?.map((s) => s.system) || [])];
 
 	return {
-		locations: locations || [],
+		locations: (locations || []).map((location: any) => ({
+			...location,
+			image_url: normalizeImageUrl(location.image_url),
+			cheatsheet_image_url: normalizeImageUrl(location.cheatsheet_image_url)
+		})),
 		systems: uniqueSystems,
 		filters: { system, difficulty, type, search }
 	};
