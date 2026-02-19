@@ -39,9 +39,10 @@ export const PUT: RequestHandler = async ({ params, request, locals }) => {
 		const adminClient = createAdminClient() ?? supabase;
 		const { data, error } = await adminClient
 			.from('rewards')
-			.upsert({ id, ...updateData }, { onConflict: 'id' })
+			.update(updateData)
+			.eq('id', id)
 			.select()
-			.maybeSingle();
+			.single();
 
 		if (error) {
 			console.error('Error updating reward:', error);
@@ -49,8 +50,8 @@ export const PUT: RequestHandler = async ({ params, request, locals }) => {
 		}
 
 		if (!data) {
-			console.error('No data returned after update for reward:', id);
-			return json({ error: 'Update failed - no data returned' }, { status: 500 });
+			console.error('Reward not found for update:', id);
+			return json({ error: 'Reward not found' }, { status: 404 });
 		}
 
 		return json({ success: true, data });

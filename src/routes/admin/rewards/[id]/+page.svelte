@@ -2,6 +2,7 @@
 	import { goto } from '$app/navigation';
 	import type { PageData } from './$types';
 	import { uploadImage } from '$lib/upload';
+	import { normalizeImageUrl } from '$lib/utils/imageUrl';
 
 	interface Props {
 		data: PageData;
@@ -18,7 +19,7 @@
 		rarity: data.reward?.rarity || 'common',
 		type_en: data.reward?.type_en || '',
 		type_fr: data.reward?.type_fr || '',
-		image_url: data.reward?.image_url || '',
+		image_url: normalizeImageUrl(data.reward?.image_url) || '',
 		image_credit: data.reward?.image_credit || '',
 		description_en: data.reward?.description_en || '',
 		description_fr: data.reward?.description_fr || '',
@@ -192,7 +193,7 @@
 				rarity: form.rarity,
 				type_en: form.type_en || null,
 				type_fr: form.type_fr || null,
-				image_url: form.image_url || null,
+				image_url: normalizeImageUrl(form.image_url) || null,
 				image_credit: form.image_credit || null,
 				description_en: form.description_en || null,
 				description_fr: form.description_fr || null,
@@ -230,7 +231,7 @@
 			// Set flag to reload data on wikelo/inventory pages
 			localStorage.setItem('wikelo_reload_needed', 'true');
 
-			goto('/admin/rewards');
+			goto('/admin/rewards', { invalidateAll: true });
 		} catch (error) {
 			console.error('Error:', error);
 			alert('Error saving reward');
@@ -320,7 +321,7 @@
 
 		try {
 			const url = await uploadImage(files[0]);
-			form.image_url = url;
+			form.image_url = normalizeImageUrl(url);
 			alert('Image uploaded successfully!');
 		} catch (error) {
 			console.error('Error uploading image:', error);

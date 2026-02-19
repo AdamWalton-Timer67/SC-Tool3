@@ -10,14 +10,24 @@ async function ensureSchemaCompatibility() {
 	await pool.query('ALTER TABLE rewards ADD COLUMN IF NOT EXISTS description_en TEXT NULL');
 	await pool.query('ALTER TABLE rewards ADD COLUMN IF NOT EXISTS description_fr TEXT NULL');
 	await pool.query('ALTER TABLE rewards ADD COLUMN IF NOT EXISTS image_credit VARCHAR(255) NULL');
-	await pool.query('ALTER TABLE rewards ADD COLUMN IF NOT EXISTS mission_name_en VARCHAR(255) NULL');
-	await pool.query('ALTER TABLE rewards ADD COLUMN IF NOT EXISTS mission_name_fr VARCHAR(255) NULL');
-	await pool.query('ALTER TABLE rewards ADD COLUMN IF NOT EXISTS has_loadout TINYINT(1) NOT NULL DEFAULT 0');
+	await pool.query(
+		'ALTER TABLE rewards ADD COLUMN IF NOT EXISTS mission_name_en VARCHAR(255) NULL'
+	);
+	await pool.query(
+		'ALTER TABLE rewards ADD COLUMN IF NOT EXISTS mission_name_fr VARCHAR(255) NULL'
+	);
+	await pool.query(
+		'ALTER TABLE rewards ADD COLUMN IF NOT EXISTS has_loadout TINYINT(1) NOT NULL DEFAULT 0'
+	);
 	await pool.query('ALTER TABLE rewards ADD COLUMN IF NOT EXISTS gives INT NOT NULL DEFAULT 1');
-	await pool.query('ALTER TABLE rewards ADD COLUMN IF NOT EXISTS not_released TINYINT(1) NOT NULL DEFAULT 0');
+	await pool.query(
+		'ALTER TABLE rewards ADD COLUMN IF NOT EXISTS not_released TINYINT(1) NOT NULL DEFAULT 0'
+	);
 	await pool.query('ALTER TABLE rewards ADD COLUMN IF NOT EXISTS components LONGTEXT NULL');
 
-	await pool.query('ALTER TABLE ingredients ADD COLUMN IF NOT EXISTS image_credit VARCHAR(255) NULL');
+	await pool.query(
+		'ALTER TABLE ingredients ADD COLUMN IF NOT EXISTS image_credit VARCHAR(255) NULL'
+	);
 	await pool.query('ALTER TABLE ingredients ADD COLUMN IF NOT EXISTS description_en TEXT NULL');
 	await pool.query('ALTER TABLE ingredients ADD COLUMN IF NOT EXISTS description_fr TEXT NULL');
 	await pool.query('ALTER TABLE ingredients ADD COLUMN IF NOT EXISTS how_to_obtain_en TEXT NULL');
@@ -27,9 +37,34 @@ async function ensureSchemaCompatibility() {
 
 	await pool.query('ALTER TABLE reward_ingredients ADD COLUMN IF NOT EXISTS unit VARCHAR(32) NULL');
 
-	await pool.query('ALTER TABLE reputation_requirements ADD COLUMN IF NOT EXISTS reputation_name_en VARCHAR(255) NULL');
-	await pool.query('ALTER TABLE reputation_requirements ADD COLUMN IF NOT EXISTS reputation_name_fr VARCHAR(255) NULL');
-	await pool.query('ALTER TABLE reputation_requirements ADD COLUMN IF NOT EXISTS required_level INT NULL');
+	await pool.query('ALTER TABLE locations ADD COLUMN IF NOT EXISTS planet VARCHAR(128) NULL');
+	await pool.query('ALTER TABLE locations ADD COLUMN IF NOT EXISTS moon VARCHAR(128) NULL');
+	await pool.query(
+		'ALTER TABLE locations ADD COLUMN IF NOT EXISTS cheatsheet_image_url VARCHAR(1024) NULL'
+	);
+	await pool.query('ALTER TABLE locations ADD COLUMN IF NOT EXISTS short_description_en TEXT NULL');
+	await pool.query('ALTER TABLE locations ADD COLUMN IF NOT EXISTS short_description_fr TEXT NULL');
+	await pool.query('ALTER TABLE locations ADD COLUMN IF NOT EXISTS how_to_access_en TEXT NULL');
+	await pool.query('ALTER TABLE locations ADD COLUMN IF NOT EXISTS how_to_access_fr TEXT NULL');
+	await pool.query('ALTER TABLE locations ADD COLUMN IF NOT EXISTS mission_types_en TEXT NULL');
+	await pool.query('ALTER TABLE locations ADD COLUMN IF NOT EXISTS mission_types_fr TEXT NULL');
+	await pool.query('ALTER TABLE locations ADD COLUMN IF NOT EXISTS loot_types_en TEXT NULL');
+	await pool.query('ALTER TABLE locations ADD COLUMN IF NOT EXISTS loot_types_fr TEXT NULL');
+	await pool.query('ALTER TABLE locations ADD COLUMN IF NOT EXISTS requirements TEXT NULL');
+	await pool.query('ALTER TABLE locations ADD COLUMN IF NOT EXISTS rewards TEXT NULL');
+	await pool.query('ALTER TABLE locations ADD COLUMN IF NOT EXISTS coordinates VARCHAR(255) NULL');
+	await pool.query('ALTER TABLE locations ADD COLUMN IF NOT EXISTS crate_types LONGTEXT NULL');
+	await pool.query('ALTER TABLE locations ADD COLUMN IF NOT EXISTS related_missions LONGTEXT NULL');
+
+	await pool.query(
+		'ALTER TABLE reputation_requirements ADD COLUMN IF NOT EXISTS reputation_name_en VARCHAR(255) NULL'
+	);
+	await pool.query(
+		'ALTER TABLE reputation_requirements ADD COLUMN IF NOT EXISTS reputation_name_fr VARCHAR(255) NULL'
+	);
+	await pool.query(
+		'ALTER TABLE reputation_requirements ADD COLUMN IF NOT EXISTS required_level INT NULL'
+	);
 }
 
 const ensureSchemaCompatibilityOnce = (() => {

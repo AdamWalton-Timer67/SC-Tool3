@@ -2,6 +2,7 @@
 	import { goto } from '$app/navigation';
 	import type { PageData } from './$types';
 	import { uploadImage } from '$lib/upload';
+	import { normalizeImageUrl } from '$lib/utils/imageUrl';
 
 	interface Props {
 		data: PageData;
@@ -16,7 +17,7 @@
 		name_fr: data.ingredient?.name_fr || '',
 		category: data.ingredient?.category || 'mining',
 		rarity: data.ingredient?.rarity || 'common',
-		image_url: data.ingredient?.image_url || '',
+		image_url: normalizeImageUrl(data.ingredient?.image_url) || '',
 		image_credit: data.ingredient?.image_credit || '',
 		description_en: data.ingredient?.description_en || '',
 		description_fr: data.ingredient?.description_fr || '',
@@ -63,7 +64,7 @@
 				name_fr: form.name_fr,
 				category: form.category,
 				rarity: form.rarity,
-				image_url: form.image_url || null,
+				image_url: normalizeImageUrl(form.image_url) || null,
 				image_credit: form.image_credit || null,
 				description_en: form.description_en || null,
 				description_fr: form.description_fr || null,
@@ -96,7 +97,7 @@
 			if (response.ok) {
 				// Set flag to reload data on wikelo/inventory pages
 				localStorage.setItem('wikelo_reload_needed', 'true');
-				goto('/admin/ingredients');
+				goto('/admin/ingredients', { invalidateAll: true });
 			} else {
 				const error = await response.json();
 				alert(`Error: ${error.error || error.message || 'Failed to save ingredient'}`);
@@ -118,7 +119,7 @@
 
 		try {
 			const url = await uploadImage(files[0]);
-			form.image_url = url;
+			form.image_url = normalizeImageUrl(url);
 			alert('Image uploaded successfully!');
 		} catch (error) {
 			console.error('Error uploading image:', error);
