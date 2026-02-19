@@ -32,7 +32,7 @@ export const PUT: RequestHandler = async ({ params, request, locals }) => {
 		const { id: _, ...updateData } = body;
 
 		// Update ingredient using admin client to bypass RLS
-		const adminClient = createAdminClient();
+		const adminClient = createAdminClient() ?? supabase;
 		const { data, error } = await adminClient
 			.from('ingredients')
 			.update(updateData)
@@ -69,7 +69,7 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
 		const { id } = params;
 
 		// Delete ingredient using admin client to bypass RLS
-		const adminClient = createAdminClient();
+		const adminClient = createAdminClient() ?? supabase;
 		const { error } = await adminClient.from('ingredients').delete().eq('id', id);
 
 		if (error) {

@@ -27,7 +27,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 		}
 
 		// Insert ingredient using admin client to bypass RLS
-		const adminClient = createAdminClient();
+		const adminClient = createAdminClient() ?? supabase;
 		const { data, error } = await adminClient.from('ingredients').insert([body]).select().single();
 
 		if (error) {

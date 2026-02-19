@@ -9,7 +9,7 @@ export const GET: RequestHandler = async ({ params, locals }) => {
 	try {
 		await requireAdmin(supabase);
 
-		const adminClient = createAdminClient();
+		const adminClient = createAdminClient() ?? supabase;
 		const { data, error } = await adminClient
 			.from('locations')
 			.select('*')
@@ -41,7 +41,7 @@ export const PUT: RequestHandler = async ({ params, request, locals }) => {
 
 		const locationData = await request.json();
 
-		const adminClient = createAdminClient();
+		const adminClient = createAdminClient() ?? supabase;
 		const { data, error } = await adminClient
 			.from('locations')
 			.update(locationData)
@@ -73,7 +73,7 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
 	try {
 		await requireAdmin(supabase);
 
-		const adminClient = createAdminClient();
+		const adminClient = createAdminClient() ?? supabase;
 		const { error } = await adminClient.from('locations').delete().eq('id', params.id);
 
 		if (error) {
