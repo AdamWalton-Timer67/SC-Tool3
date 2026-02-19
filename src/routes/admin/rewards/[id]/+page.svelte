@@ -267,7 +267,6 @@
 
 	async function saveReputationRequirements(rewardId: string) {
 		try {
-
 			// Delete all existing reputation requirements
 			const deleteResponse = await fetch(`/api/admin/rewards/${rewardId}/reputation`, {
 				method: 'DELETE'
@@ -276,13 +275,13 @@
 			if (!deleteResponse.ok) {
 				const error = await deleteResponse.json();
 				console.error('Error deleting reputation requirements:', error);
-				throw new Error(`Failed to delete reputation requirements: ${error.message || 'Unknown error'}`);
+				throw new Error(
+					`Failed to delete reputation requirements: ${error.message || 'Unknown error'}`
+				);
 			}
-
 
 			// Insert new reputation requirements
 			for (const req of reputationRequirements) {
-
 				const response = await fetch(`/api/admin/rewards/${rewardId}/reputation`, {
 					method: 'POST',
 					headers: {
@@ -298,12 +297,13 @@
 				if (!response.ok) {
 					const error = await response.json();
 					console.error('Error saving reputation requirement:', error);
-					throw new Error(`Failed to save reputation requirement: ${error.message || 'Unknown error'}`);
+					throw new Error(
+						`Failed to save reputation requirement: ${error.message || 'Unknown error'}`
+					);
 				}
 
 				const result = await response.json();
 			}
-
 		} catch (error) {
 			console.error('Error in saveReputationRequirements:', error);
 			alert(`Error saving reputation requirements: ${(error as Error).message}`);
@@ -579,9 +579,9 @@
 					</label>
 					<input
 						id="image_url"
-						type="url"
+						type="text"
 						bind:value={form.image_url}
-						placeholder="https://example.com/image.png"
+						placeholder="https://example.com/image.png or /images/..."
 						class="font-rajdhani w-full rounded-lg border-2 border-purple-500/30 bg-black/50 px-4 py-3 text-purple-300 placeholder-purple-300/30 transition-all focus:border-purple-500 focus:ring-2 focus:ring-purple-500/50 focus:outline-none"
 					/>
 				</div>

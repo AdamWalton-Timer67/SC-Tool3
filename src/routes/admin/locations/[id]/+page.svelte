@@ -349,9 +349,9 @@
 					</label>
 					<input
 						id="loc-image-url"
-						type="url"
+						type="text"
 						bind:value={form.image_url}
-						placeholder="https://..."
+						placeholder="https://... or /images/..."
 						class="w-full rounded-lg border border-purple-500/30 bg-slate-800 px-3 py-2 text-white"
 					/>
 					<div class="mt-2">
@@ -380,9 +380,9 @@
 					</label>
 					<input
 						id="loc-cheatsheet-url"
-						type="url"
+						type="text"
 						bind:value={form.cheatsheet_image_url}
-						placeholder="https://..."
+						placeholder="https://... or /images/..."
 						class="w-full rounded-lg border border-purple-500/30 bg-slate-800 px-3 py-2 text-white"
 					/>
 					<div class="mt-2">
