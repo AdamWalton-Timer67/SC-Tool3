@@ -85,26 +85,21 @@ bash ./deploy/nas/compose.sh down --remove-orphans
 
 ---
 
-## 4) Initialize database schema (first deployment only)
+## 4) Initialize database schema + baseline data (first deployment only)
 
-After containers are healthy, import auth/account schema:
+After containers are healthy, run the bootstrap script:
 
 ```bash
-docker exec -i sc-tool3-mariadb mariadb -uroot -p"$MARIADB_ROOT_PASSWORD" "$MARIADB_DATABASE" < MARIADB_AUTH_SCHEMA.sql
+bash ./deploy/nas/bootstrap-db.sh
 ```
 
-What this creates:
+What this applies:
 
-- `auth_users`
-- `profiles`
-- `user_roles`
-- default local admin account (`local@test.lan` / `admin123`)
+- `MARIADB_AUTH_SCHEMA.sql` (auth/account tables + default local admin account)
+- `MARIADB_APP_SCHEMA.sql` (core app tables for rewards/ingredients/requirements/locations/etc.)
+- baseline seed records copied from the legacy mock DB (rewards, ingredients, locations, requirements, org sample, suggestion sample)
 
-### About rewards/ingredients/requirements schema
-
-The app expects tables such as `rewards`, `ingredients`, `locations`, `reward_ingredients`, and `reputation_requirements` to exist and be populated. Ensure your MariaDB dataset includes them before opening production.
-
-The app also runs schema compatibility adjustments (e.g. add-missing-columns for rewards/ingredients/requirements) via server code when wikelo endpoints are requested.
+This makes a new MariaDB deployment immediately usable with starter data, without requiring a separate manual import for core Wikelo tables.
 
 ---
 
@@ -239,6 +234,9 @@ Admin APIs:
 ```bash
 # start/rebuild
 bash ./deploy/nas/compose.sh up -d --build
+
+# initialize schema + seed
+bash ./deploy/nas/bootstrap-db.sh
 
 # stop
 bash ./deploy/nas/compose.sh down --remove-orphans
