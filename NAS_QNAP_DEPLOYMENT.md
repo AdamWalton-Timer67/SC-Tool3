@@ -113,6 +113,12 @@ docker compose -f deploy/nas/docker-compose.yml --env-file .env ps
 
 Expect both `sc-tool3-mariadb` and `sc-tool3-web` to be `Up` / healthy.
 
+If `sc-tool3-web` is still `unhealthy`, inspect the actual healthcheck error output:
+
+```bash
+docker inspect --format="{{json .State.Health.Log}}" sc-tool3-web
+```
+
 ### B. Verify app responds
 
 ```bash
