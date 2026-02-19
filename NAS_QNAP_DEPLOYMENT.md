@@ -1,32 +1,46 @@
-# QNAP TS-251+ (QTS 5.2.8.3359) deployment guide (local-only mode)
+# SC-Tool3 deployment guide (current method)
 
-This project now runs fully on NAS equipment using:
+This is the **current, recommended deployment path** for SC-Tool3.
+It reflects the repo’s MariaDB-first runtime and the NAS Docker Compose workflow.
 
-1. The SvelteKit web app
-2. MariaDB for users, rewards, ingredients, requirements, and admin CRUD
-3. Local file uploads written into `static/uploads/*`
+---
 
-> Recommended: use QNAP **Container Station** with Docker Compose support.
+## Architecture (what runs in production)
 
-## 1) Prepare environment variables
+The deployed stack consists of:
 
-Copy `.env.example` to `.env` and set only what you need for your LAN deployment:
+1. **`sc-tool3-web`** (SvelteKit app, built from `deploy/nas/Dockerfile`)
+2. **`mariadb`** (local MariaDB 11 container)
+3. **Persistent volumes/storage**
+   - MariaDB data volume: `sc-tool3-mariadb-data`
+   - Uploaded files bind mount: `static/uploads` -> `/app/static/uploads`
 
-- `PUBLIC_OAUTH_REDIRECT_URL` (if you expose auth provider redirects)
-- auth provider toggles (`PUBLIC_ENABLE_*`) as desired
+Key behavior:
 
-No Supabase or S3 credentials are required in this local-only deployment mode.
+- Runtime data/auth is backed by **MariaDB**.
+- No Supabase or S3 credentials are required for this local/NAS mode.
+- App service depends on MariaDB health before startup.
 
-Required MariaDB variables:
+---
 
-- `MARIADB_HOST` (`mariadb` when using the bundled Docker Compose stack)
-- `MARIADB_PORT` (default `3306`)
-- `MARIADB_USER`
-- `MARIADB_PASSWORD`
-- `MARIADB_DATABASE`
+## 1) Requirements
 
+- QNAP with Container Station (or any Docker host)
+- Docker + Docker Compose v2 available on host
+- This repository on disk
+- A `.env` file at repository root (next to `package.json`)
 
-### Example (NAS LAN with bundled MariaDB container)
+---
+
+## 2) Configure environment variables
+
+Create `.env` from `.env.example`:
+
+```bash
+cp .env.example .env
+```
+
+At minimum, set:
 
 ```env
 MARIADB_HOST=mariadb
@@ -36,203 +50,206 @@ MARIADB_PASSWORD=change-me
 MARIADB_DATABASE=wikelo
 MARIADB_ROOT_PASSWORD=change-root-password
 
-PUBLIC_ENABLE_DISCORD_AUTH=false
-PUBLIC_ENABLE_TWITCH_AUTH=false
-PUBLIC_ENABLE_GOOGLE_AUTH=false
-PUBLIC_SHOW_FULL_LOCATION_DETAILS=false
-PUBLIC_OAUTH_REDIRECT_URL=http://192.168.1.20:4173
-ORIGIN=http://192.168.1.20:4173
+ORIGIN=http://<your-nas-ip-or-domain>:4173
+PUBLIC_OAUTH_REDIRECT_URL=http://<your-nas-ip-or-domain>:4173
 ```
 
-## 2) Build and run the web app
+Notes:
 
-```bash
-npm install
-npm run build
-npm run preview -- --host 0.0.0.0 --port 4173
-```
+- `MARIADB_HOST` should remain `mariadb` when using the bundled compose stack.
+- `ORIGIN` should match the URL users actually open.
+- Auth provider toggles (`PUBLIC_ENABLE_*`) can stay `false` unless intentionally enabled.
 
-## 3) Optional: run app in Docker on NAS
+---
 
-The NAS deployment now uses a dedicated image build (`deploy/nas/Dockerfile`) instead of bind-mounting the source tree into a generic Node container. This makes installs deterministic and avoids host/container dependency drift.
+## 3) Deploy with the wrapper script (recommended)
 
-### Build and run
-
-From the repository root:
+From repo root:
 
 ```bash
 bash ./deploy/nas/compose.sh up -d --build
 ```
 
-Or from inside `deploy/nas` (use an absolute env path to avoid path resolution issues in Container Station):
+Why this is preferred:
+
+- Uses `deploy/nas/docker-compose.yml`
+- Automatically reads root `.env`
+- Defaults `DOCKER_BUILDKIT=0` for better compatibility with QNAP Container Station
+- Prints targeted recovery hints for known NAS Docker metadata failures
+
+Stop stack:
 
 ```bash
-bash ./compose.sh up -d --build
+bash ./deploy/nas/compose.sh down --remove-orphans
 ```
 
-`compose.sh` disables BuildKit by default (`DOCKER_BUILDKIT=0`) to avoid QNAP Container Station
-errors like `failed to open writer ... buildkit/content/ingest/...: no such file or directory`
-during image export. Set `NAS_FORCE_BUILDKIT=1` if you explicitly want BuildKit enabled.
+---
 
-The app is exposed on `4173` and includes a container healthcheck.
+## 4) Initialize database schema (first deployment only)
 
-This Compose stack also runs a local `mariadb` service with a persistent volume (`sc-tool3-mariadb-data`) so the web app does not need to reach a LAN database IP.
-
-### Initialize MariaDB schema (first run)
-
-After containers are up, import the auth schema into the MariaDB container:
+After containers are healthy, import auth/account schema:
 
 ```bash
 docker exec -i sc-tool3-mariadb mariadb -uroot -p"$MARIADB_ROOT_PASSWORD" "$MARIADB_DATABASE" < MARIADB_AUTH_SCHEMA.sql
 ```
 
-### Why this fixes the Rollup musl error
+What this creates:
 
-- The old setup used `node:20-alpine` + a mounted `node_modules` volume, which could leave optional native dependencies in a broken state between rebuilds.
-- The new setup builds everything in-image on Debian (`node:20-bookworm-slim`) using `npm ci --include=optional`, so Rollup optional packages are resolved consistently at build time.
-- Runtime only mounts `static/uploads` for persistent local uploads.
+- `auth_users`
+- `profiles`
+- `user_roles`
+- default local admin account (`local@test.lan` / `admin123`)
 
+### About rewards/ingredients/requirements schema
 
-### Manual ZIP deployment workflow (GitHub download/upload)
+The app expects tables such as `rewards`, `ingredients`, `locations`, `reward_ingredients`, and `reputation_requirements` to exist and be populated. Ensure your MariaDB dataset includes them before opening production.
 
-If you deploy by downloading a GitHub ZIP and uploading it manually, do a **clean folder replace** each time.
-Do not unzip over an existing project directory, because deleted/old files can remain and cause mismatched builds.
+The app also runs schema compatibility adjustments (e.g. add-missing-columns for rewards/ingredients/requirements) via server code when wikelo endpoints are requested.
 
-Recommended workflow:
+---
+
+## 5) Verify deployment health
+
+### A. Container status
 
 ```bash
-# 1) In QNAP shell, keep a backup then replace folder completely
-mv /share/Public2/Container/SC-Tools3 /share/Public2/Container/SC-Tools3.bak.$(date +%s)
-mkdir -p /share/Public2/Container/SC-Tools3
+docker compose -f deploy/nas/docker-compose.yml --env-file .env ps
+```
 
-# 2) Upload and extract ZIP contents into the new folder
-#    (ensure extracted root contains package.json, src/, deploy/, etc.)
+Expect both `sc-tool3-mariadb` and `sc-tool3-web` to be `Up` / healthy.
 
-# 3) Verify expected source before building
-cd /share/Public2/Container/SC-Tools3
-grep -nE "schemaCompatibilityPromise|seedDataPromise" src/lib/server/maria-seed.ts
-# expected: one schemaCompatibilityPromise declaration, no seedDataPromise
+### B. Verify app responds
 
-# 4) Rebuild using clean commands
+```bash
+curl -I http://127.0.0.1:4173
+```
+
+Expect HTTP 200/3xx.
+
+### C. Verify MariaDB connectivity from app perspective
+
+```bash
+curl -s http://127.0.0.1:4173/api/wikelo/rewards | head
+```
+
+If this returns JSON data (or at least not a DB configuration error), app↔DB path is functioning.
+
+### D. Verify user account records exist
+
+```bash
+docker exec -i sc-tool3-mariadb mariadb -u"$MARIADB_USER" -p"$MARIADB_PASSWORD" "$MARIADB_DATABASE" -e "SELECT id,email,approved,created_at FROM auth_users LIMIT 10;"
+```
+
+### E. Verify rewards/requirements data exists
+
+```bash
+docker exec -i sc-tool3-mariadb mariadb -u"$MARIADB_USER" -p"$MARIADB_PASSWORD" "$MARIADB_DATABASE" -e "SELECT COUNT(*) AS rewards_count FROM rewards; SELECT COUNT(*) AS requirements_count FROM reputation_requirements;"
+```
+
+---
+
+## 6) Reverse proxy / CSRF-safe configuration
+
+If published behind QNAP reverse proxy / Nginx / Traefik:
+
+- Route public URL to `http://<nas-ip>:4173`
+- Ensure proxy forwards:
+  - `X-Forwarded-Host`
+  - `X-Forwarded-Proto`
+  - `X-Forwarded-Port`
+- Keep `.env` `ORIGIN` aligned with the public URL
+
+The compose service already sets SvelteKit forwarded-header trust env vars.
+
+---
+
+## 7) Updates / redeploys
+
+For normal updates:
+
+```bash
+git pull
 bash ./deploy/nas/compose.sh down --remove-orphans
-docker image rm sc-tool3-web:nas 2>/dev/null || true
 bash ./deploy/nas/compose.sh up -d --build
 ```
 
-Optional sanity check before Docker build:
+Recommended post-update checks:
 
 ```bash
-npm ci --include=optional
-npm run build
+docker compose -f deploy/nas/docker-compose.yml --env-file .env ps
+curl -I http://127.0.0.1:4173
 ```
 
-### Clean rebuild commands (recommended after migration)
+---
 
-```bash
-# from repo root
-bash ./deploy/nas/compose.sh down --remove-orphans
-docker image rm sc-tool3-web:nas 2>/dev/null || true
-bash ./deploy/nas/compose.sh up -d --build
-```
+## 8) Backup strategy
 
+Back up both:
 
-### Troubleshooting: `failed to register layer ... overlay2/.../link: no such file or directory`
+1. **Database volume** (`sc-tool3-mariadb-data`)
+2. **Uploads directory** (`static/uploads`)
 
-If you hit this error during image build/export, the issue is typically Docker/Container Station
-storage metadata corruption on the NAS, not application source.
+Without both, you risk losing accounts/data and uploaded files.
 
-Run these recovery commands from the repository root:
+---
+
+## 9) Known NAS Docker issues and recovery
+
+### Error: `failed to register layer ... overlay2/.../link: no such file or directory`
 
 ```bash
 bash ./deploy/nas/compose.sh down --remove-orphans
 docker builder prune -af
 docker system prune -af
-# then restart Container Station (or reboot NAS)
+# restart Container Station (or reboot NAS)
 bash ./deploy/nas/compose.sh up -d --build
 ```
 
-The `deploy/nas/compose.sh` wrapper also detects this error pattern and prints the same recovery hint.
+### Error: `mkdir .../lib/docker/containers/<id>: no such file or directory`
 
-### Troubleshooting: `mkdir .../lib/docker/containers/<id>: no such file or directory`
-
-If build/start fails with a missing `lib/docker/containers/...` directory, Container Station's Docker
-runtime metadata path is inconsistent on the NAS host.
-
-Recommended recovery on QNAP:
-
-```bash
-# 1) from QTS App Center: stop Container Station
-# 2) verify this directory exists on NAS:
-#    /share/CACHEDEV1_DATA/Public2/Container/container-station-data/lib/docker
-# 3) start Container Station again (or reboot NAS)
-# 4) rerun build
-bash ./deploy/nas/compose.sh up -d --build
-```
-
-If this persists after restart/reboot, back up and reinstall Container Station.
-
-### Troubleshooting: QNAP App Center cannot download/reinstall Container Station
-
-If Container Station was removed and QTS cannot download it again, this is usually a NAS connectivity,
-DNS/time, or QNAP repository availability issue.
-
-Recommended recovery sequence:
-
-```bash
-# 1) Verify NAS time is correct (TLS downloads fail if clock is wrong)
-# 2) Verify DNS on NAS (try 1.1.1.1 or 8.8.8.8 in Network settings)
-# 3) Retry install from QTS App Center
-```
-
-If App Center still fails:
-
-1. Download the Container Station `.qpkg` manually from QNAP's official package source on another machine.
-2. In QTS App Center, use **Install Manually** and upload the `.qpkg`.
-3. Start Container Station once installed, then rerun deployment:
+1. Stop Container Station in QTS App Center.
+2. Verify Docker data-root parent exists (commonly):
+   - `/share/CACHEDEV1_DATA/Public2/Container/container-station-data/lib/docker`
+3. Start Container Station again.
+4. Re-run deployment:
 
 ```bash
 bash ./deploy/nas/compose.sh up -d --build
 ```
 
-If manual install also fails, reboot NAS and repeat the manual install; persistent failures usually
-indicate NAS firmware/App Center repository issues that need QNAP support.
+If persistent, reboot NAS; last resort is Container Station reinstall.
 
-### Fixing "Cross-site POST form submissions are forbidden"
+---
 
-If your app is behind a NAS reverse proxy, configure ORIGIN and forwarded headers. This project disables strict form-origin matching to avoid false positives when proxy headers/origins vary.
+## 10) Local auth behavior (important)
 
-- Set `ORIGIN` in `.env` to your external URL (for example `https://your-domain` or `http://192.168.1.20:4173`).
-- Keep reverse proxy forwarding headers enabled (`X-Forwarded-Host`, `X-Forwarded-Proto`, `X-Forwarded-Port`).
-- The bundled Compose file already sets `HOST_HEADER`, `PROTOCOL_HEADER`, and `PORT_HEADER` so SvelteKit can trust forwarded values.
+- Signup creates users as **pending approval**.
+- Pending users cannot sign in until approved.
+- Default local admin account is seeded by `MARIADB_AUTH_SCHEMA.sql`.
 
-## 4) Reverse proxy / SSL (recommended)
+Admin APIs:
 
-Using QNAP reverse proxy (or Traefik/Nginx), map:
+- `GET /api/admin/users/pending`
+- `POST /api/admin/users/:id/approve`
 
-- `https://your-domain` -> `http://nas-ip:4173`
-- Ensure `PUBLIC_OAUTH_REDIRECT_URL` matches your public URL if auth is enabled.
+---
 
-## Local uploads on NAS
+## 11) Quick command reference
 
-Image uploads are stored locally at runtime under:
+```bash
+# start/rebuild
+bash ./deploy/nas/compose.sh up -d --build
 
-- `static/uploads/images/*`
+# stop
+bash ./deploy/nas/compose.sh down --remove-orphans
 
-For persistence across container recreations, mount `static/uploads` to a NAS volume.
+# logs
+docker compose -f deploy/nas/docker-compose.yml --env-file .env logs -f sc-tool3-web
 
+# db shell
+docker exec -it sc-tool3-mariadb mariadb -u"$MARIADB_USER" -p"$MARIADB_PASSWORD" "$MARIADB_DATABASE"
+```
 
-## Local login + admin approval flow
+---
 
-- Default local admin:
-  - Email: `local@test.lan`
-  - Password: `admin123`
-- New accounts created from the signup dialog are stored as `approved: false`.
-- Admin must approve accounts before first login using:
-  - `GET /api/admin/users/pending`
-  - `POST /api/admin/users/:id/approve`
-
-## Notes specific to TS-251+
-
-- Keep container memory limits conservative (2–4 GB total if RAM is limited).
-- Use an SSD-backed volume for better responsiveness.
-- Back up your NAS volume containing app code and `static/uploads` regularly.
+If you need a hardened production variant (external MariaDB host, automated backups, SSL termination, and health monitoring), use this guide as baseline and layer those controls on top.
