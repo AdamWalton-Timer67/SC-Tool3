@@ -272,7 +272,7 @@
 							<td class="px-4 py-3">
 								<div class="flex gap-2">
 									<a
-										href="/admin/locations/{location.id}"
+										href={`/admin/locations/${encodeURIComponent(location.id)}`}
 										class="rounded bg-blue-500 px-3 py-1 text-sm text-white hover:bg-blue-400"
 									>
 										✏️ Edit

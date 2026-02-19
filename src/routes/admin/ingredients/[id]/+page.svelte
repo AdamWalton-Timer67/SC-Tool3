@@ -58,8 +58,9 @@
 		saving = true;
 
 		try {
+			const normalizedId = form.id.trim().replace(/\s+/g, '_');
 			const payload = {
-				id: form.id,
+				id: normalizedId,
 				name_en: form.name_en,
 				name_fr: form.name_fr,
 				category: form.category,
@@ -97,6 +98,7 @@
 			if (response.ok) {
 				// Set flag to reload data on wikelo/inventory pages
 				localStorage.setItem('wikelo_reload_needed', 'true');
+				form.id = normalizedId;
 				goto('/admin/ingredients', { invalidateAll: true });
 			} else {
 				const error = await response.json();

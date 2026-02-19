@@ -1,5 +1,6 @@
 import { json } from '@sveltejs/kit';
 import { requireAdmin, createAdminClient } from '$lib/server/admin';
+import { ensureMariaWikeloSeedData } from '$lib/server/maria-seed';
 import type { RequestHandler } from './$types';
 
 function toLocationPayload(body: Record<string, unknown>) {
@@ -67,18 +68,39 @@ export const PUT: RequestHandler = async ({ params, request, locals }) => {
 	const supabase = locals.supabase;
 
 	try {
+		await ensureMariaWikeloSeedData();
 		await requireAdmin(supabase);
 
 		const body = await request.json();
 		const locationData = toLocationPayload(body);
 
 		const adminClient = createAdminClient() ?? supabase;
-		const { data, error } = await adminClient
+		let { data, error } = await adminClient
 			.from('locations')
 			.update(locationData)
 			.eq('id', params.id)
 			.select()
 			.single();
+
+		if (error?.message?.includes('Unknown column')) {
+			const legacyPayload = {
+				slug: locationData.slug,
+				name_en: locationData.name_en,
+				name_fr: locationData.name_fr,
+				system: locationData.system,
+				type: locationData.type,
+				difficulty: locationData.difficulty,
+				description_en: locationData.description_en,
+				description_fr: locationData.description_fr,
+				image_url: locationData.image_url
+			};
+			({ data, error } = await adminClient
+				.from('locations')
+				.update(legacyPayload)
+				.eq('id', params.id)
+				.select()
+				.single());
+		}
 
 		if (error) {
 			console.error('Error updating location:', error);
