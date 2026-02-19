@@ -5,6 +5,7 @@
  */
 
 import type { PageServerLoad } from './$types';
+import { normalizeImageUrl } from '$lib/utils/imageUrl';
 
 export const load: PageServerLoad = async ({ locals, url }) => {
 	const supabase = locals.supabase;
@@ -41,7 +42,10 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 	}
 
 	return {
-		ingredients: ingredients || [],
+		ingredients: (ingredients || []).map((ingredient: any) => ({
+			...ingredient,
+			image_url: normalizeImageUrl(ingredient.image_url)
+		})),
 		filters: {
 			category,
 			rarity,
