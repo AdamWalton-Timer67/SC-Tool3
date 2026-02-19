@@ -28,7 +28,6 @@ export const PUT: RequestHandler = async ({ params, request, locals }) => {
 		const body = await request.json();
 		const { id } = params;
 
-
 		const { ...updateData } = body;
 
 		// Normalize category to plural form
@@ -37,7 +36,7 @@ export const PUT: RequestHandler = async ({ params, request, locals }) => {
 		}
 
 		// Use admin client to bypass RLS
-		const adminClient = createAdminClient();
+		const adminClient = createAdminClient() ?? supabase;
 		const { data, error } = await adminClient
 			.from('rewards')
 			.upsert({ id, ...updateData }, { onConflict: 'id' })
@@ -70,7 +69,7 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
 		const { id } = params;
 
 		// Use admin client to bypass RLS
-		const adminClient = createAdminClient();
+		const adminClient = createAdminClient() ?? supabase;
 		const { error } = await adminClient.from('rewards').delete().eq('id', id);
 
 		if (error) {

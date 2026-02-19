@@ -99,7 +99,7 @@
 				goto('/admin/ingredients');
 			} else {
 				const error = await response.json();
-				alert(`Error: ${error.message || 'Failed to save ingredient'}`);
+				alert(`Error: ${error.error || error.message || 'Failed to save ingredient'}`);
 			}
 		} catch (error) {
 			console.error('Error:', error);
@@ -323,9 +323,9 @@
 					</label>
 					<input
 						id="image_url"
-						type="url"
+						type="text"
 						bind:value={form.image_url}
-						placeholder="https://example.com/image.png"
+						placeholder="https://example.com/image.png or /images/..."
 						class="font-rajdhani w-full rounded-lg border-2 border-cyan-500/30 bg-black/50 px-4 py-3 text-cyan-300 placeholder-cyan-300/30 transition-all focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/50 focus:outline-none"
 					/>
 				</div>

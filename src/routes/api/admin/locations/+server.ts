@@ -9,7 +9,7 @@ export const GET: RequestHandler = async ({ locals }) => {
 	try {
 		await requireAdmin(supabase);
 
-		const adminClient = createAdminClient();
+		const adminClient = createAdminClient() ?? supabase;
 		const { data, error } = await adminClient
 			.from('locations')
 			.select('*')
@@ -45,7 +45,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 			return json({ error: 'Missing required fields: slug, name_en, name_fr' }, { status: 400 });
 		}
 
-		const adminClient = createAdminClient();
+		const adminClient = createAdminClient() ?? supabase;
 		const { data, error } = await adminClient
 			.from('locations')
 			.insert([locationData])
