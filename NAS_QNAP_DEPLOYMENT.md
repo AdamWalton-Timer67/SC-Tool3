@@ -135,6 +135,28 @@ If this returns JSON data (or at least not a DB configuration error), app↔DB p
 docker exec -i sc-tool3-mariadb mariadb -u"$MARIADB_USER" -p"$MARIADB_PASSWORD" "$MARIADB_DATABASE" -e "SELECT id,email,approved,created_at FROM auth_users LIMIT 10;"
 ```
 
+
+### If `/api/wikelo/rewards` returns `{"error":"Failed to load data"}`
+
+Run:
+
+```bash
+docker compose -f deploy/nas/docker-compose.yml --env-file .env logs --tail=200 sc-tool3-web
+```
+
+Typical cause on migrated volumes: app DB user mismatch/privileges after changing `.env`.
+Re-run bootstrap to reconcile user/password + grants and re-apply schema/seed:
+
+```bash
+bash ./deploy/nas/bootstrap-db.sh
+```
+
+Then verify with the exact command below (avoid manual typing mistakes):
+
+```bash
+docker exec -i sc-tool3-mariadb mariadb -u"$MARIADB_USER" -p"$MARIADB_PASSWORD" "$MARIADB_DATABASE" -e "SELECT id,email,approved,created_at FROM auth_users LIMIT 10;"
+```
+
 ### E. Verify rewards/requirements data exists
 
 ```bash
@@ -215,6 +237,17 @@ bash ./deploy/nas/compose.sh up -d --build
 If persistent, reboot NAS; last resort is Container Station reinstall.
 
 ---
+
+
+### Service is `unhealthy` but `curl http://127.0.0.1:4173` works
+
+Older compose files used a `wget` healthcheck, but the app image does not include `wget` by default.
+If this happens, pull latest repo changes and rebuild so the healthcheck uses Node’s built-in HTTP client:
+
+```bash
+git pull
+bash ./deploy/nas/compose.sh up -d --build
+```
 
 ## 10) Local auth behavior (important)
 

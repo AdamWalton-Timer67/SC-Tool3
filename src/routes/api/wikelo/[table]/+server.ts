@@ -24,6 +24,7 @@ export const GET: RequestHandler = async ({ params, locals }) => {
 		return json({ data: data ?? [] });
 	} catch (error) {
 		console.error('Error loading wikelo table:', table, error);
-		return json({ error: 'Failed to load data' }, { status: 500 });
+		const message = error instanceof Error ? error.message : 'Failed to load data';
+		return json({ error: message }, { status: 500 });
 	}
 };
