@@ -8,6 +8,25 @@ import { json } from '@sveltejs/kit';
 import { requireAdmin, createAdminClient } from '$lib/server/admin';
 import type { RequestHandler } from './$types';
 
+function toIngredientPayload(body: Record<string, unknown>) {
+	return {
+		id: body.id,
+		name_en: body.name_en,
+		name_fr: body.name_fr,
+		category: body.category,
+		rarity: body.rarity,
+		image_url: body.image_url ?? null,
+		image_credit: body.image_credit ?? null,
+		description_en: body.description_en ?? null,
+		description_fr: body.description_fr ?? null,
+		how_to_obtain_en: body.how_to_obtain_en ?? null,
+		how_to_obtain_fr: body.how_to_obtain_fr ?? null,
+		locations_en: body.locations_en ?? null,
+		locations_fr: body.locations_fr ?? null,
+		location_id: body.location_id ?? null
+	};
+}
+
 export const POST: RequestHandler = async ({ request, locals }) => {
 	const supabase = locals.supabase;
 
@@ -17,9 +36,16 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 
 		// Parse request body
 		const body = await request.json();
+		const payload = toIngredientPayload(body);
 
 		// Validate required fields
-		if (!body.id || !body.name_en || !body.name_fr || !body.category || !body.rarity) {
+		if (
+			!payload.id ||
+			!payload.name_en ||
+			!payload.name_fr ||
+			!payload.category ||
+			!payload.rarity
+		) {
 			return json(
 				{ error: 'Missing required fields: id, name_en, name_fr, category, rarity' },
 				{ status: 400 }
@@ -28,7 +54,11 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 
 		// Insert ingredient using admin client to bypass RLS
 		const adminClient = createAdminClient() ?? supabase;
-		const { data, error } = await adminClient.from('ingredients').insert([body]).select().single();
+		const { data, error } = await adminClient
+			.from('ingredients')
+			.insert([payload])
+			.select()
+			.single();
 
 		if (error) {
 			console.error('Error creating ingredient:', error);

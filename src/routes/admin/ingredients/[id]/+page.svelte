@@ -99,7 +99,7 @@
 				goto('/admin/ingredients');
 			} else {
 				const error = await response.json();
-				alert(`Error: ${error.message || 'Failed to save ingredient'}`);
+				alert(`Error: ${error.error || error.message || 'Failed to save ingredient'}`);
 			}
 		} catch (error) {
 			console.error('Error:', error);
