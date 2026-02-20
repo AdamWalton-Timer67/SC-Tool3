@@ -34,7 +34,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 		body.category = normalizeCategory(body.category);
 
 		// Use admin client to bypass RLS
-		const adminClient = createAdminClient();
+		const adminClient = createAdminClient() ?? supabase;
 		const { data, error } = await adminClient.from('rewards').insert([body]).select().single();
 
 		if (error) {

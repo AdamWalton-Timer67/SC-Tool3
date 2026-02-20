@@ -145,7 +145,7 @@
 			<div class="h-px flex-1 bg-linear-to-r from-transparent via-cyan-400/50 to-transparent"></div>
 		</div>
 
-		<div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+		<div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-5">
 			<a
 				href="/admin/ingredients/new"
 				class="group flex cursor-pointer items-center gap-4 rounded-xl border-2 border-cyan-500/30 bg-gradient-to-br from-cyan-500/10 to-purple-500/10 p-5 transition-all hover:scale-105 hover:border-cyan-500/60 hover:shadow-lg hover:shadow-cyan-500/30"
@@ -203,6 +203,21 @@
 						Suggestions
 					</div>
 					<div class="text-xs text-green-300/60 sm:text-sm">Manage user feedback</div>
+				</div>
+			</a>
+
+			<a
+				href="/admin/users"
+				class="group flex cursor-pointer items-center gap-4 rounded-xl border-2 border-yellow-500/30 bg-gradient-to-br from-yellow-500/10 to-amber-500/10 p-5 transition-all hover:scale-105 hover:border-yellow-500/60 hover:shadow-lg hover:shadow-yellow-500/30"
+			>
+				<span class="text-3xl transition-transform group-hover:scale-110 sm:text-4xl">👥</span>
+				<div>
+					<div
+						class="font-orbitron text-sm font-bold tracking-wide text-yellow-300 uppercase sm:text-base"
+					>
+						User Management
+					</div>
+					<div class="text-xs text-yellow-300/60 sm:text-sm">Manage accounts and roles</div>
 				</div>
 			</a>
 		</div>
@@ -302,9 +317,15 @@
 				>
 					<span class="text-2xl">{dbStatus.connected ? '✅' : '❌'}</span>
 					<div>
-						<span class="font-orbitron font-bold {dbStatus.connected ? 'text-green-300' : 'text-red-300'}">MariaDB:</span>
+						<span
+							class="font-orbitron font-bold {dbStatus.connected
+								? 'text-green-300'
+								: 'text-red-300'}">MariaDB:</span
+						>
 						<span class="ml-2 {dbStatus.connected ? 'text-green-300/80' : 'text-red-300/80'}">
-							{dbStatus.connected ? 'Connected & Operational' : dbStatus.error || 'Connection failed'}
+							{dbStatus.connected
+								? 'Connected & Operational'
+								: dbStatus.error || 'Connection failed'}
 						</span>
 					</div>
 				</div>

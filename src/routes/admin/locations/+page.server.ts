@@ -1,4 +1,5 @@
 import type { PageServerLoad } from './$types';
+import { normalizeImageUrl } from '$lib/utils/imageUrl';
 
 export const load: PageServerLoad = async ({ url, locals }) => {
 	const supabase = locals.supabase;
@@ -22,10 +23,6 @@ export const load: PageServerLoad = async ({ url, locals }) => {
 	if (type !== 'all') {
 		query = query.eq('type', type);
 	}
-	if (search) {
-		query = query.or(`name_en.ilike.%${search}%,name_fr.ilike.%${search}%`);
-	}
-
 	const { data: locations, error } = await query;
 
 	if (error) {
@@ -42,8 +39,22 @@ export const load: PageServerLoad = async ({ url, locals }) => {
 
 	const uniqueSystems = [...new Set(systems?.map((s) => s.system) || [])];
 
+	const normalizedSearch = search.trim().toLowerCase();
+	const filteredLocations = (locations || [])
+		.filter((location: any) => {
+			if (!normalizedSearch) return true;
+			return [location.name_en, location.name_fr]
+				.filter(Boolean)
+				.some((value) => String(value).toLowerCase().includes(normalizedSearch));
+		})
+		.map((location: any) => ({
+			...location,
+			image_url: normalizeImageUrl(location.image_url),
+			cheatsheet_image_url: normalizeImageUrl(location.cheatsheet_image_url)
+		}));
+
 	return {
-		locations: locations || [],
+		locations: filteredLocations,
 		systems: uniqueSystems,
 		filters: { system, difficulty, type, search }
 	};
