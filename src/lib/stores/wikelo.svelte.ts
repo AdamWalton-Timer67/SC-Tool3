@@ -329,20 +329,8 @@ class WikeloStore {
 				// Load rewards
 				supabase.from('rewards').select('*').order('name_en'),
 
-				// Load reward_ingredients with ingredients
-				supabase.from('reward_ingredients').select(`
-						reward_id,
-						ingredient_id,
-						quantity,
-						unit,
-						ingredients (
-							id,
-							name_en,
-							name_fr,
-							category,
-							rarity
-						)
-					`),
+				// Load reward_ingredients (ingredient relation is resolved manually for Maria compatibility)
+				supabase.from('reward_ingredients').select('reward_id, ingredient_id, quantity, unit'),
 
 				// Load reputation_requirements
 				supabase.from('reputation_requirements').select('*'),
@@ -385,19 +373,23 @@ class WikeloStore {
 				throw ingredientsResult.error;
 			}
 
+			const ingredientById = new Map(
+				(ingredientsResult.data || []).map((ingredient: any) => [ingredient.id, ingredient])
+			);
+
 			// Merge data manually
 			const mergedRewardsData = (rewardsResult.data || []).map((reward) => ({
 				...reward,
 				reward_ingredients: (rewardIngredientsResult.data || [])
-					.filter((ri) => ri.reward_id === reward.id)
-					.map((ri) => ({
+					.filter((ri: any) => ri.reward_id === reward.id)
+					.map((ri: any) => ({
 						ingredient_id: ri.ingredient_id,
 						quantity: ri.quantity,
 						unit: ri.unit,
-						ingredients: ri.ingredients
+						ingredients: ingredientById.get(ri.ingredient_id)
 					})),
 				reputation_requirements: (reputationRequirementsResult.data || []).filter(
-					(rr) => rr.reward_id === reward.id
+					(rr: any) => rr.reward_id === reward.id
 				)
 			}));
 
@@ -476,8 +468,8 @@ class WikeloStore {
 							acc.set(ri.ingredient_id, {
 								id: ri.ingredient_id,
 								name: {
-									en: ri.ingredients.name_en,
-									fr: ri.ingredients.name_fr
+									en: ri.ingredients?.name_en || ri.ingredient_id,
+									fr: ri.ingredients?.name_fr || ri.ingredient_id
 								},
 								quantity: ri.quantity,
 								unit: ri.unit,

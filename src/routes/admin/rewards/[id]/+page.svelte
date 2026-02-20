@@ -262,9 +262,17 @@
 
 	async function saveRequirements(rewardId: string) {
 		// Delete existing requirements
-		await fetch(`/api/admin/rewards/${rewardId}/requirements`, {
-			method: 'DELETE'
-		});
+		const deleteResponse = await fetch(
+			`/api/admin/rewards/${encodeURIComponent(rewardId)}/requirements`,
+			{
+				method: 'DELETE'
+			}
+		);
+
+		if (!deleteResponse.ok) {
+			const message = await readApiError(deleteResponse);
+			throw new Error(`Failed to delete existing requirements: ${message}`);
+		}
 
 		// Insert new requirements
 		if (requirements.length > 0) {
@@ -277,13 +285,21 @@
 				})
 			);
 
-			await fetch(`/api/admin/rewards/${rewardId}/requirements`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(requirementsPayload)
-			});
+			const createResponse = await fetch(
+				`/api/admin/rewards/${encodeURIComponent(rewardId)}/requirements`,
+				{
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify(requirementsPayload)
+				}
+			);
+
+			if (!createResponse.ok) {
+				const message = await readApiError(createResponse);
+				throw new Error(`Failed to save requirements: ${message}`);
+			}
 		}
 	}
 
