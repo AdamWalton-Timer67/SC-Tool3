@@ -2,6 +2,7 @@
 	import { goto } from '$app/navigation';
 	import type { PageData } from './$types';
 	import { uploadImage } from '$lib/upload';
+	import { normalizeImageUrl } from '$lib/utils/imageUrl';
 
 	interface Props {
 		data: PageData;
@@ -18,7 +19,7 @@
 		rarity: data.reward?.rarity || 'common',
 		type_en: data.reward?.type_en || '',
 		type_fr: data.reward?.type_fr || '',
-		image_url: data.reward?.image_url || '',
+		image_url: normalizeImageUrl(data.reward?.image_url) || '',
 		image_credit: data.reward?.image_credit || '',
 		description_en: data.reward?.description_en || '',
 		description_fr: data.reward?.description_fr || '',
@@ -192,7 +193,7 @@
 				rarity: form.rarity,
 				type_en: form.type_en || null,
 				type_fr: form.type_fr || null,
-				image_url: form.image_url || null,
+				image_url: normalizeImageUrl(form.image_url) || null,
 				image_credit: form.image_credit || null,
 				description_en: form.description_en || null,
 				description_fr: form.description_fr || null,
@@ -216,21 +217,33 @@
 
 			if (!response.ok) {
 				const error = await response.json();
-				alert(`Error: ${error.message || 'Failed to save reward'}`);
+				alert(`Error: ${error.error || error.message || 'Failed to save reward'}`);
 				saving = false;
 				return;
 			}
 
-			// Save requirements
-			await saveRequirements(form.id);
+			const warnings: string[] = [];
 
-			// Save reputation requirements
-			await saveReputationRequirements(form.id);
+			try {
+				await saveRequirements(form.id);
+			} catch (error) {
+				warnings.push((error as Error).message || 'Failed to save requirements');
+			}
+
+			try {
+				await saveReputationRequirements(form.id);
+			} catch (error) {
+				warnings.push((error as Error).message || 'Failed to save reputation requirements');
+			}
+
+			if (warnings.length > 0) {
+				alert(`Saved reward with warnings:\n- ${warnings.join('\n- ')}`);
+			}
 
 			// Set flag to reload data on wikelo/inventory pages
 			localStorage.setItem('wikelo_reload_needed', 'true');
 
-			goto('/admin/rewards');
+			goto('/admin/rewards', { invalidateAll: true });
 		} catch (error) {
 			console.error('Error:', error);
 			alert('Error saving reward');
@@ -238,11 +251,28 @@
 		}
 	}
 
+	async function readApiError(response: Response): Promise<string> {
+		const payload = await response.json().catch(() => null);
+		return (
+			payload?.error ||
+			payload?.message ||
+			`${response.status} ${response.statusText || 'Request failed'}`
+		);
+	}
+
 	async function saveRequirements(rewardId: string) {
 		// Delete existing requirements
-		await fetch(`/api/admin/rewards/${rewardId}/requirements`, {
-			method: 'DELETE'
-		});
+		const deleteResponse = await fetch(
+			`/api/admin/rewards/${encodeURIComponent(rewardId)}/requirements`,
+			{
+				method: 'DELETE'
+			}
+		);
+
+		if (!deleteResponse.ok) {
+			const message = await readApiError(deleteResponse);
+			throw new Error(`Failed to delete existing requirements: ${message}`);
+		}
 
 		// Insert new requirements
 		if (requirements.length > 0) {
@@ -255,34 +285,39 @@
 				})
 			);
 
-			await fetch(`/api/admin/rewards/${rewardId}/requirements`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(requirementsPayload)
-			});
+			const createResponse = await fetch(
+				`/api/admin/rewards/${encodeURIComponent(rewardId)}/requirements`,
+				{
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify(requirementsPayload)
+				}
+			);
+
+			if (!createResponse.ok) {
+				const message = await readApiError(createResponse);
+				throw new Error(`Failed to save requirements: ${message}`);
+			}
 		}
 	}
 
 	async function saveReputationRequirements(rewardId: string) {
 		try {
-
 			// Delete all existing reputation requirements
 			const deleteResponse = await fetch(`/api/admin/rewards/${rewardId}/reputation`, {
 				method: 'DELETE'
 			});
 
 			if (!deleteResponse.ok) {
-				const error = await deleteResponse.json();
-				console.error('Error deleting reputation requirements:', error);
-				throw new Error(`Failed to delete reputation requirements: ${error.message || 'Unknown error'}`);
+				const message = await readApiError(deleteResponse);
+				console.error('Error deleting reputation requirements:', message);
+				throw new Error(`Failed to delete reputation requirements: ${message}`);
 			}
-
 
 			// Insert new reputation requirements
 			for (const req of reputationRequirements) {
-
 				const response = await fetch(`/api/admin/rewards/${rewardId}/reputation`, {
 					method: 'POST',
 					headers: {
@@ -296,14 +331,11 @@
 				});
 
 				if (!response.ok) {
-					const error = await response.json();
-					console.error('Error saving reputation requirement:', error);
-					throw new Error(`Failed to save reputation requirement: ${error.message || 'Unknown error'}`);
+					const message = await readApiError(response);
+					console.error('Error saving reputation requirement:', message);
+					throw new Error(`Failed to save reputation requirement: ${message}`);
 				}
-
-				const result = await response.json();
 			}
-
 		} catch (error) {
 			console.error('Error in saveReputationRequirements:', error);
 			alert(`Error saving reputation requirements: ${(error as Error).message}`);
@@ -320,7 +352,7 @@
 
 		try {
 			const url = await uploadImage(files[0]);
-			form.image_url = url;
+			form.image_url = normalizeImageUrl(url);
 			alert('Image uploaded successfully!');
 		} catch (error) {
 			console.error('Error uploading image:', error);
@@ -507,12 +539,12 @@
 							class="h-5 w-5 rounded border-2 border-yellow-500/30 bg-black/50 text-yellow-500 focus:ring-yellow-500 focus:ring-offset-0"
 						/>
 						<span class="font-orbitron text-sm font-medium tracking-wide text-yellow-300 uppercase">
-							🚧 Pas encore implémentée dans le jeu
+							🚧 Not yet implemented in the game
 						</span>
 					</label>
 					<p class="font-rajdhani mt-2 ml-8 text-xs text-purple-300/60">
-						Cochez cette case si la récompense n'est pas encore disponible dans le jeu. Seuls
-						l'image et le titre seront affichés.
+						Check this box if the reward is not yet available in-game. Only the image and title will
+						be displayed.
 					</p>
 				</div>
 
@@ -579,9 +611,9 @@
 					</label>
 					<input
 						id="image_url"
-						type="url"
+						type="text"
 						bind:value={form.image_url}
-						placeholder="https://example.com/image.png"
+						placeholder="https://example.com/image.png or /images/..."
 						class="font-rajdhani w-full rounded-lg border-2 border-purple-500/30 bg-black/50 px-4 py-3 text-purple-300 placeholder-purple-300/30 transition-all focus:border-purple-500 focus:ring-2 focus:ring-purple-500/50 focus:outline-none"
 					/>
 				</div>
@@ -621,7 +653,7 @@
 				</div>
 
 				<!-- Image Preview -->
-				{#if form.image_url}
+				{#if normalizeImageUrl(form.image_url)}
 					<div class="md:col-span-2">
 						<p
 							class="font-orbitron mb-2 text-sm font-medium tracking-wider text-purple-300 uppercase"
@@ -633,7 +665,7 @@
 								class="absolute inset-0 rounded-lg bg-gradient-to-br from-purple-400/20 to-pink-500/20 blur-lg"
 							></div>
 							<img
-								src={form.image_url}
+								src={normalizeImageUrl(form.image_url)}
 								alt="Preview"
 								class="relative h-32 w-32 rounded-lg border-2 border-purple-500/30 object-cover"
 								onerror={(e) => {
@@ -865,8 +897,8 @@
 			</div>
 
 			<p class="font-rajdhani mb-4 text-sm text-orange-300/60">
-				Ajouter une ou plusieurs réputations requises pour obtenir cette récompense (ex: "Barter &
-				Trade" niveau 340).
+				Add one or more reputation requirements to unlock this reward (e.g. "Barter & Trade" level
+				340).
 			</p>
 
 			<!-- Current Reputation Requirements -->
@@ -883,7 +915,7 @@
 										{req.reputation_name_en} / {req.reputation_name_fr}
 									</div>
 									<div class="font-rajdhani text-sm text-orange-300/60">
-										Niveau requis: <span class="font-bold text-orange-400"
+										Required level: <span class="font-bold text-orange-400"
 											>{req.required_level}</span
 										>
 									</div>

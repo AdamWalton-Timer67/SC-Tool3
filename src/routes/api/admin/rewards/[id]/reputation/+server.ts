@@ -16,7 +16,7 @@ export const GET: RequestHandler = async ({ params, locals }) => {
 		await requireAdmin(supabase);
 		const { id } = params;
 
-		const adminClient = createAdminClient();
+		const adminClient = createAdminClient() ?? supabase;
 		const { data, error } = await adminClient
 			.from('reputation_requirements')
 			.select('*')
@@ -60,7 +60,7 @@ export const POST: RequestHandler = async ({ params, request, locals }) => {
 			return json({ error: 'required_level must be greater than 0' }, { status: 400 });
 		}
 
-		const adminClient = createAdminClient();
+		const adminClient = createAdminClient() ?? supabase;
 
 		// If an ID is provided, update; otherwise insert
 		if (body.id) {
@@ -119,7 +119,7 @@ export const DELETE: RequestHandler = async ({ params, request, locals }) => {
 		const url = new URL(request.url);
 		const reputationId = url.searchParams.get('reputation_id');
 
-		const adminClient = createAdminClient();
+		const adminClient = createAdminClient() ?? supabase;
 
 		if (reputationId) {
 			// Delete specific reputation requirement
