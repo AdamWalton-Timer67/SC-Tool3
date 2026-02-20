@@ -29,6 +29,19 @@ function toNumber(value: unknown, fallback = 0): number {
 	return fallback;
 }
 
+function parseComponents(value: unknown): ShipComponent[] {
+	if (Array.isArray(value)) return value as ShipComponent[];
+	if (typeof value === 'string' && value.trim()) {
+		try {
+			const parsed = JSON.parse(value);
+			return Array.isArray(parsed) ? (parsed as ShipComponent[]) : [];
+		} catch {
+			return [];
+		}
+	}
+	return [];
+}
+
 // Types
 export interface TranslatedText {
 	en?: string;
@@ -490,7 +503,7 @@ class WikeloStore {
 				categoryId: reward.category,
 				gives: toNumber(reward.gives, 1),
 				hasLoadout: toBoolean(reward.has_loadout),
-				components: reward.components,
+				components: parseComponents(reward.components),
 				notReleased: toBoolean(reward.not_released)
 			};
 

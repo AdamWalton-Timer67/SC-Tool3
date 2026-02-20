@@ -151,6 +151,7 @@
 
 		<div class="absolute top-2 right-2 z-20">
 			<button
+				type="button"
 				onclick={(e) => {
 					e.stopPropagation();
 					handleToggleFavorite();
@@ -321,6 +322,7 @@
 
 									<!-- Bouton détails compact -->
 									<button
+										type="button"
 										onclick={(e) => {
 											e.stopPropagation();
 											if (ingredient) {
@@ -382,8 +384,9 @@
 							</div>
 						{/if}
 
-						{#if reward.hasLoadout && reward.components && reward.components.length > 0}
+						{#if reward.hasLoadout}
 							<button
+								type="button"
 								onclick={() => {
 									wikeloStore.openShipDialog(reward);
 									captureEvent('wikelo_loadout_clicked', {
@@ -400,6 +403,7 @@
 						{/if}
 
 						<button
+							type="button"
 							onclick={() => (isSuggestionDialogOpen = true)}
 							class="shrink-0 rounded border border-purple-400/30 bg-purple-500/10 px-2 py-1 transition-all hover:border-purple-400/50 hover:bg-purple-500/20"
 							title={t.suggest}
@@ -409,6 +413,7 @@
 
 						{#if isCompleted}
 							<button
+								type="button"
 								onclick={handleResetReward}
 								class="group/restart shrink-0 rounded border border-green-500/30 bg-green-500/10 px-2 py-1 transition-all hover:border-green-500/50 hover:bg-green-500/20"
 								title={t.restartTooltip}
@@ -442,6 +447,7 @@
 		<div class="relative border-b border-white/10 p-6">
 			<div class="absolute top-4 right-4 z-20">
 				<button
+					type="button"
 					onclick={(e) => {
 						e.stopPropagation();
 						handleToggleFavorite();
@@ -580,8 +586,9 @@
 						</div>
 					{/if}
 
-					{#if reward.hasLoadout && reward.components && reward.components.length > 0}
+					{#if reward.hasLoadout}
 						<button
+							type="button"
 							onclick={() => {
 								wikeloStore.openShipDialog(reward);
 								captureEvent('wikelo_loadout_clicked', {
@@ -666,6 +673,7 @@
 
 							<!-- Bouton détails -->
 							<button
+								type="button"
 								onclick={(e) => {
 									e.stopPropagation();
 									if (ingredient) {
@@ -717,6 +725,7 @@
 					{#if !isCollapsed}
 						<div class="mt-3 flex gap-2">
 							<button
+								type="button"
 								onclick={() => (isSuggestionDialogOpen = true)}
 								class="flex flex-1 items-center justify-center gap-2 rounded-lg border border-purple-400/30 bg-purple-500/10 px-4 py-2 transition-all hover:border-purple-400/50 hover:bg-purple-500/20"
 							>
@@ -728,6 +737,7 @@
 
 							{#if isCompleted}
 								<button
+									type="button"
 									onclick={handleResetReward}
 									class="group/restart flex flex-1 items-center justify-center gap-2 rounded-lg border border-green-500/30 bg-green-500/10 px-4 py-2 transition-all hover:border-green-500/50 hover:bg-green-500/20"
 									title={t.restartTooltip}
