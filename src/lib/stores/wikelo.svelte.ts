@@ -6,8 +6,28 @@
 
 import { browser } from '$app/environment';
 import { supabase } from '$lib/supabase';
+import { normalizeImageUrl } from '$lib/utils/imageUrl';
 
 import { SvelteMap } from 'svelte/reactivity';
+
+function toBoolean(value: unknown): boolean {
+	if (typeof value === 'boolean') return value;
+	if (typeof value === 'number') return value === 1;
+	if (typeof value === 'string') {
+		const normalized = value.trim().toLowerCase();
+		return normalized === '1' || normalized === 'true' || normalized === 'yes';
+	}
+	return false;
+}
+
+function toNumber(value: unknown, fallback = 0): number {
+	if (typeof value === 'number' && Number.isFinite(value)) return value;
+	if (typeof value === 'string') {
+		const parsed = Number(value);
+		if (Number.isFinite(parsed)) return parsed;
+	}
+	return fallback;
+}
 
 // Types
 export interface TranslatedText {
@@ -300,13 +320,17 @@ class WikeloStore {
 			this.error = null;
 
 			// Load all data in parallel for faster loading
-			const [rewardsResult, rewardIngredientsResult, reputationRequirementsResult, ingredientsResult] =
-				await Promise.all([
-					// Load rewards
-					supabase.from('rewards').select('*').order('name_en'),
+			const [
+				rewardsResult,
+				rewardIngredientsResult,
+				reputationRequirementsResult,
+				ingredientsResult
+			] = await Promise.all([
+				// Load rewards
+				supabase.from('rewards').select('*').order('name_en'),
 
-					// Load reward_ingredients with ingredients
-					supabase.from('reward_ingredients').select(`
+				// Load reward_ingredients with ingredients
+				supabase.from('reward_ingredients').select(`
 						reward_id,
 						ingredient_id,
 						quantity,
@@ -320,14 +344,14 @@ class WikeloStore {
 						)
 					`),
 
-					// Load reputation_requirements
-					supabase.from('reputation_requirements').select('*'),
+				// Load reputation_requirements
+				supabase.from('reputation_requirements').select('*'),
 
-					// Load ingredients with location info
-					supabase
-						.from('ingredients')
-						.select(
-							`
+				// Load ingredients with location info
+				supabase
+					.from('ingredients')
+					.select(
+						`
 						*,
 						locations:location_id (
 							id,
@@ -336,9 +360,9 @@ class WikeloStore {
 							name_fr
 						)
 					`
-						)
-						.order('name_en')
-				]);
+					)
+					.order('name_en')
+			]);
 
 			// Check for errors
 			if (rewardsResult.error) {
@@ -431,7 +455,7 @@ class WikeloStore {
 					en: reward.description_en || '',
 					fr: reward.description_fr || ''
 				},
-				image: reward.image_url || '',
+				image: normalizeImageUrl(reward.image_url),
 				imageCredit: reward.image_credit,
 				missionName:
 					reward.mission_name_en || reward.mission_name_fr
@@ -441,26 +465,27 @@ class WikeloStore {
 							}
 						: undefined,
 				requirements: Array.from(
-					(reward.reward_ingredients || []).reduce((acc, ri) => {
-						const existing = acc.get(ri.ingredient_id);
-						if (existing) {
-							existing.quantity += ri.quantity;
-							return acc;
-						}
+					(reward.reward_ingredients || [])
+						.reduce((acc, ri) => {
+							const existing = acc.get(ri.ingredient_id);
+							if (existing) {
+								existing.quantity += ri.quantity;
+								return acc;
+							}
 
-						acc.set(ri.ingredient_id, {
-							id: ri.ingredient_id,
-							name: {
-								en: ri.ingredients.name_en,
-								fr: ri.ingredients.name_fr
-							},
-							quantity: ri.quantity,
-							unit: ri.unit,
-							obtained: false
-						});
-						return acc;
-					}, new Map<string, Requirement>())
-					.values()
+							acc.set(ri.ingredient_id, {
+								id: ri.ingredient_id,
+								name: {
+									en: ri.ingredients.name_en,
+									fr: ri.ingredients.name_fr
+								},
+								quantity: ri.quantity,
+								unit: ri.unit,
+								obtained: false
+							});
+							return acc;
+						}, new Map<string, Requirement>())
+						.values()
 				),
 				reputationRequirements: (reward.reputation_requirements || []).map((rr) => ({
 					id: rr.id,
@@ -471,10 +496,10 @@ class WikeloStore {
 					required_level: rr.required_level
 				})),
 				categoryId: reward.category,
-				gives: reward.gives,
-				hasLoadout: reward.has_loadout,
+				gives: toNumber(reward.gives, 1),
+				hasLoadout: toBoolean(reward.has_loadout),
 				components: reward.components,
-				notReleased: reward.not_released
+				notReleased: toBoolean(reward.not_released)
 			};
 
 			categoriesMap.get(categoryKey)?.rewards.push(transformedReward);
@@ -499,7 +524,7 @@ class WikeloStore {
 				},
 				category: ingredient.category,
 				rarity: ingredient.rarity,
-				image: ingredient.image_url || '',
+				image: normalizeImageUrl(ingredient.image_url),
 				credit: ingredient.image_credit,
 				description: {
 					en: ingredient.description_en || '',
@@ -897,9 +922,6 @@ class WikeloStore {
 	isRewardCollapsed(): boolean {
 		return this.isCompactView;
 	}
-
-
-
 
 	// ========================================
 	// End Supabase Integration Methods

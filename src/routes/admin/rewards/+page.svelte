@@ -271,7 +271,7 @@
 
 							<div class="flex gap-2">
 								<a
-									href="/admin/rewards/{reward.id}"
+									href={`/admin/rewards/${encodeURIComponent(reward.id)}`}
 									class="font-orbitron flex-1 cursor-pointer rounded-lg border-2 border-purple-500/30 bg-purple-500/20 px-3 py-2 text-center text-sm tracking-wide text-purple-300 uppercase transition-all hover:border-purple-500/60 hover:bg-purple-500/30"
 								>
 									✏️ Edit
