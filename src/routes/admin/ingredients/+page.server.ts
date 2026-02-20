@@ -27,10 +27,6 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 		query = query.eq('rarity', rarity);
 	}
 
-	if (search) {
-		query = query.or(`name_en.ilike.%${search}%,name_fr.ilike.%${search}%`);
-	}
-
 	const { data: ingredients, error } = await query;
 
 	if (error) {
@@ -41,11 +37,21 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 		};
 	}
 
-	return {
-		ingredients: (ingredients || []).map((ingredient: any) => ({
+	const normalizedSearch = search.trim().toLowerCase();
+	const filteredIngredients = (ingredients || [])
+		.filter((ingredient: any) => {
+			if (!normalizedSearch) return true;
+			return [ingredient.name_en, ingredient.name_fr]
+				.filter(Boolean)
+				.some((value) => String(value).toLowerCase().includes(normalizedSearch));
+		})
+		.map((ingredient: any) => ({
 			...ingredient,
 			image_url: normalizeImageUrl(ingredient.image_url)
-		})),
+		}));
+
+	return {
+		ingredients: filteredIngredients,
 		filters: {
 			category,
 			rarity,

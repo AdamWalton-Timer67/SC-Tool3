@@ -369,7 +369,7 @@
 				</div>
 
 				<!-- Image Preview -->
-				{#if form.image_url}
+				{#if normalizeImageUrl(form.image_url)}
 					<div class="md:col-span-2">
 						<p
 							class="font-orbitron mb-2 text-sm font-medium tracking-wider text-cyan-300 uppercase"
@@ -381,7 +381,7 @@
 								class="absolute inset-0 rounded-lg bg-gradient-to-br from-cyan-400/20 to-purple-500/20 blur-lg"
 							></div>
 							<img
-								src={form.image_url}
+								src={normalizeImageUrl(form.image_url)}
 								alt="Preview"
 								class="relative h-32 w-32 rounded-lg border-2 border-cyan-500/30 object-cover"
 								onerror={(e) => {

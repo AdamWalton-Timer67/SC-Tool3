@@ -369,8 +369,12 @@
 							/>
 						</label>
 					</div>
-					{#if form.image_url}
-						<img src={form.image_url} alt="Preview" class="mt-2 h-32 w-full rounded object-cover" />
+					{#if normalizeImageUrl(form.image_url)}
+						<img
+							src={normalizeImageUrl(form.image_url)}
+							alt="Preview"
+							class="mt-2 h-32 w-full rounded object-cover"
+						/>
 					{/if}
 				</div>
 
@@ -400,9 +404,9 @@
 							/>
 						</label>
 					</div>
-					{#if form.cheatsheet_image_url}
+					{#if normalizeImageUrl(form.cheatsheet_image_url)}
 						<img
-							src={form.cheatsheet_image_url}
+							src={normalizeImageUrl(form.cheatsheet_image_url)}
 							alt="Preview"
 							class="mt-2 h-32 w-full rounded object-cover"
 						/>

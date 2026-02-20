@@ -3,9 +3,9 @@ export function normalizeImageUrl(url: unknown): string {
 	const trimmed = url.trim();
 	if (!trimmed) return '';
 	if (/^https?:\/\//i.test(trimmed) || trimmed.startsWith('data:') || trimmed.startsWith('blob:')) {
-		return trimmed;
+		return encodeURI(trimmed);
 	}
-	if (trimmed.startsWith('//')) return `https:${trimmed}`;
-	if (trimmed.startsWith('/')) return trimmed;
-	return `/${trimmed}`;
+	if (trimmed.startsWith('//')) return encodeURI(`https:${trimmed}`);
+	if (trimmed.startsWith('/')) return encodeURI(trimmed);
+	return encodeURI(`/${trimmed}`);
 }

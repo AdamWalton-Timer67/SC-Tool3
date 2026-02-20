@@ -27,10 +27,6 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 		query = query.eq('rarity', rarity);
 	}
 
-	if (search) {
-		query = query.or(`name_en.ilike.%${search}%,name_fr.ilike.%${search}%`);
-	}
-
 	const { data: rewards, error } = await query;
 
 	if (error) {
@@ -41,11 +37,21 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 		};
 	}
 
-	return {
-		rewards: (rewards || []).map((reward: any) => ({
+	const normalizedSearch = search.trim().toLowerCase();
+	const filteredRewards = (rewards || [])
+		.filter((reward: any) => {
+			if (!normalizedSearch) return true;
+			return [reward.name_en, reward.name_fr]
+				.filter(Boolean)
+				.some((value) => String(value).toLowerCase().includes(normalizedSearch));
+		})
+		.map((reward: any) => ({
 			...reward,
 			image_url: normalizeImageUrl(reward.image_url)
-		})),
+		}));
+
+	return {
+		rewards: filteredRewards,
 		filters: {
 			category,
 			rarity,
