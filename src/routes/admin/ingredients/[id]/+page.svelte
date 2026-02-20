@@ -2,6 +2,7 @@
 	import { goto } from '$app/navigation';
 	import type { PageData } from './$types';
 	import { uploadImage } from '$lib/upload';
+	import { normalizeImageUrl } from '$lib/utils/imageUrl';
 
 	interface Props {
 		data: PageData;
@@ -16,7 +17,7 @@
 		name_fr: data.ingredient?.name_fr || '',
 		category: data.ingredient?.category || 'mining',
 		rarity: data.ingredient?.rarity || 'common',
-		image_url: data.ingredient?.image_url || '',
+		image_url: normalizeImageUrl(data.ingredient?.image_url) || '',
 		image_credit: data.ingredient?.image_credit || '',
 		description_en: data.ingredient?.description_en || '',
 		description_fr: data.ingredient?.description_fr || '',
@@ -57,13 +58,14 @@
 		saving = true;
 
 		try {
+			const normalizedId = form.id.trim().replace(/\s+/g, '_');
 			const payload = {
-				id: form.id,
+				id: normalizedId,
 				name_en: form.name_en,
 				name_fr: form.name_fr,
 				category: form.category,
 				rarity: form.rarity,
-				image_url: form.image_url || null,
+				image_url: normalizeImageUrl(form.image_url) || null,
 				image_credit: form.image_credit || null,
 				description_en: form.description_en || null,
 				description_fr: form.description_fr || null,
@@ -96,10 +98,11 @@
 			if (response.ok) {
 				// Set flag to reload data on wikelo/inventory pages
 				localStorage.setItem('wikelo_reload_needed', 'true');
-				goto('/admin/ingredients');
+				form.id = normalizedId;
+				goto('/admin/ingredients', { invalidateAll: true });
 			} else {
 				const error = await response.json();
-				alert(`Error: ${error.message || 'Failed to save ingredient'}`);
+				alert(`Error: ${error.error || error.message || 'Failed to save ingredient'}`);
 			}
 		} catch (error) {
 			console.error('Error:', error);
@@ -118,7 +121,7 @@
 
 		try {
 			const url = await uploadImage(files[0]);
-			form.image_url = url;
+			form.image_url = normalizeImageUrl(url);
 			alert('Image uploaded successfully!');
 		} catch (error) {
 			console.error('Error uploading image:', error);
@@ -323,9 +326,9 @@
 					</label>
 					<input
 						id="image_url"
-						type="url"
+						type="text"
 						bind:value={form.image_url}
-						placeholder="https://example.com/image.png"
+						placeholder="https://example.com/image.png or /images/..."
 						class="font-rajdhani w-full rounded-lg border-2 border-cyan-500/30 bg-black/50 px-4 py-3 text-cyan-300 placeholder-cyan-300/30 transition-all focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/50 focus:outline-none"
 					/>
 				</div>
@@ -366,7 +369,7 @@
 				</div>
 
 				<!-- Image Preview -->
-				{#if form.image_url}
+				{#if normalizeImageUrl(form.image_url)}
 					<div class="md:col-span-2">
 						<p
 							class="font-orbitron mb-2 text-sm font-medium tracking-wider text-cyan-300 uppercase"
@@ -378,7 +381,7 @@
 								class="absolute inset-0 rounded-lg bg-gradient-to-br from-cyan-400/20 to-purple-500/20 blur-lg"
 							></div>
 							<img
-								src={form.image_url}
+								src={normalizeImageUrl(form.image_url)}
 								alt="Preview"
 								class="relative h-32 w-32 rounded-lg border-2 border-cyan-500/30 object-cover"
 								onerror={(e) => {
