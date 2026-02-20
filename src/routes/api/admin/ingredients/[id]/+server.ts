@@ -38,6 +38,7 @@ export const PUT: RequestHandler = async ({ params, request, locals }) => {
 		const body = await request.json();
 		const updateData = toIngredientPayload(body);
 		const { id } = params;
+		const idVariants = Array.from(new Set([id, id.replace(/_/g, ' '), id.replace(/\s+/g, '_')]));
 
 		// Validate required fields
 		if (!updateData.name_en || !updateData.name_fr || !updateData.category || !updateData.rarity) {
@@ -52,7 +53,7 @@ export const PUT: RequestHandler = async ({ params, request, locals }) => {
 		const { data, error } = await adminClient
 			.from('ingredients')
 			.update(updateData)
-			.eq('id', id)
+			.in('id', idVariants)
 			.select()
 			.single();
 
@@ -83,10 +84,11 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
 		await requireAdmin(supabase);
 
 		const { id } = params;
+		const idVariants = Array.from(new Set([id, id.replace(/_/g, ' '), id.replace(/\s+/g, '_')]));
 
 		// Delete ingredient using admin client to bypass RLS
 		const adminClient = createAdminClient() ?? supabase;
-		const { error } = await adminClient.from('ingredients').delete().eq('id', id);
+		const { error } = await adminClient.from('ingredients').delete().in('id', idVariants);
 
 		if (error) {
 			console.error('Error deleting ingredient:', error);

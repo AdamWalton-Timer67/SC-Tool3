@@ -24,7 +24,7 @@
 	});
 
 	async function deleteSuggestion(id: string) {
-		if (!confirm('Êtes-vous sûr de vouloir supprimer cette suggestion ?')) {
+		if (!confirm('Are you sure you want to delete this suggestion?')) {
 			return;
 		}
 
@@ -43,7 +43,7 @@
 			suggestions = suggestions.filter((s) => s.id !== id);
 		} catch (error) {
 			console.error('Error deleting suggestion:', error);
-			alert('Erreur lors de la suppression de la suggestion');
+			alert('Error deleting suggestion');
 		} finally {
 			deletingId = null;
 		}
@@ -69,13 +69,13 @@
 			suggestions = suggestions.map((s) => (s.id === id ? suggestion : s));
 		} catch (error) {
 			console.error('Error updating suggestion:', error);
-			alert('Erreur lors de la mise à jour du statut');
+			alert('Error updating status');
 		}
 	}
 
 	function formatDate(dateString: string): string {
 		const date = new Date(dateString);
-		return new Intl.DateTimeFormat('fr-FR', {
+		return new Intl.DateTimeFormat('en-US', {
 			dateStyle: 'medium',
 			timeStyle: 'short'
 		}).format(date);
@@ -273,7 +273,7 @@
 										<span
 											class="rounded border-orange-400/30 bg-orange-500/20 px-2 py-1 text-orange-300"
 										>
-											👤 Anonyme
+											👤 Anonymous
 										</span>
 									{/if}
 								</div>
@@ -344,7 +344,7 @@
 							disabled={deletingId === suggestion.id}
 							class="font-orbitron ml-auto rounded-lg border-2 border-red-400/30 bg-red-500/20 px-3 py-2 text-xs tracking-wide text-red-300 uppercase transition-all hover:scale-105 hover:border-red-400/60 hover:bg-red-500/30 disabled:cursor-not-allowed disabled:opacity-50"
 						>
-							{deletingId === suggestion.id ? 'Suppression...' : '🗑️ Supprimer'}
+							{deletingId === suggestion.id ? 'Deleting...' : '🗑️ Delete'}
 						</button>
 					</div>
 				</div>

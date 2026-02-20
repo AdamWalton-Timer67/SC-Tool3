@@ -37,6 +37,9 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 		// Parse request body
 		const body = await request.json();
 		const payload = toIngredientPayload(body);
+		payload.id = String(payload.id || '')
+			.trim()
+			.replace(/\s+/g, '_');
 
 		// Validate required fields
 		if (

@@ -83,7 +83,7 @@
 
 			const url = data.isNew
 				? '/api/admin/ingredients'
-				: `/api/admin/ingredients/${data.ingredient.id}`;
+				: `/api/admin/ingredients/${encodeURIComponent(data.ingredient.id)}`;
 
 			const method = data.isNew ? 'POST' : 'PUT';
 

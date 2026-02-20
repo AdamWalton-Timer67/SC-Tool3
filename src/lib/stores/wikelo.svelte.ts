@@ -10,6 +10,25 @@ import { normalizeImageUrl } from '$lib/utils/imageUrl';
 
 import { SvelteMap } from 'svelte/reactivity';
 
+function toBoolean(value: unknown): boolean {
+	if (typeof value === 'boolean') return value;
+	if (typeof value === 'number') return value === 1;
+	if (typeof value === 'string') {
+		const normalized = value.trim().toLowerCase();
+		return normalized === '1' || normalized === 'true' || normalized === 'yes';
+	}
+	return false;
+}
+
+function toNumber(value: unknown, fallback = 0): number {
+	if (typeof value === 'number' && Number.isFinite(value)) return value;
+	if (typeof value === 'string') {
+		const parsed = Number(value);
+		if (Number.isFinite(parsed)) return parsed;
+	}
+	return fallback;
+}
+
 // Types
 export interface TranslatedText {
 	en?: string;
@@ -477,10 +496,10 @@ class WikeloStore {
 					required_level: rr.required_level
 				})),
 				categoryId: reward.category,
-				gives: reward.gives,
-				hasLoadout: reward.has_loadout,
+				gives: toNumber(reward.gives, 1),
+				hasLoadout: toBoolean(reward.has_loadout),
 				components: reward.components,
-				notReleased: reward.not_released
+				notReleased: toBoolean(reward.not_released)
 			};
 
 			categoriesMap.get(categoryKey)?.rewards.push(transformedReward);
