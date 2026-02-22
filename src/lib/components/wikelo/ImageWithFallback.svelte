@@ -93,6 +93,10 @@
 	}
 
 	function handleImageLoad() {
+		if (imgElement && imgElement.naturalWidth === 0) {
+			handleImageError();
+			return;
+		}
 		imageLoaded = true;
 		imageError = false;
 	}
@@ -119,15 +123,17 @@
 		<!-- Glitch layers -->
 		<div class="absolute inset-0 bg-cyan-400/10 blur-md"></div>
 		<div class="absolute inset-0 bg-purple-500/5 blur-lg"></div>
-		
+
 		<!-- Bordure glitch -->
-		<div class="relative border-2 border-cyan-400/30 rounded-lg p-2 bg-slate-900/90 backdrop-blur-sm shadow-md shadow-cyan-400/20 animate-glitch-border h-full">
-			<div class="flex flex-col items-center justify-center h-full text-center">
-				<div class="text-4xl mb-2 opacity-50">📦</div>
-				<div class="text-xs text-cyan-400/70 font-rajdhani uppercase tracking-wider px-2">
+		<div
+			class="animate-glitch-border relative h-full rounded-lg border-2 border-cyan-400/30 bg-slate-900/90 p-2 shadow-md shadow-cyan-400/20 backdrop-blur-sm"
+		>
+			<div class="flex h-full flex-col items-center justify-center text-center">
+				<div class="mb-2 text-4xl opacity-50">📦</div>
+				<div class="font-rajdhani px-2 text-xs tracking-wider text-cyan-400/70 uppercase">
 					{itemName || alt || 'Image'}
 				</div>
-				<div class="text-xs text-gray-500 mt-1">No Image</div>
+				<div class="mt-1 text-xs text-gray-500">No Image</div>
 			</div>
 		</div>
 	</div>
