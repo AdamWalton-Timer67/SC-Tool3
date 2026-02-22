@@ -267,7 +267,7 @@
 							<!-- Actions -->
 							<div class="flex gap-2">
 								<a
-									href="/admin/ingredients/{ingredient.id}"
+									href={`/admin/ingredients/${encodeURIComponent(ingredient.id)}`}
 									class="font-orbitron flex-1 cursor-pointer rounded-lg border-2 border-cyan-500/30 bg-cyan-500/20 px-3 py-2 text-center text-sm tracking-wide text-cyan-300 uppercase transition-all hover:border-cyan-500/60 hover:bg-cyan-500/30"
 								>
 									✏️ Edit
