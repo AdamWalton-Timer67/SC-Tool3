@@ -293,3 +293,95 @@ ON DUPLICATE KEY UPDATE
   organization_id = VALUES(organization_id),
   user_id = VALUES(user_id),
   role = VALUES(role);
+
+
+-- Datamined Wikelo 4.6 seed (initial import from provided JSON)
+INSERT INTO rewards (id, name_en, name_fr, type_en, type_fr, category, rarity, version, favor_cost, description_en, description_fr, image_url, image_credit, mission_name_en, mission_name_fr, has_loadout, gives, not_released)
+VALUES
+  ('reward_dm_item_001', 'Ana Arms Endro; Ana Legs Endro; Ana Core Endro; Ana Helmet Endro', 'Ana Arms Endro; Ana Legs Endro; Ana Core Endro; Ana Helmet Endro', 'Armor', 'Armor', 'utilities', 'epic', '4.6', NULL, 'Hello, know many humans want saldynium for regen problem. Credits good, yes, but Wikelo can use that, kopion horn, and other things to make special armor. Once done, you be very tough. Very scary. You see items needed. Bring to and I make for you. Bye.', 'Hello, know many humans want saldynium for regen problem. Credits good, yes, but Wikelo can use that, kopion horn, and other things to make special armor. Once done, you be very tough. Very scary. You see items needed. Bring to and I make for you. Bye.', '/images/armour_endro.jpg', NULL, 'Armor with horn and string', 'Armor with horn and string', 0, 1, 0),
+  ('reward_dm_item_002', 'Parallax', 'Parallax', 'Weapon', 'Weapon', 'weapons', 'epic', '4.6', NULL, 'Hello. Can make fun change to gun if you want. Use kopion skin for pattern and little skull dangle. Very effective. Shoot much better. All you need is bring me parts to and will make. Bye.', 'Hello. Can make fun change to gun if you want. Use kopion skin for pattern and little skull dangle. Very effective. Shoot much better. All you need is bring me parts to and will make. Bye.', '/images/gun_kopion_military.jpg', NULL, 'Fun Kopion Skull Gun', 'Fun Kopion Skull Gun', 0, 1, 0),
+  ('reward_dm_item_012', 'Bokto Core; Bokto Arms; Bokto Legs; Bokto Helmet', 'Bokto Core; Bokto Arms; Bokto Legs; Bokto Helmet', 'Armor', 'Armor', 'utilities', 'epic', '4.6', NULL, 'Wikelo had exciting idea during brief work rest. Was thinking about the little glow worms in Pyro and saw armor get changed to look like. If you get me parts, bring to and will make for you then you can glow too. Bye.', 'Wikelo had exciting idea during brief work rest. Was thinking about the little glow worms in Pyro and saw armor get changed to look like. If you get me parts, bring to and will make for you then you can glow too. Bye.', '/images/armour_endro_glow.jpg', NULL, 'Make glowy armor', 'Make glowy armor', 0, 1, 0),
+  ('reward_dm_ship_001', 'MISC Fortune Wikelo Special', 'MISC Fortune Wikelo Special', 'Ship', 'Ship', 'ships', 'epic', '4.6', NULL, '', '', NULL, NULL, 'Fortune ship for you', 'Fortune ship for you', 1, 1, 0),
+  ('reward_dm_ship_002', 'Aopoa Nox Wikelo Special', 'Aopoa Nox Wikelo Special', 'Ship', 'Ship', 'ships', 'epic', '4.6', NULL, '', '', NULL, NULL, 'Noxy Mod', 'Noxy Mod', 1, 1, 0),
+  ('reward_dm_intro_item_032', 'Wikelo Arrive to System', 'Wikelo Arrive to System', 'Intro', 'Intro', 'utilities', 'common', '4.6', NULL, 'Hello, I am Wikelo. Recent addition to your system and very excited to be here. Spent many time here in UEE and happy to spent more. Have place where I make things from other things. Need person to bring me useful things to finish project I work on. You have list. Get, please. I am at . Will give you item for your help. Also, when done, if you want to do more. Have many things can make in my humble shop. Come, look at pretty poster and then decide what you want me to make. Bye.', 'Hello, I am Wikelo. Recent addition to your system and very excited to be here. Spent many time here in UEE and happy to spent more. Have place where I make things from other things. Need person to bring me useful things to finish project I work on. You have list. Get, please. I am at . Will give you item for your help. Also, when done, if you want to do more. Have many things can make in my humble shop. Come, look at pretty poster and then decide what you want me to make. Bye.', NULL, NULL, 'Wikelo Arrive to System', 'Wikelo Arrive to System', 0, 1, 0),
+  ('reward_dm_currency_worm_parts', 'Wikelo Favor', 'Wikelo Favor', 'Currency', 'Currency', 'utilities', 'common', '4.6', NULL, 'Have new way to get favors from Wikelo. Hear much about worm things in radiation storms. Made up of many interesting parts that Wikelo find use for. If you bring parts to , will trade for favor. Bye.', 'Have new way to get favors from Wikelo. Hear much about worm things in radiation storms. Made up of many interesting parts that Wikelo find use for. If you bring parts to , will trade for favor. Bye.', NULL, NULL, 'Trade Worm Parts for Favors?', 'Trade Worm Parts for Favors?', 0, 1, 0)
+ON DUPLICATE KEY UPDATE
+  name_en = VALUES(name_en),
+  name_fr = VALUES(name_fr),
+  type_en = VALUES(type_en),
+  type_fr = VALUES(type_fr),
+  category = VALUES(category),
+  rarity = VALUES(rarity),
+  version = VALUES(version),
+  description_en = VALUES(description_en),
+  description_fr = VALUES(description_fr),
+  image_url = VALUES(image_url),
+  mission_name_en = VALUES(mission_name_en),
+  mission_name_fr = VALUES(mission_name_fr),
+  has_loadout = VALUES(has_loadout),
+  gives = VALUES(gives),
+  not_released = VALUES(not_released);
+
+INSERT INTO ingredients (id, name_en, name_fr, category, rarity, image_url, description_en, description_fr, how_to_obtain_en, how_to_obtain_fr, location_id)
+VALUES
+  ('ing_dm_carinite_pure', 'Carinite (Pure)', 'Carinite (Pure)', 'special', 'common', NULL, NULL, NULL, NULL, NULL, NULL),
+  ('ing_dm_antium_core', 'Antium Core', 'Antium Core', 'special', 'common', NULL, NULL, NULL, NULL, NULL, NULL),
+  ('ing_dm_antium_helmet', 'Antium Helmet', 'Antium Helmet', 'special', 'common', NULL, NULL, NULL, NULL, NULL, NULL),
+  ('ing_dm_antium_legs', 'Antium Legs', 'Antium Legs', 'special', 'common', NULL, NULL, NULL, NULL, NULL, NULL),
+  ('ing_dm_antium_arms', 'Antium Arms', 'Antium Arms', 'special', 'common', NULL, NULL, NULL, NULL, NULL, NULL),
+  ('ing_dm_carinite', 'Carinite', 'Carinite', 'special', 'common', NULL, NULL, NULL, NULL, NULL, NULL),
+  ('ing_dm_saldynium_ore', 'Saldynium (Ore)', 'Saldynium (Ore)', 'special', 'common', NULL, NULL, NULL, NULL, NULL, NULL),
+  ('ing_dm_parallax_energy_assault_rifle', 'Parallax Energy Assault Rifle', 'Parallax Energy Assault Rifle', 'special', 'common', NULL, NULL, NULL, NULL, NULL, NULL),
+  ('ing_dm_tundra_kopion_horn', 'Tundra Kopion Horn', 'Tundra Kopion Horn', 'special', 'common', NULL, NULL, NULL, NULL, NULL, NULL),
+  ('ing_dm_jaclium_ore', 'Jaclium (Ore)', 'Jaclium (Ore)', 'special', 'common', NULL, NULL, NULL, NULL, NULL, NULL),
+  ('ing_dm_irradiated_valakkar_pearl_grade_aaa', 'Irradiated Valakkar Pearl (Grade AAA)', 'Irradiated Valakkar Pearl (Grade AAA)', 'special', 'common', NULL, NULL, NULL, NULL, NULL, NULL),
+  ('ing_dm_wikelo_favor', 'Wikelo Favor', 'Wikelo Favor', 'currency', 'common', NULL, NULL, NULL, NULL, NULL, NULL),
+  ('ing_dm_vestal_water', 'Vestal Water', 'Vestal Water', 'special', 'common', NULL, NULL, NULL, NULL, NULL, NULL),
+  ('ing_dm_irradiated_valakkar_pearl_grade_aa', 'Irradiated Valakkar Pearl (Grade AA)', 'Irradiated Valakkar Pearl (Grade AA)', 'special', 'common', NULL, NULL, NULL, NULL, NULL, NULL)
+ON DUPLICATE KEY UPDATE
+  name_en = VALUES(name_en),
+  name_fr = VALUES(name_fr),
+  category = VALUES(category),
+  rarity = VALUES(rarity);
+
+INSERT INTO reward_ingredients (id, reward_id, ingredient_id, quantity, unit)
+VALUES
+  ('ri_dm_item_001_1', 'reward_dm_item_001', 'ing_dm_carinite_pure', 1, 'x'),
+  ('ri_dm_item_001_2', 'reward_dm_item_001', 'ing_dm_antium_core', 1, 'x'),
+  ('ri_dm_item_001_3', 'reward_dm_item_001', 'ing_dm_antium_helmet', 1, 'x'),
+  ('ri_dm_item_001_4', 'reward_dm_item_001', 'ing_dm_antium_legs', 1, 'x'),
+  ('ri_dm_item_001_5', 'reward_dm_item_001', 'ing_dm_antium_arms', 1, 'x'),
+  ('ri_dm_item_002_1', 'reward_dm_item_002', 'ing_dm_carinite', 10, 'x'),
+  ('ri_dm_item_002_2', 'reward_dm_item_002', 'ing_dm_saldynium_ore', 15, 'x'),
+  ('ri_dm_item_002_3', 'reward_dm_item_002', 'ing_dm_parallax_energy_assault_rifle', 1, 'x'),
+  ('ri_dm_item_002_4', 'reward_dm_item_002', 'ing_dm_tundra_kopion_horn', 20, 'x'),
+  ('ri_dm_item_002_5', 'reward_dm_item_002', 'ing_dm_jaclium_ore', 20, 'x'),
+  ('ri_dm_item_012_1', 'reward_dm_item_012', 'ing_dm_antium_core', 1, 'x'),
+  ('ri_dm_item_012_2', 'reward_dm_item_012', 'ing_dm_antium_helmet', 1, 'x'),
+  ('ri_dm_item_012_3', 'reward_dm_item_012', 'ing_dm_antium_arms', 1, 'x'),
+  ('ri_dm_item_012_4', 'reward_dm_item_012', 'ing_dm_antium_legs', 1, 'x'),
+  ('ri_dm_item_012_5', 'reward_dm_item_012', 'ing_dm_irradiated_valakkar_pearl_grade_aaa', 1, 'x'),
+  ('ri_dm_ship_001_1', 'reward_dm_ship_001', 'ing_dm_wikelo_favor', 3, 'x'),
+  ('ri_dm_ship_001_2', 'reward_dm_ship_001', 'ing_dm_carinite_pure', 1, 'x'),
+  ('ri_dm_ship_002_1', 'reward_dm_ship_002', 'ing_dm_wikelo_favor', 4, 'x'),
+  ('ri_dm_intro_1', 'reward_dm_intro_item_032', 'ing_dm_vestal_water', 1, 'x'),
+  ('ri_dm_intro_2', 'reward_dm_intro_item_032', 'ing_dm_tundra_kopion_horn', 3, 'x'),
+  ('ri_dm_exchange_1', 'reward_dm_currency_worm_parts', 'ing_dm_irradiated_valakkar_pearl_grade_aa', 12, 'x')
+ON DUPLICATE KEY UPDATE
+  reward_id = VALUES(reward_id),
+  ingredient_id = VALUES(ingredient_id),
+  quantity = VALUES(quantity),
+  unit = VALUES(unit);
+
+INSERT INTO reputation_requirements (id, reward_id, reputation_name_en, reputation_name_fr, required_level)
+VALUES
+  ('rep_dm_item_001', 'reward_dm_item_001', 'Wikelo Reputation', 'Réputation Wikelo', 0),
+  ('rep_dm_item_002', 'reward_dm_item_002', 'Wikelo Reputation', 'Réputation Wikelo', 0),
+  ('rep_dm_item_012', 'reward_dm_item_012', 'Wikelo Reputation', 'Réputation Wikelo', 0),
+  ('rep_dm_ship_001', 'reward_dm_ship_001', 'Wikelo Reputation', 'Réputation Wikelo', 0),
+  ('rep_dm_ship_002', 'reward_dm_ship_002', 'Wikelo Reputation', 'Réputation Wikelo', 0)
+ON DUPLICATE KEY UPDATE
+  reward_id = VALUES(reward_id),
+  reputation_name_en = VALUES(reputation_name_en),
+  reputation_name_fr = VALUES(reputation_name_fr),
+  required_level = VALUES(required_level);
