@@ -24,7 +24,7 @@ export const POST: RequestHandler = async ({ params, request, locals }) => {
 		}
 
 		// Insert requirements using admin client to bypass RLS
-		const adminClient = createAdminClient();
+		const adminClient = createAdminClient() ?? supabase;
 		const { data, error } = await adminClient
 			.from('reward_ingredients')
 			.insert(requirements)
@@ -50,7 +50,7 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
 		const { id } = params;
 
 		// Delete all requirements for this reward using admin client to bypass RLS
-		const adminClient = createAdminClient();
+		const adminClient = createAdminClient() ?? supabase;
 		const { error } = await adminClient.from('reward_ingredients').delete().eq('reward_id', id);
 
 		if (error) {

@@ -14,7 +14,8 @@
 		{ label: 'Ingredients', href: '/admin/ingredients', icon: '🧪', color: 'purple' },
 		{ label: 'Rewards', href: '/admin/rewards', icon: '🎁', color: 'yellow' },
 		{ label: 'Locations', href: '/admin/locations', icon: '🗺️', color: 'blue' },
-		{ label: 'Suggestions', href: '/admin/suggestions', icon: '💡', color: 'green' }
+		{ label: 'Suggestions', href: '/admin/suggestions', icon: '💡', color: 'green' },
+		{ label: 'Users', href: '/admin/users', icon: '👥', color: 'yellow' }
 	];
 
 	function isCurrentPath(href: string): boolean {
