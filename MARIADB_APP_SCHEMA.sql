@@ -91,6 +91,9 @@ CREATE TABLE IF NOT EXISTS reward_ingredients (
   INDEX idx_reward_ingredients_ingredient_id (ingredient_id)
 );
 
+-- Ensure existing installations are widened before long datamine IDs are inserted
+ALTER TABLE reward_ingredients MODIFY COLUMN id VARCHAR(255) NOT NULL;
+
 CREATE TABLE IF NOT EXISTS reputation_requirements (
   id VARCHAR(64) PRIMARY KEY,
   reward_id VARCHAR(64) NOT NULL,
