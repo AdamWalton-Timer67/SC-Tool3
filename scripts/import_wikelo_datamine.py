@@ -3,7 +3,7 @@
 Usage:
   python scripts/import_wikelo_datamine.py path/to/wikelo.json > data/wikelo_datamine_seed.sql
 """
-import json, re, sys
+import hashlib, json, re, sys
 from pathlib import Path
 
 def slug(v:str)->str:
@@ -13,6 +13,16 @@ def slug(v:str)->str:
 
 def esc(v:str)->str:
     return v.replace("\\","\\\\").replace("'","''")
+
+def short_id(prefix:str, *parts:str, max_len:int=64)->str:
+    raw = "_".join([prefix] + [p for p in parts if p])
+    if len(raw) <= max_len:
+        return raw
+    digest = hashlib.sha1(raw.encode('utf-8')).hexdigest()[:16]
+    normalized = re.sub(r"[^a-z0-9]+", "_", "_".join(parts).lower()).strip("_")
+    head_budget = max_len - len(prefix) - 1 - 16 - 1
+    head = normalized[: max(8, head_budget)]
+    return f"{prefix}_{head}_{digest}"[:max_len]
 
 def parse_recipe(recipe:str):
     out=[]
@@ -76,7 +86,7 @@ def main():
         for name,qty in parse_recipe(e.get('recipe','')):
             iid='ing_dm_'+slug(name)
             ingredients[iid]=name
-            reqs.append((f"ri_{slug(r['id'])}_{slug(iid)}", r['id'], iid, qty, 'x'))
+            reqs.append((short_id('ri', slug(r['id']), slug(iid)), r['id'], iid, qty, 'x'))
         if r['rep']>0:
             reps.append((f"rep_{slug(r['id'])}", r['id'], 'Wikelo Reputation', 'Réputation Wikelo', r['rep']))
 
