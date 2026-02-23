@@ -34,6 +34,59 @@ function toLocationPayload(body: Record<string, unknown>) {
 	};
 }
 
+function toLegacyLocationPayload(locationData: Record<string, any>) {
+	return {
+		id: locationData.id,
+		slug: locationData.slug,
+		name_en: locationData.name_en,
+		name_fr: locationData.name_fr,
+		system: locationData.system,
+		type: locationData.type,
+		difficulty: locationData.difficulty,
+		description_en: locationData.description_en,
+		description_fr: locationData.description_fr,
+		image_url: locationData.image_url
+	};
+}
+
+function isDuplicateError(error: any): boolean {
+	const msg = String(error?.message || '').toLowerCase();
+	return msg.includes('duplicate') || msg.includes('unique') || msg.includes('uniq_');
+}
+
+async function upsertLocation(adminClient: any, payload: Record<string, any>) {
+	let { data, error } = await adminClient.from('locations').insert([payload]).select().single();
+
+	if (error?.message?.includes('Unknown column')) {
+		({ data, error } = await adminClient
+			.from('locations')
+			.insert([toLegacyLocationPayload(payload)])
+			.select()
+			.single());
+	}
+
+	if (error && isDuplicateError(error)) {
+		({ data, error } = await adminClient
+			.from('locations')
+			.update(payload)
+			.eq('id', payload.id)
+			.select()
+			.single());
+		if (error?.message?.includes('Unknown column')) {
+			({ data, error } = await adminClient
+				.from('locations')
+				.update(toLegacyLocationPayload(payload))
+				.eq('id', payload.id)
+				.select()
+				.single());
+		}
+		if (!error) return { data, mode: 'updated' as const };
+	}
+
+	if (error) throw new Error(error.message || 'Failed to create location');
+	return { data, mode: 'inserted' as const };
+}
+
 // GET: List all locations
 export const GET: RequestHandler = async ({ locals }) => {
 	const supabase = locals.supabase;
@@ -63,7 +116,7 @@ export const GET: RequestHandler = async ({ locals }) => {
 	}
 };
 
-// POST: Create new location
+// POST: Create new location (single + bulk)
 export const POST: RequestHandler = async ({ request, locals }) => {
 	const supabase = locals.supabase;
 
@@ -72,45 +125,79 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 		await requireAdmin(supabase);
 
 		const body = await request.json();
-		const locationData = toLocationPayload(body);
+		const adminClient = createAdminClient() ?? supabase;
 
-		// Validate required fields
+		const rawItems: unknown[] = Array.isArray(body)
+			? body
+			: body && typeof body === 'object' && Array.isArray((body as { items?: unknown[] }).items)
+				? ((body as { items: unknown[] }).items ?? [])
+				: [];
+		const isBulkFlag = Boolean(
+			body && typeof body === 'object' && (body as { bulk?: boolean }).bulk
+		);
+
+		if (rawItems.length > 0 || isBulkFlag) {
+			if (rawItems.length === 0) {
+				return json({ error: 'Bulk upload requires a non-empty items array' }, { status: 400 });
+			}
+
+			let inserted = 0;
+			let updated = 0;
+			const errors: Array<{ index: number; id?: string; error: string }> = [];
+
+			for (let i = 0; i < rawItems.length; i++) {
+				const raw = rawItems[i] as Record<string, unknown>;
+				const payload = toLocationPayload(raw);
+				payload.id = String(payload.id || '')
+					.trim()
+					.replace(/\s+/g, '_');
+				payload.slug = String(payload.slug || '')
+					.trim()
+					.toLowerCase()
+					.replace(/\s+/g, '-');
+
+				if (!payload.id || !payload.slug || !payload.name_en || !payload.name_fr) {
+					errors.push({ index: i, id: String(payload.id || ''), error: 'Missing required fields' });
+					continue;
+				}
+
+				try {
+					const res = await upsertLocation(adminClient, payload);
+					if (res.mode === 'inserted') inserted++;
+					else updated++;
+				} catch (error) {
+					errors.push({
+						index: i,
+						id: String(payload.id || ''),
+						error: error instanceof Error ? error.message : 'Unknown error'
+					});
+				}
+			}
+
+			return json(
+				{ success: errors.length === 0, inserted, updated, errors },
+				{ status: errors.length ? 207 : 201 }
+			);
+		}
+
+		if (!body || typeof body !== 'object') {
+			return json({ error: 'Invalid payload' }, { status: 400 });
+		}
+
+		const locationData = toLocationPayload(body as Record<string, unknown>);
+		locationData.id = String(locationData.id || '')
+			.trim()
+			.replace(/\s+/g, '_');
+		locationData.slug = String(locationData.slug || '')
+			.trim()
+			.toLowerCase()
+			.replace(/\s+/g, '-');
+
 		if (!locationData.slug || !locationData.name_en || !locationData.name_fr) {
 			return json({ error: 'Missing required fields: slug, name_en, name_fr' }, { status: 400 });
 		}
 
-		const adminClient = createAdminClient() ?? supabase;
-		let { data, error } = await adminClient
-			.from('locations')
-			.insert([locationData])
-			.select()
-			.single();
-
-		if (error?.message?.includes('Unknown column')) {
-			const legacyPayload = {
-				id: locationData.id,
-				slug: locationData.slug,
-				name_en: locationData.name_en,
-				name_fr: locationData.name_fr,
-				system: locationData.system,
-				type: locationData.type,
-				difficulty: locationData.difficulty,
-				description_en: locationData.description_en,
-				description_fr: locationData.description_fr,
-				image_url: locationData.image_url
-			};
-			({ data, error } = await adminClient
-				.from('locations')
-				.insert([legacyPayload])
-				.select()
-				.single());
-		}
-
-		if (error) {
-			console.error('Error creating location:', error);
-			return json({ error: error.message }, { status: 500 });
-		}
-
+		const { data } = await upsertLocation(adminClient, locationData);
 		return json({ success: true, data }, { status: 201 });
 	} catch (error) {
 		console.error('Error:', error);

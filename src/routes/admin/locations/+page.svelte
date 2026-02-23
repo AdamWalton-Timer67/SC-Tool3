@@ -30,6 +30,37 @@
 
 	let searchInput = $state(data.filters?.search || '');
 	let deleteConfirm = $state<string | null>(null);
+	let uploadResult = $state('');
+	let isUploading = $state(false);
+
+	const locationTemplate = {
+		id: '',
+		slug: '',
+		name_en: '',
+		name_fr: '',
+		system: 'pyro',
+		planet: '',
+		moon: '',
+		type: 'other',
+		difficulty: 'low',
+		short_description_en: '',
+		short_description_fr: '',
+		description_en: '',
+		description_fr: '',
+		how_to_access_en: '',
+		how_to_access_fr: '',
+		mission_types_en: '',
+		mission_types_fr: '',
+		loot_types_en: '',
+		loot_types_fr: '',
+		requirements: '',
+		rewards: '',
+		coordinates: '',
+		crate_types: '',
+		related_missions: '',
+		image_url: '',
+		cheatsheet_image_url: ''
+	};
 
 	function applyFilters(system: string, difficulty: string, type: string, search: string) {
 		const params = new URLSearchParams();
@@ -102,6 +133,54 @@
 		}
 	}
 
+	function downloadTemplate() {
+		const blob = new Blob([JSON.stringify([locationTemplate], null, 2)], {
+			type: 'application/json'
+		});
+		const url = URL.createObjectURL(blob);
+		const a = document.createElement('a');
+		a.href = url;
+		a.download = 'locations-upload-template.json';
+		a.click();
+		URL.revokeObjectURL(url);
+	}
+
+	async function uploadLocations(event: Event) {
+		const input = event.target as HTMLInputElement;
+		const file = input.files?.[0];
+		if (!file) return;
+
+		uploadResult = '';
+		isUploading = true;
+		try {
+			const parsed = JSON.parse(await file.text());
+			const items = Array.isArray(parsed) ? parsed : parsed?.items;
+			if (!Array.isArray(items) || items.length === 0) {
+				uploadResult = 'Upload failed: JSON must be an array or { items: [...] }.';
+				return;
+			}
+
+			const response = await fetch('/api/admin/locations', {
+				method: 'POST',
+				headers: { 'content-type': 'application/json' },
+				body: JSON.stringify({ bulk: true, items })
+			});
+			const result = await response.json();
+			if (!response.ok && response.status !== 207) {
+				uploadResult = `Upload failed: ${result?.error || 'Unknown error'}`;
+				return;
+			}
+
+			uploadResult = `Upload complete: ${result.inserted ?? 0} inserted, ${result.updated ?? 0} updated, ${(result.errors ?? []).length} errors.`;
+			await goto('/admin/locations', { invalidateAll: true });
+		} catch (error) {
+			uploadResult = `Upload failed: ${error instanceof Error ? error.message : 'Unknown error'}`;
+		} finally {
+			isUploading = false;
+			input.value = '';
+		}
+	}
+
 	function getDifficultyColor(difficulty: string | null): string {
 		if (!difficulty) return 'text-gray-400';
 		const colors: Record<string, string> = {
@@ -144,14 +223,45 @@
 				Total: {data.locations.length} locations
 			</p>
 		</div>
-		<a
-			href="/admin/locations/new"
-			class="flex items-center gap-2 rounded-lg bg-cyan-500 px-4 py-2 font-bold text-black transition-all hover:bg-cyan-400"
-		>
-			<span>➕</span>
-			<span>Add Location</span>
-		</a>
+		<div class="flex flex-wrap items-center gap-2">
+			<button
+				type="button"
+				onclick={downloadTemplate}
+				class="rounded-lg border border-cyan-500/40 bg-cyan-500/10 px-4 py-2 text-sm font-semibold text-cyan-200 transition-all hover:bg-cyan-500/20"
+			>
+				⬇️ Download Template
+			</button>
+			<label
+				for="location-upload"
+				class="cursor-pointer rounded-lg border border-purple-500/40 bg-purple-500/20 px-4 py-2 text-sm font-semibold text-purple-200 transition-all hover:bg-purple-500/30"
+			>
+				{isUploading ? 'Uploading...' : 'Upload Locations'}
+			</label>
+			<input
+				id="location-upload"
+				type="file"
+				accept="application/json"
+				class="hidden"
+				onchange={uploadLocations}
+				disabled={isUploading}
+			/>
+			<a
+				href="/admin/locations/new"
+				class="flex items-center gap-2 rounded-lg bg-cyan-500 px-4 py-2 font-bold text-black transition-all hover:bg-cyan-400"
+			>
+				<span>➕</span>
+				<span>Add Location</span>
+			</a>
+		</div>
 	</div>
+
+	{#if uploadResult}
+		<div
+			class="rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-4 py-2 text-sm text-cyan-200"
+		>
+			{uploadResult}
+		</div>
+	{/if}
 
 	<!-- Filters -->
 	<div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -165,6 +275,7 @@
 				onkeydown={(e) => e.key === 'Enter' && handleSearch()}
 			/>
 			<button
+				type="button"
 				onclick={handleSearch}
 				class="rounded-lg bg-cyan-500 px-4 py-2 font-bold text-black hover:bg-cyan-400"
 			>
@@ -179,8 +290,10 @@
 			class="rounded-lg border border-cyan-500/30 bg-slate-800 px-3 py-2 text-white"
 		>
 			<option value="all">All Systems</option>
-			{#each data.systems as system}
-				<option value={system}>{system.charAt(0).toUpperCase() + system.slice(1)}</option>
+			{#each data.systems as systemRaw}
+				<option value={String(systemRaw)}
+					>{String(systemRaw).charAt(0).toUpperCase() + String(systemRaw).slice(1)}</option
+				>
 			{/each}
 		</select>
 

@@ -39,6 +39,7 @@ async function ensureSchemaCompatibility() {
 	await safeAlter('ALTER TABLE ingredients ADD COLUMN IF NOT EXISTS locations_fr LONGTEXT NULL');
 
 	await safeAlter('ALTER TABLE reward_ingredients ADD COLUMN IF NOT EXISTS unit VARCHAR(32) NULL');
+	await safeAlter('ALTER TABLE reward_ingredients MODIFY COLUMN id VARCHAR(255) NOT NULL');
 
 	await safeAlter('ALTER TABLE locations ADD COLUMN IF NOT EXISTS planet VARCHAR(128) NULL');
 	await safeAlter('ALTER TABLE locations ADD COLUMN IF NOT EXISTS moon VARCHAR(128) NULL');

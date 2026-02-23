@@ -80,7 +80,7 @@ CREATE TABLE IF NOT EXISTS ingredients (
 );
 
 CREATE TABLE IF NOT EXISTS reward_ingredients (
-  id VARCHAR(64) PRIMARY KEY,
+  id VARCHAR(255) PRIMARY KEY,
   reward_id VARCHAR(64) NOT NULL,
   ingredient_id VARCHAR(64) NOT NULL,
   quantity INT NOT NULL,
