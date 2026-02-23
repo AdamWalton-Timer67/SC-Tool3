@@ -26,13 +26,15 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 		};
 	}
 
-	// Load existing ingredient
-	const { data: ingredient, error: fetchError } = await supabase
+	// Load existing ingredient (allow legacy ID variants with spaces/underscores)
+	const idVariants = Array.from(new Set([id, id.replace(/_/g, ' '), id.replace(/\s+/g, '_')]));
+	const { data: ingredients, error: fetchError } = await supabase
 		.from('ingredients')
 		.select('*')
-		.eq('id', id)
-		.single();
+		.in('id', idVariants)
+		.limit(1);
 
+	const ingredient = ingredients?.[0] ?? null;
 	if (fetchError || !ingredient) {
 		throw error(404, 'Ingredient not found');
 	}

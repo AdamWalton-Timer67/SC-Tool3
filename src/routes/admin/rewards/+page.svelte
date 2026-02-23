@@ -29,6 +29,26 @@
 
 	let searchInput = $state(data.filters?.search || '');
 	let deleteConfirm = $state<string | null>(null);
+	let uploadResult = $state('');
+	let isUploading = $state(false);
+
+	const rewardTemplate = {
+		id: '',
+		name_en: '',
+		name_fr: '',
+		category: 'weapons',
+		rarity: 'common',
+		type_en: '',
+		type_fr: '',
+		description_en: '',
+		description_fr: '',
+		location_en: '',
+		location_fr: '',
+		stats: '',
+		image_url: '',
+		has_loadout: false,
+		components: []
+	};
 
 	function applyFilters(category: string, rarity: string, search: string) {
 		const params = new URLSearchParams();
@@ -58,6 +78,55 @@
 		} catch (error) {
 			console.error('Error:', error);
 			alert('Error deleting reward');
+		}
+	}
+
+	function downloadTemplate() {
+		const blob = new Blob([JSON.stringify([rewardTemplate], null, 2)], {
+			type: 'application/json'
+		});
+		const url = URL.createObjectURL(blob);
+		const a = document.createElement('a');
+		a.href = url;
+		a.download = 'rewards-upload-template.json';
+		a.click();
+		URL.revokeObjectURL(url);
+	}
+
+	async function uploadRewards(event: Event) {
+		const input = event.target as HTMLInputElement;
+		const file = input.files?.[0];
+		if (!file) return;
+
+		uploadResult = '';
+		isUploading = true;
+
+		try {
+			const parsed = JSON.parse(await file.text());
+			const items = Array.isArray(parsed) ? parsed : parsed?.items;
+			if (!Array.isArray(items) || items.length === 0) {
+				uploadResult = 'Upload failed: JSON must be an array or { items: [...] }.';
+				return;
+			}
+
+			const response = await fetch('/api/admin/rewards', {
+				method: 'POST',
+				headers: { 'content-type': 'application/json' },
+				body: JSON.stringify({ bulk: true, items })
+			});
+			const result = await response.json();
+			if (!response.ok && response.status !== 207) {
+				uploadResult = `Upload failed: ${result?.error || 'Unknown error'}`;
+				return;
+			}
+
+			uploadResult = `Upload complete: ${result.inserted ?? 0} inserted, ${result.updated ?? 0} updated, ${(result.errors ?? []).length} errors.`;
+			await goto('/admin/rewards', { invalidateAll: true });
+		} catch (error) {
+			uploadResult = `Upload failed: ${error instanceof Error ? error.message : 'Unknown error'}`;
+		} finally {
+			isUploading = false;
+			input.value = '';
 		}
 	}
 
@@ -101,16 +170,47 @@
 				{data.rewards.length} reward{data.rewards.length !== 1 ? 's' : ''} found
 			</p>
 		</div>
-		<a
-			href="/admin/rewards/new"
-			class="font-orbitron flex cursor-pointer items-center gap-2 rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-3 font-semibold tracking-wide text-white uppercase transition-all hover:scale-105 hover:from-purple-600 hover:to-pink-600 hover:shadow-lg hover:shadow-purple-500/50 sm:px-6"
-		>
-			<span class="text-xl">➕</span>
-			<span>Add New Reward</span>
-		</a>
+		<div class="flex flex-wrap items-center gap-2">
+			<button
+				type="button"
+				onclick={downloadTemplate}
+				class="font-orbitron rounded-lg border-2 border-purple-500/30 bg-purple-500/10 px-4 py-3 text-sm tracking-wide text-purple-300 uppercase transition-all hover:border-purple-500/60 hover:bg-purple-500/20"
+			>
+				⬇️ Download Template
+			</button>
+			<label
+				for="reward-upload"
+				class="font-orbitron cursor-pointer rounded-lg border-2 border-cyan-500/30 bg-cyan-500/20 px-4 py-3 text-sm tracking-wide text-cyan-300 uppercase transition-all hover:border-cyan-500/60 hover:bg-cyan-500/30"
+			>
+				{isUploading ? 'Uploading...' : 'Upload Rewards'}
+			</label>
+			<input
+				id="reward-upload"
+				type="file"
+				accept="application/json"
+				class="hidden"
+				onchange={uploadRewards}
+				disabled={isUploading}
+			/>
+			<a
+				href="/admin/rewards/new"
+				class="font-orbitron flex cursor-pointer items-center gap-2 rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-3 font-semibold tracking-wide text-white uppercase transition-all hover:scale-105 hover:from-purple-600 hover:to-pink-600 hover:shadow-lg hover:shadow-purple-500/50 sm:px-6"
+			>
+				<span class="text-xl">➕</span>
+				<span>Add New Reward</span>
+			</a>
+		</div>
 	</div>
 
 	<div class="h-px bg-linear-to-r from-purple-400/50 via-pink-400/50 to-transparent"></div>
+
+	{#if uploadResult}
+		<div
+			class="rounded-lg border border-purple-500/30 bg-purple-500/10 px-4 py-3 text-sm text-purple-200"
+		>
+			{uploadResult}
+		</div>
+	{/if}
 
 	<!-- Filters -->
 	<div class="grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -185,6 +285,7 @@
 					class="font-rajdhani flex-1 rounded-lg border-2 border-purple-500/30 bg-black/50 px-4 py-3 text-purple-300 placeholder-purple-300/30 transition-all focus:border-purple-500 focus:ring-2 focus:ring-purple-500/50 focus:outline-none"
 				/>
 				<button
+					type="button"
 					onclick={() =>
 						applyFilters(
 							data.filters?.category || 'all',
@@ -271,7 +372,7 @@
 
 							<div class="flex gap-2">
 								<a
-									href="/admin/rewards/{reward.id}"
+									href={`/admin/rewards/${encodeURIComponent(reward.id)}`}
 									class="font-orbitron flex-1 cursor-pointer rounded-lg border-2 border-purple-500/30 bg-purple-500/20 px-3 py-2 text-center text-sm tracking-wide text-purple-300 uppercase transition-all hover:border-purple-500/60 hover:bg-purple-500/30"
 								>
 									✏️ Edit

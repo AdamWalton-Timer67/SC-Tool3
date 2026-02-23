@@ -1,18 +1,22 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { page } from '$app/stores';
 	import '$lib/styles/wikelo.css';
 	import LanguageToggle from '$lib/components/wikelo/LanguageToggle.svelte';
 	import AuthButton from '$lib/components/AuthButton.svelte';
+	import LoginRequiredDialog from '$lib/components/LoginRequiredDialog.svelte';
 	import DataSources from '$lib/components/wikelo/DataSources.svelte';
 	import { wikeloStore } from '$lib/stores/wikelo.svelte';
 	import { captureEvent } from '$lib/analytics';
 
 	let mounted = $state(false);
 	let patchNotes = $state<any>(null);
+	let showLoginRequiredDialog = $state(false);
 
 	// Set default language to English on mount
 	onMount(async () => {
 		mounted = true;
+		showLoginRequiredDialog = $page.url.searchParams.get('loginRequired') === '1';
 		// Force English as default on home page
 		wikeloStore.currentLang = 'en';
 		// Track home page view
@@ -28,6 +32,13 @@
 			console.error('Failed to load patch notes:', error);
 		}
 	});
+
+	function closeLoginRequiredDialog() {
+		showLoginRequiredDialog = false;
+		const url = new URL(window.location.href);
+		url.searchParams.delete('loginRequired');
+		window.history.replaceState({}, '', url);
+	}
 
 	const currentLang = $derived(wikeloStore.currentLang);
 
@@ -244,6 +255,8 @@
 	</script>
 </svelte:head>
 
+<LoginRequiredDialog show={showLoginRequiredDialog} onClose={closeLoginRequiredDialog} />
+
 <div class="relative min-h-screen bg-linear-to-br from-slate-900 via-slate-800 to-slate-900">
 	<!-- Space Background -->
 	<div class="space-background">
@@ -301,9 +314,13 @@
 	<!-- Main Content -->
 	<main class="container mx-auto px-4 py-12">
 		<!-- Temporary Alpha 4.5 Notice -->
-		<div class="mb-8 overflow-hidden rounded-xl border border-orange-400/50 bg-linear-to-r from-orange-900/30 via-yellow-900/30 to-orange-900/30 backdrop-blur-xl">
+		<div
+			class="mb-8 overflow-hidden rounded-xl border border-orange-400/50 bg-linear-to-r from-orange-900/30 via-yellow-900/30 to-orange-900/30 backdrop-blur-xl"
+		>
 			<div class="relative border-b border-orange-400/30 bg-orange-800/20 px-6 py-3">
-				<div class="absolute top-0 right-0 left-0 h-0.5 animate-pulse bg-linear-to-r from-transparent via-orange-400 to-transparent"></div>
+				<div
+					class="absolute top-0 right-0 left-0 h-0.5 animate-pulse bg-linear-to-r from-transparent via-orange-400 to-transparent"
+				></div>
 				<div class="flex items-center gap-3">
 					<span class="text-2xl">⚠️</span>
 					<h3 class="font-orbitron text-lg font-bold tracking-wider text-orange-400 uppercase">
@@ -312,23 +329,23 @@
 				</div>
 			</div>
 			<div class="p-6">
-				<p class="text-gray-300 leading-relaxed">
+				<p class="leading-relaxed text-gray-300">
 					{#if currentLang === 'fr'}
-						<strong class="text-orange-400">Star Citizen Alpha 4.5</strong> arrive bientôt avec des changements majeurs au système Wikelo Emporium.
-						De nouvelles récompenses, ingrédients et mécaniques de jeu seront ajoutées.
-						Nous mettrons à jour les outils dès que possible après la sortie du patch.
-						Merci de votre patience ! 🚀
+						<strong class="text-orange-400">Star Citizen Alpha 4.5</strong> arrive bientôt avec des changements
+						majeurs au système Wikelo Emporium. De nouvelles récompenses, ingrédients et mécaniques de
+						jeu seront ajoutées. Nous mettrons à jour les outils dès que possible après la sortie du
+						patch. Merci de votre patience ! 🚀
 					{:else}
-						<strong class="text-orange-400">Star Citizen Alpha 4.5</strong> is coming soon with major changes to the Wikelo Emporium system.
-						New rewards, ingredients, and game mechanics will be added.
-						We will update the tools as soon as possible after the patch release.
-						Thank you for your patience! 🚀
+						<strong class="text-orange-400">Star Citizen Alpha 4.5</strong> is coming soon with major
+						changes to the Wikelo Emporium system. New rewards, ingredients, and game mechanics will
+						be added. We will update the tools as soon as possible after the patch release. Thank you
+						for your patience! 🚀
 					{/if}
 				</p>
 			</div>
 		</div>
 
-		<div class="grid gap-6 md:grid-cols-2 3xl:grid-cols-3">
+		<div class="3xl:grid-cols-3 grid gap-6 md:grid-cols-2">
 			<!-- Wikelo Tracker Card -->
 			<a
 				href="/wikelo"
@@ -434,7 +451,6 @@
 					</div>
 				</div>
 			</a>
-
 		</div>
 
 		<!-- Patch Notes Section -->
@@ -479,30 +495,35 @@
 							</div>
 
 							<ul class="space-y-2">
-						{#each patch.changes[currentLang] as change}
-							{@const isImportant = change.includes('----')}
-							{#if isImportant}
-								<!-- Important title with special styling -->
-								<li class="flex items-start gap-3 mb-4 mt-4">
-									<div class="flex flex-col gap-2 w-full">
-										<div class="flex items-center gap-2">
-											<span class="rounded-full bg-yellow-500/20 border border-yellow-500/50 px-2 py-0.5 text-[10px] font-bold text-yellow-400 uppercase tracking-wider">Important</span>
-											<div class="h-px flex-1 bg-linear-to-r from-yellow-400/50 to-transparent"></div>
-										</div>
-										<h3 class="font-orbitron text-lg font-bold text-yellow-400 tracking-wide">
-											{change.replace(/----/g, '').trim()}
-										</h3>
-									</div>
-								</li>
-							{:else}
-								<!-- Regular change item -->
-								<li class="flex items-start gap-3 text-gray-300">
-									<span class="mt-1 text-green-400">✓</span>
-									<span>{change}</span>
-								</li>
-							{/if}
-						{/each}
-					</ul>
+								{#each patch.changes[currentLang] as change}
+									{@const isImportant = change.includes('----')}
+									{#if isImportant}
+										<!-- Important title with special styling -->
+										<li class="mt-4 mb-4 flex items-start gap-3">
+											<div class="flex w-full flex-col gap-2">
+												<div class="flex items-center gap-2">
+													<span
+														class="rounded-full border border-yellow-500/50 bg-yellow-500/20 px-2 py-0.5 text-[10px] font-bold tracking-wider text-yellow-400 uppercase"
+														>Important</span
+													>
+													<div
+														class="h-px flex-1 bg-linear-to-r from-yellow-400/50 to-transparent"
+													></div>
+												</div>
+												<h3 class="font-orbitron text-lg font-bold tracking-wide text-yellow-400">
+													{change.replace(/----/g, '').trim()}
+												</h3>
+											</div>
+										</li>
+									{:else}
+										<!-- Regular change item -->
+										<li class="flex items-start gap-3 text-gray-300">
+											<span class="mt-1 text-green-400">✓</span>
+											<span>{change}</span>
+										</li>
+									{/if}
+								{/each}
+							</ul>
 						</div>
 					{/each}
 				</div>
