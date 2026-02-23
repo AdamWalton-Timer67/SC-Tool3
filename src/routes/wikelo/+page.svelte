@@ -305,13 +305,12 @@
 <div class="font-rajdhani relative z-10 container mx-auto max-w-7xl px-4 py-8">
 	<!-- Top Navigation - Back button + Language + Auth -->
 	<div
-		class="mb-4 {wikeloStore.selectedIngredient ||
-		wikeloStore.selectedShip
+		class="mb-4 {wikeloStore.selectedIngredient || wikeloStore.selectedShip
 			? 'pointer-events-none opacity-0'
 			: 'opacity-100'} transition-opacity"
 	>
 		<!-- Top row: Back button + Auth -->
-		<div class="flex items-start justify-between mb-3">
+		<div class="mb-3 flex items-start justify-between">
 			<!-- Back to Home Button -->
 			<a
 				href="/"
@@ -336,14 +335,14 @@
 			</a>
 
 			<!-- Auth on desktop, hidden on mobile -->
-			<div class="hidden sm:flex items-center gap-3">
+			<div class="hidden items-center gap-3 sm:flex">
 				<LanguageToggle />
 				<AuthButton variant="compact" />
 			</div>
 		</div>
 
 		<!-- Second row on mobile: Language + Auth centered -->
-		<div class="flex sm:hidden items-center justify-center gap-3">
+		<div class="flex items-center justify-center gap-3 sm:hidden">
 			<LanguageToggle />
 			<AuthButton variant="compact" />
 		</div>
@@ -422,20 +421,29 @@
 	</header>
 
 	<!-- Version Info Alert -->
-	<div class="mb-4 rounded-xl border border-yellow-400/30 bg-yellow-900/20 p-4 backdrop-blur-xl sm:p-6">
+	<div
+		class="mb-4 rounded-xl border border-yellow-400/30 bg-yellow-900/20 p-4 backdrop-blur-xl sm:p-6"
+	>
 		<div class="flex items-start gap-3">
 			<span class="text-2xl">ℹ️</span>
 			<div class="flex-1">
 				<h3 class="font-orbitron mb-2 text-lg font-bold text-yellow-400">
-					{wikeloStore.currentLang === 'fr' ? 'Version 4.4 - Mise à jour 4.5 à venir' : 'Version 4.4 - Update 4.5 Coming'}
+					{wikeloStore.currentLang === 'fr'
+						? 'Version 4.4 - Mise à jour 4.5 à venir'
+						: 'Version 4.4 - Update 4.5 Coming'}
 				</h3>
-				<p class="text-sm text-gray-300 leading-relaxed">
+				<p class="text-sm leading-relaxed text-gray-300">
 					{#if wikeloStore.currentLang === 'fr'}
-						Les éléments affichés ci-dessous représentent les récompenses disponibles dans la version <strong>4.4</strong> de Star Citizen. 
-						Veuillez noter que <strong>la plupart des récompenses changeront avec l'arrivée de la version 4.5</strong> et qu'une nouvelle réputation fera son apparition.
+						Les éléments affichés ci-dessous représentent les récompenses disponibles dans la
+						version <strong>4.4</strong> de Star Citizen. Veuillez noter que
+						<strong>la plupart des récompenses changeront avec l'arrivée de la version 4.5</strong> et
+						qu'une nouvelle réputation fera son apparition.
 					{:else}
-						The items displayed below represent the rewards available in Star Citizen version <strong>4.4</strong>. 
-						Please note that <strong>most rewards will change with the arrival of version 4.5</strong> and a new reputation will be introduced.
+						The items displayed below represent the rewards available in Star Citizen version <strong
+							>4.4</strong
+						>. Please note that
+						<strong>most rewards will change with the arrival of version 4.5</strong> and a new reputation
+						will be introduced.
 					{/if}
 				</p>
 			</div>
@@ -448,7 +456,7 @@
 	<!-- Filter Bar -->
 	<div class="mb-4 rounded-xl border border-white/10 bg-slate-900/85 p-4 backdrop-blur-xl sm:p-6">
 		<!-- Première ligne : Search + Rarity Filters -->
-		<div class="flex flex-wrap items-center gap-3 sm:gap-6 mb-3">
+		<div class="mb-3 flex flex-wrap items-center gap-3 sm:gap-6">
 			<!-- Search -->
 			<div class="relative min-w-[200px] flex-1 sm:min-w-[250px]">
 				<input
@@ -469,6 +477,7 @@
 			<!-- Rarity Filters - Hidden on mobile -->
 			<div class="hidden flex-wrap gap-2 sm:flex">
 				<button
+					type="button"
 					onclick={() => {
 						wikeloStore.currentRarity = 'all';
 						captureEvent('wikelo_rarity_filter_changed', { rarity: 'all' });
@@ -481,6 +490,7 @@
 					{t.allRarities}
 				</button>
 				<button
+					type="button"
 					onclick={() => {
 						wikeloStore.currentRarity = 'legendary';
 						captureEvent('wikelo_rarity_filter_changed', { rarity: 'legendary' });
@@ -493,6 +503,7 @@
 					{t.legendary}
 				</button>
 				<button
+					type="button"
 					onclick={() => {
 						wikeloStore.currentRarity = 'epic';
 						captureEvent('wikelo_rarity_filter_changed', { rarity: 'epic' });
@@ -505,6 +516,7 @@
 					{t.epic}
 				</button>
 				<button
+					type="button"
 					onclick={() => {
 						wikeloStore.currentRarity = 'rare';
 						captureEvent('wikelo_rarity_filter_changed', { rarity: 'rare' });
@@ -517,6 +529,7 @@
 					{t.rare}
 				</button>
 				<button
+					type="button"
 					onclick={() => {
 						wikeloStore.currentRarity = 'uncommon';
 						captureEvent('wikelo_rarity_filter_changed', { rarity: 'uncommon' });
@@ -529,6 +542,7 @@
 					{t.uncommon}
 				</button>
 				<button
+					type="button"
 					onclick={() => {
 						wikeloStore.currentRarity = 'common';
 						captureEvent('wikelo_rarity_filter_changed', { rarity: 'common' });
@@ -548,6 +562,7 @@
 			<!-- View Toggle - Hidden on mobile -->
 			<div class="hidden gap-2 sm:flex">
 				<button
+					type="button"
 					onclick={() => {
 						wikeloStore.viewMode = 'grid';
 						captureEvent('wikelo_view_mode_changed', { viewMode: 'grid' });
@@ -562,6 +577,7 @@
 				</button>
 
 				<button
+					type="button"
 					onclick={() => {
 						wikeloStore.viewMode = 'list';
 						captureEvent('wikelo_view_mode_changed', { viewMode: 'list' });
@@ -578,34 +594,38 @@
 
 			<!-- Favorites Filter - Visible on all screens -->
 			<button
+				type="button"
 				onclick={() => {
 					wikeloStore.favoritesOnly = !wikeloStore.favoritesOnly;
 					captureEvent('wikelo_favorites_filter_toggled', { enabled: wikeloStore.favoritesOnly });
 				}}
-				class="cursor-pointer flex items-center gap-2 rounded-lg border transition-all hover:scale-105 px-3 py-2 sm:px-4
+				class="flex cursor-pointer items-center gap-2 rounded-lg border px-3 py-2 transition-all hover:scale-105 sm:px-4
 					{wikeloStore.favoritesOnly
 					? 'border-pink-500 bg-pink-500/20 text-pink-400 shadow-lg shadow-pink-500/20'
 					: 'border-white/10 bg-white/5 text-gray-400 hover:border-pink-500/50 hover:bg-pink-500/10 hover:text-pink-300'}"
 				title={t.favoritesOnly}
 			>
 				<span class={wikeloStore.favoritesOnly ? 'animate-pulse' : ''}>❤️</span>
-				<span class="font-bold text-xs sm:text-sm">{t.favoritesOnly}</span>
+				<span class="text-xs font-bold sm:text-sm">{t.favoritesOnly}</span>
 			</button>
 
 			<!-- Compact Mode Toggle - Visible on all screens -->
 			<button
+				type="button"
 				onclick={() => {
 					wikeloStore.toggleCompactView();
 					captureEvent('wikelo_compact_mode_toggled', { enabled: wikeloStore.isCompactView });
 				}}
-				class="cursor-pointer flex items-center gap-2 rounded-lg border px-3 py-1.5 sm:px-4 font-semibold transition-all
+				class="flex cursor-pointer items-center gap-2 rounded-lg border px-3 py-1.5 font-semibold transition-all sm:px-4
 					{wikeloStore.isCompactView
 					? 'border-indigo-400 bg-indigo-500/20 text-indigo-400 shadow-lg shadow-indigo-500/20'
 					: 'border-white/10 bg-white/5 text-gray-400 hover:border-indigo-400/50 hover:bg-indigo-500/10 hover:text-indigo-300'}"
 				title={t.compactView}
 			>
 				<span class="text-lg">↕</span>
-				<span class="text-xs font-bold uppercase tracking-wider sm:text-sm xl:inline">{t.compactView}</span>
+				<span class="text-xs font-bold tracking-wider uppercase sm:text-sm xl:inline"
+					>{t.compactView}</span
+				>
 			</button>
 		</div>
 	</div>
@@ -613,6 +633,7 @@
 	<!-- Categories Navigation -->
 	<nav class="mb-4 flex flex-wrap gap-2 sm:gap-3">
 		<button
+			type="button"
 			onclick={() => {
 				wikeloStore.currentCategory = 'all';
 				captureEvent('wikelo_category_filter_changed', { category: 'all' });
@@ -628,6 +649,7 @@
 
 		{#each wikeloStore.rewards as category}
 			<button
+				type="button"
 				onclick={() => {
 					wikeloStore.currentCategory = category.id;
 					captureEvent('wikelo_category_filter_changed', { category: category.id });
