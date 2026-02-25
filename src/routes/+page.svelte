@@ -16,6 +16,7 @@
 	// Set default language to English on mount
 	onMount(async () => {
 		mounted = true;
+		showLoginRequiredDialog = $page.url.searchParams.get('loginRequired') === '1';
 		// Force English as default on home page
 		wikeloStore.currentLang = 'en';
 		// Track home page view
