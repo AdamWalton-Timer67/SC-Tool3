@@ -33,6 +33,10 @@
 		}
 	});
 
+	$effect(() => {
+		showLoginRequiredDialog = $page.url.searchParams.get('loginRequired') === '1';
+	});
+
 	function closeLoginRequiredDialog() {
 		showLoginRequiredDialog = false;
 		const url = new URL(window.location.href);
