@@ -1,5 +1,6 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
+import { requireAdmin } from '$lib/server/admin';
 
 /**
  * DELETE /api/suggestions/[id]
@@ -13,16 +14,9 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
 		return json({ error: 'Unauthorized' }, { status: 401 });
 	}
 
-	// Check if user is admin
-	const { data: userData } = await supabase
-		.from('auth.users')
-		.select('raw_user_meta_data')
-		.eq('id', user.id)
-		.single();
-
-	const isAdmin = userData?.raw_user_meta_data?.role === 'admin';
-
-	if (!isAdmin) {
+	try {
+		await requireAdmin(supabase);
+	} catch {
 		return json({ error: 'Forbidden' }, { status: 403 });
 	}
 
@@ -51,16 +45,9 @@ export const PATCH: RequestHandler = async ({ params, request, locals }) => {
 		return json({ error: 'Unauthorized' }, { status: 401 });
 	}
 
-	// Check if user is admin
-	const { data: userData } = await supabase
-		.from('auth.users')
-		.select('raw_user_meta_data')
-		.eq('id', user.id)
-		.single();
-
-	const isAdmin = userData?.raw_user_meta_data?.role === 'admin';
-
-	if (!isAdmin) {
+	try {
+		await requireAdmin(supabase);
+	} catch {
 		return json({ error: 'Forbidden' }, { status: 403 });
 	}
 

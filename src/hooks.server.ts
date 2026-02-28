@@ -1,6 +1,11 @@
+import { redirect } from '@sveltejs/kit';
 import type { Handle } from '@sveltejs/kit';
 import { SESSION_COOKIE } from '$lib/supabase';
-import { createMariaSupabaseClient, findMariaAuthUserById, isApprovedUser } from '$lib/server/maria-supabase';
+import {
+	createMariaSupabaseClient,
+	findMariaAuthUserById,
+	isApprovedUser
+} from '$lib/server/maria-supabase';
 
 function createUnavailableSupabaseClient() {
 	const unavailable = { message: 'MariaDB is not configured or unavailable.' };
@@ -37,11 +42,14 @@ function createUnavailableSupabaseClient() {
 
 export const handle: Handle = async ({ event, resolve }) => {
 	const sessionUserId = event.cookies.get(SESSION_COOKIE) ?? null;
+	let approvedUser: any = null;
 	try {
 		const authUser = await findMariaAuthUserById(sessionUserId);
-		const approvedUser: any = authUser && isApprovedUser(authUser) ? authUser : null;
+		approvedUser = authUser && isApprovedUser(authUser) ? authUser : null;
 
-		event.locals.supabase = createMariaSupabaseClient({ requestUserId: approvedUser?.id ?? null }) as any;
+		event.locals.supabase = createMariaSupabaseClient({
+			requestUserId: approvedUser?.id ?? null
+		}) as any;
 		event.locals.safeGetSession = async () => {
 			if (!approvedUser) return { session: null, user: null };
 			const session = {
@@ -54,7 +62,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 					user_metadata:
 						typeof approvedUser.raw_user_meta_data === 'string'
 							? JSON.parse(approvedUser.raw_user_meta_data)
-							: approvedUser.raw_user_meta_data ?? {}
+							: (approvedUser.raw_user_meta_data ?? {})
 				}
 			};
 			return { session, user: session.user };
@@ -63,6 +71,14 @@ export const handle: Handle = async ({ event, resolve }) => {
 		console.warn('Maria unavailable, using degraded server mode:', error);
 		event.locals.supabase = createUnavailableSupabaseClient() as any;
 		event.locals.safeGetSession = async () => ({ session: null, user: null });
+	}
+
+	const { pathname } = event.url;
+	const isHomePage = pathname === '/';
+	const isApiRoute = pathname.startsWith('/api');
+
+	if (!approvedUser && !isHomePage && !isApiRoute) {
+		throw redirect(303, '/?loginRequired=1');
 	}
 
 	return resolve(event);
