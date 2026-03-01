@@ -8,10 +8,17 @@
 	import DataSources from '$lib/components/wikelo/DataSources.svelte';
 	import { wikeloStore } from '$lib/stores/wikelo.svelte';
 	import { captureEvent } from '$lib/analytics';
+	import type { PageData } from './$types';
+
+	interface Props {
+		data: PageData;
+	}
+
+	const { data }: Props = $props();
 
 	let mounted = $state(false);
 	let patchNotes = $state<any>(null);
-	let showLoginRequiredDialog = $state(false);
+	let showLoginRequiredDialog = $state(Boolean(data.loginRequired));
 
 	// Set default language to English on mount
 	onMount(async () => {
@@ -34,7 +41,8 @@
 	});
 
 	$effect(() => {
-		showLoginRequiredDialog = $page.url.searchParams.get('loginRequired') === '1';
+		showLoginRequiredDialog =
+			Boolean(data.loginRequired) || $page.url.searchParams.get('loginRequired') === '1';
 	});
 
 	function closeLoginRequiredDialog() {

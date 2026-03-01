@@ -6,7 +6,7 @@
 
 import { browser } from '$app/environment';
 import { supabase } from '$lib/supabase';
-import { normalizeImageUrl } from '$lib/utils/imageUrl';
+import { getRewardImageCandidates, normalizeImageUrl } from '$lib/utils/imageUrl';
 
 import { SvelteMap } from 'svelte/reactivity';
 
@@ -460,7 +460,7 @@ class WikeloStore {
 					en: reward.description_en || '',
 					fr: reward.description_fr || ''
 				},
-				image: normalizeImageUrl(reward.image_url),
+				image: getRewardImageCandidates(reward.name_en, reward.image_url)[0],
 				imageCredit: reward.image_credit,
 				missionName:
 					reward.mission_name_en || reward.mission_name_fr

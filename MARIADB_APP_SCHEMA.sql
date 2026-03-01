@@ -113,6 +113,7 @@ CREATE TABLE IF NOT EXISTS suggestions (
   content TEXT NOT NULL,
   user_email VARCHAR(255) NULL,
   user_id VARCHAR(64) NULL,
+  status VARCHAR(32) NOT NULL DEFAULT 'pending',
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 

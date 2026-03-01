@@ -9,5 +9,8 @@ export const load: LayoutLoad = async ({ url, data }) => {
 		throw redirect(303, '/?loginRequired=1');
 	}
 
-	return {};
+	return {
+		session: data.session,
+		isAdmin: data.isAdmin
+	};
 };

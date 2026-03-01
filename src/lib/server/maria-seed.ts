@@ -69,6 +69,10 @@ async function ensureSchemaCompatibility() {
 	await safeAlter(
 		'ALTER TABLE reputation_requirements ADD COLUMN IF NOT EXISTS required_level INT NULL'
 	);
+
+	await safeAlter(
+		"ALTER TABLE suggestions ADD COLUMN IF NOT EXISTS status VARCHAR(32) NOT NULL DEFAULT 'pending'"
+	);
 }
 
 const ensureSchemaCompatibilityOnce = (() => {
