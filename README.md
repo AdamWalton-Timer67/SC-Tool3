@@ -57,3 +57,22 @@ This repository is now prepared for a NAS self-hosted deployment:
 - **Analytics were removed** from the frontend code.
 
 Read the full NAS guide in [`NAS_QNAP_DEPLOYMENT.md`](NAS_QNAP_DEPLOYMENT.md).
+
+## 🗃️ Database bootstrap includes Items DB
+
+The NAS bootstrap now applies both schema files:
+
+- `MARIADB_APP_SCHEMA.sql`
+- `MARIADB_ITEMS_SCHEMA.sql`
+
+`MARIADB_ITEMS_SCHEMA.sql` is generated from the shared item sheet and stores:
+
+- item category/type sections (ASSAULT RIFLE, LMG, PISTOL, etc.) as `item_type`
+- duplicate item names split by fire mode (for example: `Gallant Rifle (Burst 3)` / `Gallant Rifle (Burst 5)`)
+- full source row payload in `data_json`
+
+If you need to regenerate it:
+
+```bash
+python3 scripts/import_items_sheet.py --out MARIADB_ITEMS_SCHEMA.sql
+```
