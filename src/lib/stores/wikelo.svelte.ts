@@ -240,8 +240,7 @@ class WikeloStore {
 		unit?: string;
 	} | null>(null);
 
-	// Supabase realtime subscriptions
-	// Realtime functionality removed as per request
+	private inventorySyncInterval: ReturnType<typeof setInterval> | null = null;
 
 	constructor() {
 		if (browser) {
@@ -271,6 +270,7 @@ class WikeloStore {
 				await this.loadRewardIngredientsFromSupabase();
 				await this.loadRewardCompletionsFromSupabase();
 				await this.loadFavoritesFromSupabase();
+				this.startInventorySync();
 			}
 
 			// Listen for auth changes
@@ -288,14 +288,9 @@ class WikeloStore {
 						};
 						await this.loadInventoryFromSupabase();
 						await this.loadRewardIngredientsFromSupabase();
-						await this.loadRewardIngredientsFromSupabase();
 						await this.loadRewardCompletionsFromSupabase();
 						await this.loadFavoritesFromSupabase();
-						await this.loadRewardCompletionsFromSupabase();
-						await this.loadFavoritesFromSupabase();
-						// Realtime subscriptions removed
-						// this.cleanupRealtimeSubscriptions();
-						// this.setupRealtimeSubscriptions();
+						this.startInventorySync();
 					}
 				} else if (event === 'SIGNED_OUT') {
 					this.currentUser = null;
@@ -305,14 +300,26 @@ class WikeloStore {
 					this.rewardCompletions = {};
 					this.favoriteRewards = new Set();
 					this.favoriteIngredients = new Set();
-					// Realtime subscriptions removed
-					// this.cleanupRealtimeSubscriptions();
-					// this.setupRealtimeSubscriptions();
+					this.stopInventorySync();
 				}
 			});
 		} catch (err) {
 			console.error('Error initializing auth:', err);
 		}
+	}
+
+	private startInventorySync() {
+		if (!browser || !this.currentUser || this.inventorySyncInterval) return;
+
+		this.inventorySyncInterval = setInterval(() => {
+			void this.loadInventoryFromSupabase();
+		}, 3000);
+	}
+
+	private stopInventorySync() {
+		if (!this.inventorySyncInterval) return;
+		clearInterval(this.inventorySyncInterval);
+		this.inventorySyncInterval = null;
 	}
 
 	// Load data from Supabase with cache and parallel loading
