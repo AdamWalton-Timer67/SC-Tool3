@@ -48,4 +48,7 @@ docker exec -i sc-tool3-mariadb mariadb -uroot -p"$MARIADB_ROOT_PASSWORD" "$MARI
 echo "Applying app schema + mock baseline seed (MARIADB_APP_SCHEMA.sql)..."
 docker exec -i sc-tool3-mariadb mariadb -uroot -p"$MARIADB_ROOT_PASSWORD" "$MARIADB_DATABASE" < "$ROOT_DIR/MARIADB_APP_SCHEMA.sql"
 
+echo "Applying items database schema + seed (MARIADB_ITEMS_SCHEMA.sql)..."
+docker exec -i sc-tool3-mariadb mariadb -uroot -p"$MARIADB_ROOT_PASSWORD" "$MARIADB_DATABASE" < "$ROOT_DIR/MARIADB_ITEMS_SCHEMA.sql"
+
 echo "Bootstrap complete."
