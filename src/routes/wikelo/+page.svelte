@@ -252,7 +252,7 @@
 						"name": "Wikelo Favor",
 						"description": "Top ingredient needed for Wikelo rewards",
 						"category": "Armor",
-						"image": "https://www.star-citizen-wikelo-tools.space/images/wikelo/wikelo_favor.png"
+						"image": "https://www.star-citizen-wikelo-tools.space/images/wikelo/wikelo_favor.webp"
 					}
 				},
 				{

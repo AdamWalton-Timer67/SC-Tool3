@@ -1,6 +1,20 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { requireAdmin } from '$lib/server/admin';
+
+async function ensureAdminAccess(supabase: any, userId: string) {
+	const { data: roles, error } = await supabase
+		.from('user_roles')
+		.select('role')
+		.eq('user_id', userId);
+
+	if (
+		error ||
+		!Array.isArray(roles) ||
+		!roles.some((role: { role?: string }) => role.role === 'admin')
+	) {
+		throw new Error('Forbidden');
+	}
+}
 
 /**
  * DELETE /api/suggestions/[id]
@@ -15,7 +29,7 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
 	}
 
 	try {
-		await requireAdmin(supabase);
+		await ensureAdminAccess(supabase, user.id);
 	} catch {
 		return json({ error: 'Forbidden' }, { status: 403 });
 	}
@@ -46,7 +60,7 @@ export const PATCH: RequestHandler = async ({ params, request, locals }) => {
 	}
 
 	try {
-		await requireAdmin(supabase);
+		await ensureAdminAccess(supabase, user.id);
 	} catch {
 		return json({ error: 'Forbidden' }, { status: 403 });
 	}

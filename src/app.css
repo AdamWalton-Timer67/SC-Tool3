@@ -3,6 +3,129 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/forms';
 
+:root {
+	--avalon-base: #212222;
+	--avalon-surface: #2a2b2b;
+	--avalon-surface-2: #343535;
+	--avalon-text: #f8f4e3;
+	--avalon-muted: #e5d1a0;
+	--avalon-yellow: #f4c542;
+	--avalon-yellow-strong: #ffd75e;
+	--avalon-red: #c7422f;
+	--avalon-red-strong: #e25b45;
+}
+
+html,
+body {
+	background: var(--avalon-base);
+	color: var(--avalon-text);
+}
+
+/* Global palette remap to base + red/yellow accent theme */
+[class*='bg-slate-'] {
+	background-color: var(--avalon-surface) !important;
+}
+
+[class*='text-cyan-'],
+[class*='text-blue-'],
+[class*='text-yellow-'] {
+	color: var(--avalon-yellow-strong) !important;
+}
+
+[class*='text-purple-'],
+[class*='text-pink-'],
+[class*='text-emerald-'],
+[class*='text-green-'],
+[class*='text-orange-'],
+[class*='text-red-'] {
+	color: var(--avalon-red-strong) !important;
+}
+
+[class*='border-cyan-'],
+[class*='border-blue-'],
+[class*='border-yellow-'] {
+	border-color: color-mix(in srgb, var(--avalon-yellow) 55%, transparent) !important;
+}
+
+[class*='border-purple-'],
+[class*='border-pink-'],
+[class*='border-emerald-'],
+[class*='border-green-'],
+[class*='border-orange-'],
+[class*='border-red-'] {
+	border-color: color-mix(in srgb, var(--avalon-red) 58%, transparent) !important;
+}
+
+[class*='bg-cyan-'],
+[class*='bg-blue-'],
+[class*='bg-yellow-'] {
+	background-color: color-mix(in srgb, var(--avalon-yellow) 22%, transparent) !important;
+}
+
+[class*='bg-purple-'],
+[class*='bg-pink-'],
+[class*='bg-emerald-'],
+[class*='bg-green-'],
+[class*='bg-orange-'],
+[class*='bg-red-'] {
+	background-color: color-mix(in srgb, var(--avalon-red) 22%, transparent) !important;
+}
+
+[class*='from-slate-'] {
+	--tw-gradient-from: var(--avalon-base) var(--tw-gradient-from-position) !important;
+}
+
+[class*='via-slate-'] {
+	--tw-gradient-via: var(--avalon-surface) var(--tw-gradient-via-position) !important;
+}
+
+[class*='to-slate-'] {
+	--tw-gradient-to: var(--avalon-surface-2) var(--tw-gradient-to-position) !important;
+}
+
+[class*='from-cyan-'],
+[class*='via-cyan-'],
+[class*='to-cyan-'],
+[class*='from-yellow-'],
+[class*='via-yellow-'],
+[class*='to-yellow-'],
+[class*='from-blue-'],
+[class*='via-blue-'],
+[class*='to-blue-'] {
+	--tw-gradient-from: color-mix(in srgb, var(--avalon-yellow) 55%, transparent)
+		var(--tw-gradient-from-position) !important;
+	--tw-gradient-via: color-mix(in srgb, var(--avalon-yellow) 55%, transparent)
+		var(--tw-gradient-via-position) !important;
+	--tw-gradient-to: color-mix(in srgb, var(--avalon-yellow) 55%, transparent)
+		var(--tw-gradient-to-position) !important;
+}
+
+[class*='from-purple-'],
+[class*='via-purple-'],
+[class*='to-purple-'],
+[class*='from-pink-'],
+[class*='via-pink-'],
+[class*='to-pink-'],
+[class*='from-emerald-'],
+[class*='via-emerald-'],
+[class*='to-emerald-'],
+[class*='from-green-'],
+[class*='via-green-'],
+[class*='to-green-'],
+[class*='from-orange-'],
+[class*='via-orange-'],
+[class*='to-orange-'],
+[class*='from-red-'],
+[class*='via-red-'],
+[class*='to-red-'] {
+	--tw-gradient-from: color-mix(in srgb, var(--avalon-red) 60%, transparent)
+		var(--tw-gradient-from-position) !important;
+	--tw-gradient-via: color-mix(in srgb, var(--avalon-red) 60%, transparent)
+		var(--tw-gradient-via-position) !important;
+	--tw-gradient-to: color-mix(in srgb, var(--avalon-red) 60%, transparent)
+		var(--tw-gradient-to-position) !important;
+}
+
 /* Glitch animations for images */
 @keyframes glitch-1 {
 	0%,
