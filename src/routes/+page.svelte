@@ -86,6 +86,18 @@
 						],
 						cta: "Gérer l'inventaire"
 					},
+					armourViewerCard: {
+						title: "Aperçu d'Armure",
+						description:
+							"Prévisualisez les emplacements d'armure Star Citizen sur un mannequin 3D et consultez les données des objets importés depuis les fichiers du jeu.",
+						features: [
+							"Onglets d'emplacements interactifs (tête, torse, bras, jambes)",
+							'Panneau latéral avec métadonnées et statistiques',
+							"Pipeline d'upload admin pour les exports de fichiers du jeu",
+							"Catalogue d'armures alimenté par la base de données"
+						],
+						cta: "Ouvrir l'aperçu"
+					},
 
 					comingSoon: {
 						title: 'Bientôt disponible',
@@ -128,6 +140,18 @@
 							'Data Export/Import'
 						],
 						cta: 'Manage inventory'
+					},
+					armourViewerCard: {
+						title: 'Armor Preview',
+						description:
+							'Preview Star Citizen armour slots on a 3D mannequin and inspect item data sourced from uploaded game files.',
+						features: [
+							'Interactive slot tabs (head, torso, arms, legs)',
+							'Side panel with item metadata and stats',
+							'Admin upload pipeline for game-file exports',
+							'Database-backed armour catalogue'
+						],
+						cta: 'Open viewer'
 					},
 
 					comingSoon: {
@@ -357,7 +381,7 @@
 			</div>
 		</div>
 
-		<div class="3xl:grid-cols-3 grid gap-6 md:grid-cols-2">
+		<div class="3xl:grid-cols-3 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
 			<!-- Wikelo Tracker Card -->
 			<a
 				href="/wikelo"
@@ -459,6 +483,55 @@
 					<!-- CTA -->
 					<div class="mt-6 flex items-center gap-2 font-semibold text-purple-400">
 						<span>{t.inventoryCard.cta}</span>
+						<span class="transition-transform group-hover:translate-x-2">→</span>
+					</div>
+				</div>
+			</a>
+
+			<!-- Armour Viewer Card -->
+			<a
+				href="/armor"
+				onclick={() => {
+					captureEvent('navigation_clicked', {
+						from: 'home',
+						to: 'armor_preview',
+						timestamp: new Date().toISOString()
+					});
+				}}
+				class="group relative overflow-hidden rounded-xl border border-white/10 bg-slate-900/80 p-8 backdrop-blur-xl transition-all hover:scale-[1.02] hover:border-emerald-400/50 hover:shadow-2xl hover:shadow-emerald-400/20"
+			>
+				<div
+					class="absolute inset-0 bg-linear-to-r from-emerald-400 via-cyan-500 to-teal-400 opacity-0 blur-xl transition-opacity group-hover:opacity-20"
+				></div>
+
+				<div class="relative">
+					<div class="mb-6 text-6xl">
+						<span
+							class="inline-block transition-transform group-hover:scale-110 group-hover:-rotate-6"
+						>
+							🛡️
+						</span>
+					</div>
+
+					<h2 class="mb-3 text-2xl font-bold text-emerald-400">
+						{t.armourViewerCard.title}
+					</h2>
+
+					<p class="mb-4 text-gray-400">
+						{t.armourViewerCard.description}
+					</p>
+
+					<ul class="space-y-2 text-sm text-gray-500">
+						{#each t.armourViewerCard.features as feature}
+							<li class="flex items-center gap-2">
+								<span class="text-green-400">✓</span>
+								{feature}
+							</li>
+						{/each}
+					</ul>
+
+					<div class="mt-6 flex items-center gap-2 font-semibold text-emerald-400">
+						<span>{t.armourViewerCard.cta}</span>
 						<span class="transition-transform group-hover:translate-x-2">→</span>
 					</div>
 				</div>
