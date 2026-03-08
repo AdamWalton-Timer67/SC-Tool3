@@ -79,6 +79,24 @@ CREATE TABLE IF NOT EXISTS ingredients (
   INDEX idx_ingredients_location_id (location_id)
 );
 
+
+CREATE TABLE IF NOT EXISTS armour_items (
+  id VARCHAR(128) PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  slot VARCHAR(32) NOT NULL,
+  brand VARCHAR(128) NULL,
+  rarity VARCHAR(64) NULL,
+  armor_rating INT NULL,
+  temperature_min INT NULL,
+  temperature_max INT NULL,
+  game_file_path VARCHAR(1024) NULL,
+  metadata LONGTEXT NULL,
+  uploaded_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_armour_items_slot (slot),
+  INDEX idx_armour_items_name (name)
+);
+
 CREATE TABLE IF NOT EXISTS reward_ingredients (
   id VARCHAR(255) PRIMARY KEY,
   reward_id VARCHAR(64) NOT NULL,
