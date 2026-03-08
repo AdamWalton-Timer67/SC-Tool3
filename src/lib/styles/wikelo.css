@@ -57,7 +57,7 @@
 }
 
 .text-shadow-gold {
-	text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+	text-shadow: 0 0 20px rgba(244, 197, 66, 0.6);
 }
 
 .animate-spin-slow {
@@ -81,7 +81,7 @@
 	appearance: none;
 	width: 1.5rem;
 	height: 1.5rem;
-	border: 2px solid #00d9ff;
+	border: 2px solid #ffd75e;
 	border-radius: 0.25rem;
 	background-color: transparent;
 	cursor: pointer;
@@ -93,9 +93,9 @@
 }
 
 .checkbox-custom:checked {
-	background-color: #00ff88;
-	border-color: #00ff88;
-	box-shadow: 0 0 15px rgba(0, 255, 136, 0.5);
+	background-color: #c7422f;
+	border-color: #e25b45;
+	box-shadow: 0 0 15px rgba(199, 66, 47, 0.5);
 }
 
 .checkbox-custom:checked::after {
@@ -106,12 +106,12 @@
 }
 
 .checkbox-orange {
-	border-color: #ff8c42;
+	border-color: #e25b45;
 }
 
 .checkbox-orange:checked {
-	background-color: #00ff88;
-	border-color: #00ff88;
+	background-color: #c7422f;
+	border-color: #e25b45;
 }
 
 /* Space background */
@@ -119,7 +119,7 @@
 	position: fixed;
 	inset: 0;
 	z-index: -10;
-	background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+	background: radial-gradient(ellipse at bottom, #2a2b2b 0%, #212222 100%);
 }
 
 .stars,
@@ -135,7 +135,7 @@
 		radial-gradient(2px 2px at 20px 30px, #eee, transparent),
 		radial-gradient(2px 2px at 40px 70px, #fff, transparent),
 		radial-gradient(1px 1px at 90px 40px, #fff, transparent),
-		radial-gradient(1px 1px at 160px 120px, #00d9ff, transparent);
+		radial-gradient(1px 1px at 160px 120px, #ffd75e, transparent);
 	background-size: 200px 200px;
 	animation: starsMove 60s linear infinite;
 }
@@ -144,7 +144,7 @@
 	background-image:
 		radial-gradient(1px 1px at 50px 50px, #ddd, transparent),
 		radial-gradient(1px 1px at 100px 150px, #eee, transparent),
-		radial-gradient(1px 1px at 150px 50px, #f4d03f, transparent);
+		radial-gradient(1px 1px at 150px 50px, #e25b45, transparent);
 	background-size: 250px 250px;
 	animation: starsMove 80s linear infinite;
 }
@@ -154,8 +154,8 @@
 	width: 100%;
 	height: 100%;
 	background:
-		radial-gradient(ellipse at 30% 50%, rgba(0, 217, 255, 0.1) 0%, transparent 50%),
-		radial-gradient(ellipse at 70% 70%, rgba(212, 175, 55, 0.08) 0%, transparent 50%);
+		radial-gradient(ellipse at 30% 50%, rgba(244, 197, 66, 0.12) 0%, transparent 50%),
+		radial-gradient(ellipse at 70% 70%, rgba(199, 66, 47, 0.1) 0%, transparent 50%);
 	animation: nebulaPulse 8s ease-in-out infinite;
 }
 
@@ -181,7 +181,7 @@
 /* Scrollbar custom */
 .custom-scrollbar {
 	scrollbar-width: thin;
-	scrollbar-color: #00d9ff rgba(255, 255, 255, 0.1);
+	scrollbar-color: #ffd75e rgba(255, 255, 255, 0.1);
 }
 
 .custom-scrollbar::-webkit-scrollbar {
@@ -195,7 +195,7 @@
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-	background: #00d9ff;
+	background: #ffd75e;
 	border-radius: 3px;
 }
 
