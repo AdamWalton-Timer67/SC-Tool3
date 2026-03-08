@@ -91,7 +91,7 @@ self.addEventListener('fetch', (event) => {
 									<head>
 										<meta charset="UTF-8">
 										<meta name="viewport" content="width=device-width, initial-scale=1.0">
-										<title>Offline - Wikelo Tools</title>
+										<title>Offline - Avalon Tools</title>
 										<style>
 											body {
 												background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
@@ -127,7 +127,7 @@ self.addEventListener('fetch', (event) => {
 											<div class="emoji">🛰️</div>
 											<h1>Mode Hors Ligne</h1>
 											<p>Vous êtes actuellement hors ligne. Veuillez vérifier votre connexion internet.</p>
-											<p><small>Wikelo Tools - Star Citizen</small></p>
+											<p><small>Avalon Tools - Star Citizen</small></p>
 										</div>
 									</body>
 									</html>

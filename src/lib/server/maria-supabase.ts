@@ -45,6 +45,7 @@ class QueryBuilder {
 	private orderBy: { field: string; asc: boolean } | null = null;
 	private limitValue: number | null = null;
 	private writeMode: 'insert' | 'update' | 'delete' | null = null;
+	private upsertConflict: string[] = [];
 	private payload: any;
 
 	constructor(
@@ -59,6 +60,17 @@ class QueryBuilder {
 	insert(payload: any): this {
 		this.writeMode = 'insert';
 		this.payload = payload;
+		return this;
+	}
+	upsert(payload: any, options?: { onConflict?: string }): this {
+		this.writeMode = 'insert';
+		this.payload = payload;
+		this.upsertConflict = options?.onConflict
+			? options.onConflict
+					.split(',')
+					.map((field) => field.trim())
+					.filter(Boolean)
+			: [];
 		return this;
 	}
 	update(payload: any): this {
@@ -126,6 +138,39 @@ class QueryBuilder {
 	private async execute(): Promise<{ data: any; error: any }> {
 		const table = normalizeTable(this.tableName);
 		try {
+			if (this.writeMode === 'insert' && this.upsertConflict.length > 0) {
+				const rows = Array.isArray(this.payload) ? this.payload : [this.payload];
+				const writtenRows: any[] = [];
+
+				for (const row of rows) {
+					const withId = { ...row };
+					if (!withId.id) withId.id = createId(table);
+
+					const keys = Object.keys(withId);
+					const updateKeys = keys.filter((key) => key !== 'id');
+					const sql =
+						`INSERT INTO \`${table}\` (${keys.map((k) => `\`${k}\``).join(',')}) ` +
+						`VALUES (${keys.map(() => '?').join(',')}) ` +
+						`ON DUPLICATE KEY UPDATE ${updateKeys.map((k) => `\`${k}\` = VALUES(\`${k}\`)`).join(',')}`;
+
+					await this.pool.query(sql, keys.map((key) => withId[key]));
+
+					const conflictFields = this.upsertConflict.length ? this.upsertConflict : ['id'];
+					const whereClause = conflictFields.map((field) => `\`${field}\` = ?`).join(' AND ');
+					const params = conflictFields.map((field) => withId[field]);
+					const [selected] = await this.pool.query<RowDataPacket[]>(
+						`SELECT * FROM \`${table}\` WHERE ${whereClause} LIMIT 1`,
+						params
+					);
+
+					if (selected.length) {
+						writtenRows.push(selected[0]);
+					}
+				}
+
+				return { data: writtenRows, error: null };
+			}
+
 			if (this.writeMode === 'insert') {
 				const rows = Array.isArray(this.payload) ? this.payload : [this.payload];
 				const created: any[] = [];
