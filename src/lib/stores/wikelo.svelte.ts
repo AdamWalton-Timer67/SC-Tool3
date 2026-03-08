@@ -241,6 +241,21 @@ class WikeloStore {
 	} | null>(null);
 
 	private inventorySyncInterval: ReturnType<typeof setInterval> | null = null;
+	private pendingInventoryWrites = new Map<string, number>();
+
+	private startInventoryWrite(ingredientId: string) {
+		const current = this.pendingInventoryWrites.get(ingredientId) ?? 0;
+		this.pendingInventoryWrites.set(ingredientId, current + 1);
+	}
+
+	private finishInventoryWrite(ingredientId: string) {
+		const current = this.pendingInventoryWrites.get(ingredientId) ?? 0;
+		if (current <= 1) {
+			this.pendingInventoryWrites.delete(ingredientId);
+			return;
+		}
+		this.pendingInventoryWrites.set(ingredientId, current - 1);
+	}
 
 	constructor() {
 		if (browser) {
@@ -653,16 +668,21 @@ class WikeloStore {
 
 	async setInventoryQuantity(ingredientId: string, quantity: number) {
 		if (!this.currentUser) return; // Block if not authenticated
+		this.startInventoryWrite(ingredientId);
 
-		const nextInventory = { ...this.inventory };
-		if (quantity <= 0) {
-			delete nextInventory[ingredientId];
-		} else {
-			nextInventory[ingredientId] = quantity;
+		try {
+			const nextInventory = { ...this.inventory };
+			if (quantity <= 0) {
+				delete nextInventory[ingredientId];
+			} else {
+				nextInventory[ingredientId] = quantity;
+			}
+			this.inventory = nextInventory;
+
+			await this.saveInventoryToSupabase(ingredientId, quantity);
+		} finally {
+			this.finishInventoryWrite(ingredientId);
 		}
-		this.inventory = nextInventory;
-
-		await this.saveInventoryToSupabase(ingredientId, quantity);
 	}
 
 	async adjustInventoryQuantity(ingredientId: string, delta: number) {
@@ -697,6 +717,15 @@ class WikeloStore {
 				data.forEach((item) => {
 					inventoryMap[item.ingredient_id] = item.quantity;
 				});
+
+				for (const ingredientId of this.pendingInventoryWrites.keys()) {
+					if (ingredientId in this.inventory) {
+						inventoryMap[ingredientId] = this.inventory[ingredientId];
+					} else {
+						delete inventoryMap[ingredientId];
+					}
+				}
+
 				this.inventory = inventoryMap;
 			}
 		} catch (err) {
@@ -1067,20 +1096,25 @@ class WikeloStore {
 	// Adjust inventory with Supabase support
 	async adjustInventoryQuantityWithSupabase(ingredientId: string, delta: number) {
 		if (!this.currentUser) return; // Block if not authenticated
+		this.startInventoryWrite(ingredientId);
 
-		const current = this.getInventoryQuantity(ingredientId);
-		const newQuantity = Math.max(0, current + delta);
+		try {
+			const current = this.getInventoryQuantity(ingredientId);
+			const newQuantity = Math.max(0, current + delta);
 
-		// Update local state with immutable write so Svelte reacts to every click
-		const nextInventory = { ...this.inventory };
-		if (newQuantity <= 0) {
-			delete nextInventory[ingredientId];
-		} else {
-			nextInventory[ingredientId] = newQuantity;
+			// Update local state with immutable write so Svelte reacts to every click
+			const nextInventory = { ...this.inventory };
+			if (newQuantity <= 0) {
+				delete nextInventory[ingredientId];
+			} else {
+				nextInventory[ingredientId] = newQuantity;
+			}
+			this.inventory = nextInventory;
+
+			await this.saveInventoryToSupabase(ingredientId, newQuantity);
+		} finally {
+			this.finishInventoryWrite(ingredientId);
 		}
-		this.inventory = nextInventory;
-
-		await this.saveInventoryToSupabase(ingredientId, newQuantity);
 	}
 
 	// Check if requirement is obtained

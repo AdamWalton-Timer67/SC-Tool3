@@ -1,0 +1,66 @@
+{
+	"version": "0.1.0",
+	"updatedAt": "2026-03-08T09:00:00.000Z",
+	"items": [
+		{
+			"id": "undersuit_stone_basic_01",
+			"name": "StoneSkin Undersuit",
+			"slot": "undersuit",
+			"brand": "Placeholder",
+			"grade": "light",
+			"bodyTypes": ["neutral", "male", "female"],
+			"description": "Starter undersuit used as a placeholder for local preview.",
+			"tags": ["undersuit", "starter", "placeholder"]
+		},
+		{
+			"id": "helmet_orc_mkX_black",
+			"name": "ORC-mkX Helmet Black",
+			"slot": "helmet",
+			"brand": "Placeholder",
+			"grade": "heavy",
+			"bodyTypes": ["neutral", "male", "female"],
+			"description": "Heavy combat helmet placeholder.",
+			"tags": ["helmet", "heavy", "black"]
+		},
+		{
+			"id": "torso_orc_mkX_black",
+			"name": "ORC-mkX Torso Black",
+			"slot": "torso",
+			"brand": "Placeholder",
+			"grade": "heavy",
+			"bodyTypes": ["neutral", "male", "female"],
+			"description": "Heavy torso placeholder.",
+			"tags": ["torso", "heavy", "black"]
+		},
+		{
+			"id": "arms_orc_mkX_black",
+			"name": "ORC-mkX Arms Black",
+			"slot": "arms",
+			"brand": "Placeholder",
+			"grade": "heavy",
+			"bodyTypes": ["neutral", "male", "female"],
+			"description": "Heavy arm armor placeholder.",
+			"tags": ["arms", "heavy", "black"]
+		},
+		{
+			"id": "legs_orc_mkX_black",
+			"name": "ORC-mkX Legs Black",
+			"slot": "legs",
+			"brand": "Placeholder",
+			"grade": "heavy",
+			"bodyTypes": ["neutral", "male", "female"],
+			"description": "Heavy leg armor placeholder.",
+			"tags": ["legs", "heavy", "black"]
+		},
+		{
+			"id": "backpack_rsp_fieldpack_01",
+			"name": "RSP Field Pack",
+			"slot": "backpack",
+			"brand": "Placeholder",
+			"grade": "medium",
+			"bodyTypes": ["neutral", "male", "female"],
+			"description": "Backpack placeholder.",
+			"tags": ["backpack", "utility"]
+		}
+	]
+}
