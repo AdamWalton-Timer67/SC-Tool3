@@ -66,10 +66,11 @@
 			await loadProfile();
 			isEditingDisplayName = false;
 			saveMessage = wikeloStore.currentLang === 'fr' ? 'Nom sauvegardé !' : 'Name saved!';
-			setTimeout(() => saveMessage = '', 3000);
+			setTimeout(() => (saveMessage = ''), 3000);
 		} catch (err) {
 			console.error('Error saving display name:', err);
-			saveMessage = wikeloStore.currentLang === 'fr' ? 'Erreur lors de la sauvegarde' : 'Error saving';
+			saveMessage =
+				wikeloStore.currentLang === 'fr' ? 'Erreur lors de la sauvegarde' : 'Error saving';
 		} finally {
 			isSavingDisplayName = false;
 		}
@@ -107,10 +108,10 @@
 					loading: 'Chargement...',
 					notConnected: 'Vous devez être connecté pour accéder à cette page',
 					myOrganizations: 'Mes Organisations',
-					noOrganizations: 'Vous ne faites partie d\'aucune organisation',
+					noOrganizations: "Vous ne faites partie d'aucune organisation",
 					joinOrganizations: 'Découvrez et rejoignez des organisations',
 					members: 'membres',
-					viewOrganization: 'Voir l\'organisation',
+					viewOrganization: "Voir l'organisation",
 					owner: 'Propriétaire',
 					admin: 'Administrateur',
 					member: 'Membre'
@@ -148,7 +149,7 @@
 </script>
 
 <svelte:head>
-	<title>{t.title} - Wikelo Tools</title>
+	<title>{t.title} - Avalon Tools</title>
 </svelte:head>
 
 {#if authStore.loading}
@@ -298,7 +299,7 @@
 
 							<!-- Display Name (In-Game Name) -->
 							<div
-								class="flex flex-col border-b border-white/10 pb-3 sm:flex-row sm:justify-between sm:items-center"
+								class="flex flex-col border-b border-white/10 pb-3 sm:flex-row sm:items-center sm:justify-between"
 							>
 								<dt
 									class="mb-1 text-xs font-semibold tracking-wider text-yellow-400 uppercase sm:mb-0"
@@ -311,7 +312,7 @@
 											type="text"
 											bind:value={displayName}
 											placeholder={t.displayNamePlaceholder}
-											class="rounded-lg border border-cyan-500/50 bg-slate-800/50 px-3 py-1.5 text-sm text-white focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/50"
+											class="rounded-lg border border-cyan-500/50 bg-slate-800/50 px-3 py-1.5 text-sm text-white focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/50 focus:outline-none"
 											maxlength="50"
 										/>
 										<button
@@ -331,18 +332,18 @@
 											{t.cancel}
 										</button>
 									{:else}
-										<span class="text-sm text-white font-semibold">
+										<span class="text-sm font-semibold text-white">
 											{profile?.display_name || 'Inconnu'}
 										</span>
 										<button
-											onclick={() => isEditingDisplayName = true}
+											onclick={() => (isEditingDisplayName = true)}
 											class="rounded-lg border border-cyan-500/50 bg-cyan-500/10 px-3 py-1.5 text-xs font-semibold text-cyan-400 transition-all hover:border-cyan-500 hover:bg-cyan-500/20"
 										>
 											{t.edit}
 										</button>
 									{/if}
 									{#if saveMessage}
-										<span class="text-xs text-green-400 animate-pulse">{saveMessage}</span>
+										<span class="animate-pulse text-xs text-green-400">{saveMessage}</span>
 									{/if}
 								</dd>
 							</div>
@@ -462,7 +463,9 @@
 			<div
 				class="mb-6 overflow-hidden rounded-xl border-2 border-yellow-400/50 bg-slate-900/85 shadow-2xl shadow-yellow-400/20 backdrop-blur-xl"
 			>
-				<div class="border-b border-white/10 bg-linear-to-r from-yellow-500/20 via-orange-500/20 to-yellow-500/20 px-6 py-4">
+				<div
+					class="border-b border-white/10 bg-linear-to-r from-yellow-500/20 via-orange-500/20 to-yellow-500/20 px-6 py-4"
+				>
 					<h3
 						class="font-orbitron flex items-center gap-2 text-lg font-bold tracking-wider text-yellow-400 uppercase"
 					>
@@ -488,15 +491,20 @@
 
 				<div class="p-6">
 					{#if organizationsStore.userOrganizations.length === 0}
-						<div class="text-center py-8">
-							<p class="text-6xl mb-4">👥</p>
-							<p class="text-gray-400 mb-4">{t.noOrganizations}</p>
+						<div class="py-8 text-center">
+							<p class="mb-4 text-6xl">👥</p>
+							<p class="mb-4 text-gray-400">{t.noOrganizations}</p>
 							<a
 								href="/organizations"
 								class="inline-flex items-center gap-2 rounded-lg border border-yellow-500/50 bg-yellow-500/10 px-4 py-2 font-semibold text-yellow-400 transition-all hover:border-yellow-500 hover:bg-yellow-500/20"
 							>
 								<svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+									/>
 								</svg>
 								{t.joinOrganizations}
 							</a>
@@ -509,19 +517,27 @@
 									class="group relative overflow-hidden rounded-lg border border-yellow-500/30 bg-slate-800/50 p-4 transition-all hover:scale-[1.02] hover:border-yellow-500/70 hover:shadow-lg hover:shadow-yellow-500/20"
 								>
 									<div class="mb-3 flex items-start justify-between gap-2">
-										<h4 class="font-orbitron text-lg font-bold text-yellow-400 group-hover:text-yellow-300">
+										<h4
+											class="font-orbitron text-lg font-bold text-yellow-400 group-hover:text-yellow-300"
+										>
 											{org.name}
 										</h4>
 										{#if org.user_role === 'owner'}
-											<span class="rounded-full border border-purple-500/50 bg-purple-500/10 px-2 py-1 text-xs font-semibold text-purple-400">
+											<span
+												class="rounded-full border border-purple-500/50 bg-purple-500/10 px-2 py-1 text-xs font-semibold text-purple-400"
+											>
 												{t.owner}
 											</span>
 										{:else if org.user_role === 'admin'}
-											<span class="rounded-full border border-blue-500/50 bg-blue-500/10 px-2 py-1 text-xs font-semibold text-blue-400">
+											<span
+												class="rounded-full border border-blue-500/50 bg-blue-500/10 px-2 py-1 text-xs font-semibold text-blue-400"
+											>
 												{t.admin}
 											</span>
 										{:else}
-											<span class="rounded-full border border-green-500/50 bg-green-500/10 px-2 py-1 text-xs font-semibold text-green-400">
+											<span
+												class="rounded-full border border-green-500/50 bg-green-500/10 px-2 py-1 text-xs font-semibold text-green-400"
+											>
 												{t.member}
 											</span>
 										{/if}

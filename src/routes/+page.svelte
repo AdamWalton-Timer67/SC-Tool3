@@ -57,7 +57,7 @@
 	const t = $derived(
 		currentLang === 'fr'
 			? {
-					subtitle: 'Star citizen • Outils communautaires • Secteur Stanton',
+					subtitle: 'Tools for the Garden in the Hallow',
 					patchNotes: {
 						title: 'Notes de mise à jour',
 						version: 'Version'
@@ -75,7 +75,7 @@
 						cta: 'Ouvrir le tracker'
 					},
 					inventoryCard: {
-						title: 'Wikelo My Inventory',
+						title: 'My Inventory',
 						description:
 							"Gérez votre inventaire d'ingrédients Wikelo. Suivez vos quantités et organisez vos ressources.",
 						features: [
@@ -112,7 +112,7 @@
 					}
 				}
 			: {
-					subtitle: 'Star citizen • Community Tools • Stanton Sector',
+					subtitle: 'Tools for the Garden in the Hallow',
 					patchNotes: {
 						title: 'Patch Notes',
 						version: 'Version'
@@ -130,7 +130,7 @@
 						cta: 'Open tracker'
 					},
 					inventoryCard: {
-						title: 'Wikelo My Inventory',
+						title: 'My Inventory',
 						description:
 							'Manage your Wikelo ingredients inventory. Track your quantities and organize your resources.',
 						features: [
@@ -167,75 +167,17 @@
 					}
 				}
 	);
-
-	const content = $derived(
-		currentLang === 'fr'
-			? {
-					title: "Suite Complète d'Outils Star Citizen Wikelo Emporium",
-					intro:
-						"Bienvenue sur la collection d'outils gratuits la plus complète pour suivre les <strong>récompenses Wikelo Emporium</strong>. Notre suite comprend un <strong>tracker de récompenses</strong> complet, une <strong>base de données d'ingrédients</strong> et un <strong>gestionnaire d'inventaire</strong> conçus spécifiquement pour les missions du marchand Banu Wikelo.",
-					rewardsTitle: 'Tracker de Récompenses Wikelo Emporium',
-					rewardsText:
-						"Suivez plus de 30 récompenses exclusives du <strong>marchand Banu Wikelo</strong> incluant des ensembles d'armures légendaires comme la <strong>Combinaison Xanthule Ascension</strong>, la <strong>Combinaison d'Exploration Novikov Ascension</strong>, l'<strong>Armure Geist Camo Neige</strong>, les variantes d'<strong>Armure DCP</strong> (Camo Jungle, Camo Chasseur, Camo Cobalt), l'<strong>Ensemble d'Armure Ana Endro</strong>, l'<strong>Armure Bokto Luminescente</strong>, l'<strong>Ensemble Corbel Crush</strong> et l'<strong>Armure Palatino Mark I</strong>.",
-					ingredientsTitle: 'Base de Données Complète des Ingrédients',
-					ingredientsText:
-						'Accédez aux informations détaillées pour tous les matériaux de fabrication et monnaies incluant les <strong>Crocs de Valakkar</strong> (Juvénile, Adulte, Apex), les <strong>Perles Valakkar Grade AAA</strong>, les <strong>Marqueurs de Service de Guerre Tevarin</strong>, les <strong>Disques Sécurisés ASD</strong>, <strong>MG Scrip</strong>, <strong>Council Scrip</strong>, <strong>Wikelo Favor</strong>, matériaux de minage (<strong>Carinite</strong>, <strong>Jaclium</strong>, <strong>Saldynium</strong>, <strong>Quantanium</strong>, <strong>Cuivre</strong>, <strong>Tungstène</strong>, <strong>Corindon</strong>), matériaux organiques et composants spéciaux.',
-					featuresTitle: 'Fonctionnalités & Avantages',
-					features: [
-						'<strong>Suivi de progression en temps réel</strong> pour toutes les missions Wikelo Emporium',
-						'<strong>Sauvegarde automatique locale</strong> pour protéger vos données et votre vie privée',
-						'<strong>Support multilingue</strong> (Anglais/Français)',
-						'<strong>Filtrage avancé</strong> par rareté (Commun, Inhabituel, Rare, Épique, Légendaire)',
-						"<strong>Gestion d'inventaire</strong> avec ajustements rapides des quantités +/-",
-						"<strong>Informations détaillées sur les ingrédients</strong> avec emplacements et guides d'obtention",
-						"<strong>Fonctionnalité de recherche</strong> pour trouver rapidement n'importe quelle récompense ou ingrédient",
-						"<strong>Interface spatiale magnifique</strong> inspirée de l'esthétique Star Citizen et Banu"
-					],
-					locationsTitle: 'Emplacements Wikelo Emporium',
-					locationsText:
-						'Trouvez les Wikelo Emporiums à trois emplacements dans le système Stanton : <strong>Wikelo Emporium Dasi</strong> (orbite de Hurston), <strong>Wikelo Emporium Kinga</strong> (orbite de microTech) et <strong>Wikelo Emporium Selo</strong> (orbite de Yela). Chaque emplacement offre les mêmes récompenses, mais suivre votre progression vous aide à planifier vos routes de farming efficacement.',
-					footer:
-						"Cette collection d'outils a été créée par et pour la <strong>communauté Star Citizen</strong>. Tous les outils sont entièrement gratuits sans publicités ni fonctionnalités premium. Vos données sont sauvegardées localement dans votre navigateur pour garantir la confidentialité. Les futures mises à jour incluront la synchronisation cloud sur plusieurs appareils."
-				}
-			: {
-					title: 'Complete Star Citizen Wikelo Emporium Tools Suite',
-					intro:
-						"Welcome to the most comprehensive free <strong>Star Citizen Wikelo Tools collection</strong> for tracking <strong>Wikelo Emporium rewards</strong>. Our suite includes a complete <strong>rewards tracker</strong>, <strong>ingredient database</strong>, and <strong>inventory manager</strong> designed specifically for the Banu merchant Wikelo's missions.",
-					rewardsTitle: 'Wikelo Emporium Rewards Tracker',
-					rewardsText:
-						'Track over 60+ exclusive rewards from the <strong>Banu merchant Wikelo</strong> including legendary armor sets like <strong>Xanthule Ascension Suit</strong>, <strong>Novikov Ascension Exploration Suit</strong>, <strong>Geist Snow Camo Armor Set</strong>, <strong>DCP Armor</strong> variants (Jungle Camo, Hunter Camo, Cobalt Camo), <strong>Ana Armor Endro Set</strong>, <strong>Bokto Glowing Armor</strong>, <strong>Corbel Crush Set</strong>, and <strong>Palatino Mark I Armor</strong>.',
-					ingredientsTitle: 'Complete Ingredient Database',
-					ingredientsText:
-						'Access detailed information for all crafting materials and currencies including <strong>Valakkar Fangs</strong> (Juvenile, Adult, Apex), <strong>Valakkar Pearls Grade AAA</strong>, <strong>Tevarin War Service Markers</strong>, <strong>ASD Secure Drives</strong>, <strong>MG Scrip</strong>, <strong>Council Scrip</strong>, <strong>Wikelo Favor</strong>, mining materials (<strong>Carinite</strong>, <strong>Jaclium</strong>, <strong>Saldynium</strong>, <strong>Quantanium</strong>, <strong>Copper</strong>, <strong>Tungsten</strong>, <strong>Corundum</strong>), organic materials, and special components.',
-					featuresTitle: 'Features & Benefits',
-					features: [
-						'<strong>Real-time progression tracking</strong> for all Wikelo Emporium missions',
-						'<strong>Automatic local save</strong> to protect your data and privacy',
-						'<strong>Multi-language support</strong> (English/French)',
-						'<strong>Advanced filtering</strong> by rarity (Common, Uncommon, Rare, Epic, Legendary)',
-						'<strong>Inventory management</strong> with quick +/- quantity adjustments',
-						'<strong>Detailed ingredient information</strong> with locations and how-to-obtain guides',
-						'<strong>Search functionality</strong> to quickly find any reward or ingredient',
-						'<strong>Beautiful space-themed UI</strong> inspired by Star Citizen and Banu aesthetics'
-					],
-					locationsTitle: 'Wikelo Emporium Locations',
-					locationsText:
-						'Find Wikelo Emporiums at three locations in the Stanton system: <strong>Wikelo Emporium Dasi</strong> (Hurston orbit), <strong>Wikelo Emporium Kinga</strong> (microTech orbit), and <strong>Wikelo Emporium Selo</strong> (Yela orbit). Each location offers the same rewards but tracking your progression helps you plan your farming routes efficiently.',
-					footer:
-						'This tool collection was created by and for the <strong>Star Citizen community</strong>. All tools are completely free with no ads or premium features. Your data is saved locally in your browser to ensure privacy. Future updates will include cloud synchronization across multiple devices.'
-				}
-	);
 </script>
 
 <svelte:head>
-	<title>Wikelo Tools - Star Citizen Tracker & Database</title>
+	<title>Avalon Tools - Star Citizen Tracker & Database</title>
 	<meta
 		name="description"
 		content="Free Wikelo Emporium tracker for Star Citizen. Track 60+ rewards, manage ingredients, and organize your inventory. Updated for 4.5"
 	/>
 	<meta
 		name="keywords"
-		content="Star Citizen Wikelo Tools, Wikelo Emporium tracker, Star Citizen rewards, Star Citizen database, Star Citizen inventory manager, Banu merchant Wikelo, Star Citizen armor tracker, Star Citizen weapons database, Star Citizen crafting guide, Xanthule Ascension Suit, Novikov Armor, Geist Snow Camo, DCP Armor, Valakkar Fang, MG Scrip, Wikelo Favor, Star Citizen ingredients, Star Citizen missions tracker, free Star Citizen Wikelo Tools"
+		content="Star Citizen Avalon Tools, Wikelo Emporium tracker, Star Citizen rewards, Star Citizen database, Star Citizen inventory manager, Banu merchant Wikelo, Star Citizen armor tracker, Star Citizen weapons database, Star Citizen crafting guide, Xanthule Ascension Suit, Novikov Armor, Geist Snow Camo, DCP Armor, Valakkar Fang, MG Scrip, Wikelo Favor, Star Citizen ingredients, Star Citizen missions tracker, free Star Citizen Avalon Tools"
 	/>
 
 	<!-- Open Graph / Facebook -->
@@ -243,7 +185,7 @@
 	<meta property="og:url" content="https://www.star-citizen-wikelo-tools.space/" />
 	<meta
 		property="og:title"
-		content="Star Citizen Wikelo Tools - Wikelo Emporium Tracker & Database"
+		content="Star Citizen Avalon Tools - Wikelo Emporium Tracker & Database"
 	/>
 	<meta
 		property="og:description"
@@ -257,7 +199,7 @@
 	<!-- Twitter -->
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:url" content="https://www.star-citizen-wikelo-tools.space/" />
-	<meta name="twitter:title" content="Star Citizen Wikelo Tools - Wikelo Emporium Tracker" />
+	<meta name="twitter:title" content="Star Citizen Avalon Tools - Wikelo Emporium Tracker" />
 	<meta
 		name="twitter:description"
 		content="Free Star Citizen community tools: Wikelo rewards tracker, inventory manager, and complete database"
@@ -273,7 +215,7 @@
 		{@html JSON.stringify({
 			"@context": "https://schema.org",
 			"@type": "WebSite",
-			"name": "Star Citizen Wikelo Tools",
+			"name": "Star Citizen Avalon Tools",
 			"url": "https://www.star-citizen-wikelo-tools.space",
 			"description": "Free community tools for Star Citizen players: Wikelo Emporium rewards tracker, ingredient database, and inventory manager",
 			"applicationCategory": "GameApplication",
@@ -322,7 +264,7 @@
 					<h1
 						class="font-orbitron mb-2 bg-linear-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-2xl font-black tracking-wider text-transparent uppercase sm:text-5xl"
 					>
-						Wikelo Tools
+						Avalon Tools
 					</h1>
 					<p
 						class="font-rajdhani mb-3 text-xs font-light tracking-widest text-cyan-400 uppercase sm:mb-0 sm:text-sm"
@@ -349,38 +291,6 @@
 
 	<!-- Main Content -->
 	<main class="container mx-auto px-4 py-12">
-		<!-- Temporary Alpha 4.5 Notice -->
-		<div
-			class="mb-8 overflow-hidden rounded-xl border border-orange-400/50 bg-linear-to-r from-orange-900/30 via-yellow-900/30 to-orange-900/30 backdrop-blur-xl"
-		>
-			<div class="relative border-b border-orange-400/30 bg-orange-800/20 px-6 py-3">
-				<div
-					class="absolute top-0 right-0 left-0 h-0.5 animate-pulse bg-linear-to-r from-transparent via-orange-400 to-transparent"
-				></div>
-				<div class="flex items-center gap-3">
-					<span class="text-2xl">⚠️</span>
-					<h3 class="font-orbitron text-lg font-bold tracking-wider text-orange-400 uppercase">
-						{currentLang === 'fr' ? 'Mise à jour importante à venir' : 'Important Update Coming'}
-					</h3>
-				</div>
-			</div>
-			<div class="p-6">
-				<p class="leading-relaxed text-gray-300">
-					{#if currentLang === 'fr'}
-						<strong class="text-orange-400">Star Citizen Alpha 4.5</strong> arrive bientôt avec des changements
-						majeurs au système Wikelo Emporium. De nouvelles récompenses, ingrédients et mécaniques de
-						jeu seront ajoutées. Nous mettrons à jour les outils dès que possible après la sortie du
-						patch. Merci de votre patience ! 🚀
-					{:else}
-						<strong class="text-orange-400">Star Citizen Alpha 4.5</strong> is coming soon with major
-						changes to the Wikelo Emporium system. New rewards, ingredients, and game mechanics will
-						be added. We will update the tools as soon as possible after the patch release. Thank you
-						for your patience! 🚀
-					{/if}
-				</p>
-			</div>
-		</div>
-
 		<div class="3xl:grid-cols-3 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
 			<!-- Wikelo Tracker Card -->
 			<a
@@ -614,47 +524,6 @@
 				</div>
 			</div>
 		{/if}
-
-		<!-- SEO-Rich Info Section -->
-		<article class="mt-8 rounded-xl border border-white/10 bg-slate-900/50 p-8 backdrop-blur-xl">
-			<div class="mb-4 flex items-center justify-between">
-				<h2 class="text-xl font-bold text-white">{content.title}</h2>
-			</div>
-			<div class="space-y-4 leading-relaxed text-gray-400">
-				<p>
-					{@html content.intro}
-				</p>
-
-				<h3 class="mt-6 mb-3 text-lg font-bold text-cyan-400">{content.rewardsTitle}</h3>
-				<p>
-					{@html content.rewardsText}
-				</p>
-
-				<h3 class="mt-6 mb-3 text-lg font-bold text-cyan-400">{content.ingredientsTitle}</h3>
-				<p>
-					{@html content.ingredientsText}
-				</p>
-
-				<h3 class="mt-6 mb-3 text-lg font-bold text-cyan-400">{content.featuresTitle}</h3>
-				<ul class="list-inside list-disc space-y-2 text-gray-400">
-					{#each content.features as feature}
-						<li>{@html feature}</li>
-					{/each}
-				</ul>
-
-				<h3 class="mt-6 mb-3 text-lg font-bold text-cyan-400">{content.locationsTitle}</h3>
-				<p>
-					{@html content.locationsText}
-				</p>
-
-				<p class="mt-6">
-					{@html content.footer}
-				</p>
-			</div>
-			<p class="mt-4 text-sm text-gray-500 italic">
-				{t.footer.disclaimer}
-			</p>
-		</article>
 	</main>
 
 	<!-- Footer -->
