@@ -58,7 +58,7 @@ export const GET: RequestHandler = async ({ fetch }) => {
 		<priority>1.0</priority>
 		<image:image>
 			<image:loc>${sitemapIcon}</image:loc>
-			<image:title>Wikelo Tools - Star Citizen</image:title>
+			<image:title>Avalon Tools - Star Citizen</image:title>
 			<image:caption>Free Wikelo Emporium tracker</image:caption>
 		</image:image>
 	</url>
