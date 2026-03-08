@@ -8,19 +8,29 @@
 
 	const { data }: Props = $props();
 
-	let suggestions = $state<Suggestion[]>(data.suggestions || []);
+	function normalizeStatus(status: string | null | undefined): 'pending' | 'reviewed' | 'resolved' {
+		if (status === 'reviewed' || status === 'resolved') return status;
+		return 'pending';
+	}
+
+	let suggestions = $state<Suggestion[]>(
+		(data.suggestions || []).map((suggestion) => ({
+			...suggestion,
+			status: normalizeStatus(suggestion.status)
+		}))
+	);
 	let deletingId = $state<string | null>(null);
 	let filter = $state<'all' | 'pending' | 'reviewed' | 'resolved'>('all');
 
 	const filteredSuggestions = $derived(
-		filter === 'all' ? suggestions : suggestions.filter((s) => s.status === filter)
+		filter === 'all' ? suggestions : suggestions.filter((s) => normalizeStatus(s.status) === filter)
 	);
 
 	const stats = $derived({
 		total: suggestions.length,
-		pending: suggestions.filter((s) => s.status === 'pending').length,
-		reviewed: suggestions.filter((s) => s.status === 'reviewed').length,
-		resolved: suggestions.filter((s) => s.status === 'resolved').length
+		pending: suggestions.filter((s) => normalizeStatus(s.status) === 'pending').length,
+		reviewed: suggestions.filter((s) => normalizeStatus(s.status) === 'reviewed').length,
+		resolved: suggestions.filter((s) => normalizeStatus(s.status) === 'resolved').length
 	});
 
 	async function deleteSuggestion(id: string) {
@@ -64,9 +74,13 @@
 			}
 
 			const { suggestion } = await response.json();
+			const normalizedSuggestion = {
+				...suggestion,
+				status: normalizeStatus(suggestion?.status)
+			};
 
 			// Update local state
-			suggestions = suggestions.map((s) => (s.id === id ? suggestion : s));
+			suggestions = suggestions.map((s) => (s.id === id ? normalizedSuggestion : s));
 		} catch (error) {
 			console.error('Error updating suggestion:', error);
 			alert('Error updating status');

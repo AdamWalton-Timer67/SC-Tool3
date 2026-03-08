@@ -715,7 +715,11 @@ class WikeloStore {
 			if (data) {
 				const inventoryMap: Record<string, number> = {};
 				data.forEach((item) => {
-					inventoryMap[item.ingredient_id] = item.quantity;
+					const parsedQuantity = Number(item.quantity);
+					if (!Number.isFinite(parsedQuantity) || parsedQuantity <= 0) {
+						return;
+					}
+					inventoryMap[item.ingredient_id] = Math.floor(parsedQuantity);
 				});
 
 				for (const ingredientId of this.pendingInventoryWrites.keys()) {
