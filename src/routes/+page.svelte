@@ -278,11 +278,6 @@
 						<AuthButton variant="home" />
 					</div>
 				</div>
-
-				<!-- Animated Icon - Hidden on mobile -->
-				<div class="animate-spin-slow text-shadow-gold hidden text-7xl text-yellow-400 sm:block">
-					◈
-				</div>
 			</div>
 		</div>
 

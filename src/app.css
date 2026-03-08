@@ -21,6 +21,10 @@ body {
 	color: var(--avalon-text);
 }
 
+h1 {
+	color: var(--avalon-red-strong) !important;
+}
+
 /* Global palette remap to base + red/yellow accent theme */
 [class*='bg-slate-'] {
 	background-color: var(--avalon-surface) !important;
