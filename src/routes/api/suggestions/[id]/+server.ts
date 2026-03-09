@@ -17,7 +17,7 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
 	}
 
 	try {
-		await requireAdmin(supabase);
+		await ensureAdminAccess(db, user.id);
 	} catch {
 		return json({ error: 'Forbidden' }, { status: 403 });
 	}
@@ -49,7 +49,7 @@ export const PATCH: RequestHandler = async ({ params, request, locals }) => {
 	}
 
 	try {
-		await requireAdmin(supabase);
+		await ensureAdminAccess(db, user.id);
 	} catch {
 		return json({ error: 'Forbidden' }, { status: 403 });
 	}
