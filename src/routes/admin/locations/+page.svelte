@@ -348,6 +348,11 @@
 										src={location.image_url}
 										alt={location.name_en}
 										class="h-16 w-16 rounded object-cover"
+										onerror={(event) => {
+											const image = event.currentTarget as HTMLImageElement;
+											image.onerror = null;
+											image.src = '/images/wikelo/wikelo_favor.webp';
+										}}
 									/>
 								{:else}
 									<div

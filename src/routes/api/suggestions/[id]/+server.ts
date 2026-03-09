@@ -1,6 +1,21 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { requireAdmin } from '$lib/server/admin';
+import { createAdminClient } from '$lib/server/admin';
+
+async function ensureAdminAccess(supabase: any, userId: string) {
+	const { data: roles, error } = await supabase
+		.from('user_roles')
+		.select('role')
+		.eq('user_id', userId);
+
+	if (
+		error ||
+		!Array.isArray(roles) ||
+		!roles.some((role: { role?: string }) => role.role === 'admin')
+	) {
+		throw new Error('Forbidden');
+	}
+}
 
 /**
  * DELETE /api/suggestions/[id]
@@ -9,13 +24,15 @@ import { requireAdmin } from '$lib/server/admin';
 export const DELETE: RequestHandler = async ({ params, locals }) => {
 	const { supabase, safeGetSession } = locals;
 	const { user } = await safeGetSession();
+	const adminSupabase = createAdminClient();
+	const db = adminSupabase ?? supabase;
 
 	if (!user) {
 		return json({ error: 'Unauthorized' }, { status: 401 });
 	}
 
 	try {
-		await requireAdmin(supabase);
+		await ensureAdminAccess(db, user.id);
 	} catch {
 		return json({ error: 'Forbidden' }, { status: 403 });
 	}
@@ -23,7 +40,7 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
 	const { id } = params;
 
 	// Delete the suggestion
-	const { error } = await supabase.from('suggestions').delete().eq('id', id);
+	const { error } = await db.from('suggestions').delete().eq('id', id);
 
 	if (error) {
 		console.error('Error deleting suggestion:', error);
@@ -40,13 +57,15 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
 export const PATCH: RequestHandler = async ({ params, request, locals }) => {
 	const { supabase, safeGetSession } = locals;
 	const { user } = await safeGetSession();
+	const adminSupabase = createAdminClient();
+	const db = adminSupabase ?? supabase;
 
 	if (!user) {
 		return json({ error: 'Unauthorized' }, { status: 401 });
 	}
 
 	try {
-		await requireAdmin(supabase);
+		await ensureAdminAccess(db, user.id);
 	} catch {
 		return json({ error: 'Forbidden' }, { status: 403 });
 	}
@@ -63,7 +82,7 @@ export const PATCH: RequestHandler = async ({ params, request, locals }) => {
 		}
 
 		// Update the suggestion
-		const { data, error } = await supabase
+		const { data, error } = await db
 			.from('suggestions')
 			.update({ status })
 			.eq('id', id)
