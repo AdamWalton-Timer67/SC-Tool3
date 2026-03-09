@@ -69,7 +69,14 @@
 			});
 
 			if (!response.ok) {
-				throw new Error('Failed to update suggestion');
+				let errorMessage = 'Failed to update suggestion';
+				try {
+					const payload = await response.json();
+					errorMessage = payload?.error || errorMessage;
+				} catch {
+					// no-op: keep default message
+				}
+				throw new Error(errorMessage);
 			}
 
 			const { suggestion } = await response.json();
@@ -82,7 +89,8 @@
 			suggestions = suggestions.map((s) => (s.id === id ? normalizedSuggestion : s));
 		} catch (error) {
 			console.error('Error updating suggestion:', error);
-			alert('Error updating status');
+			const message = error instanceof Error ? error.message : 'Error updating status';
+			alert(message);
 		}
 	}
 

@@ -1,21 +1,6 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { createAdminClient } from '$lib/server/admin';
-
-async function ensureAdminAccess(supabase: any, userId: string) {
-	const { data: roles, error } = await supabase
-		.from('user_roles')
-		.select('role')
-		.eq('user_id', userId);
-
-	if (
-		error ||
-		!Array.isArray(roles) ||
-		!roles.some((role: { role?: string }) => role.role === 'admin')
-	) {
-		throw new Error('Forbidden');
-	}
-}
+import { createAdminClient, requireAdmin } from '$lib/server/admin';
 
 /**
  * DELETE /api/suggestions/[id]
@@ -39,7 +24,6 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
 
 	const { id } = params;
 
-	// Delete the suggestion
 	const { error } = await db.from('suggestions').delete().eq('id', id);
 
 	if (error) {
@@ -76,25 +60,29 @@ export const PATCH: RequestHandler = async ({ params, request, locals }) => {
 		const body = await request.json();
 		const { status } = body;
 
-		// Validate status
-		if (!['pending', 'reviewed', 'resolved'].includes(status)) {
+		if (!['pending', 'resolved'].includes(status)) {
 			return json({ error: 'Invalid status' }, { status: 400 });
 		}
 
-		// Update the suggestion
-		const { data, error } = await db
-			.from('suggestions')
-			.update({ status })
-			.eq('id', id)
-			.select()
-			.single();
+		const { error: updateError } = await db.from('suggestions').update({ status }).eq('id', id);
 
-		if (error) {
-			console.error('Error updating suggestion:', error);
+		if (updateError) {
+			console.error('Error updating suggestion:', updateError);
 			return json({ error: 'Failed to update suggestion' }, { status: 500 });
 		}
 
-		return json({ suggestion: data });
+		const { data: suggestion, error: fetchError } = await db
+			.from('suggestions')
+			.select('*')
+			.eq('id', id)
+			.single();
+
+		if (fetchError) {
+			console.error('Error fetching updated suggestion:', fetchError);
+			return json({ error: 'Suggestion updated but failed to fetch result' }, { status: 500 });
+		}
+
+		return json({ suggestion });
 	} catch (err) {
 		console.error('Error parsing request:', err);
 		return json({ error: 'Invalid request' }, { status: 400 });
