@@ -10,7 +10,7 @@
 	import {
 		getCategoryIcon,
 		getCategoryTranslation,
-		getAllCategoryTranslations,
+		getAllCategoryTranslations
 	} from '$lib/utils/categories';
 
 	let searchQuery = $state('');
@@ -194,9 +194,14 @@
 	);
 
 	const totalItems = $derived(
-		Object.values(wikeloStore.inventory).reduce((sum, qty) => sum + qty, 0)
+		Object.values(wikeloStore.inventory).reduce((sum, qty) => {
+			const parsedQuantity = Number(qty);
+			return sum + (Number.isFinite(parsedQuantity) && parsedQuantity > 0 ? parsedQuantity : 0);
+		}, 0)
 	);
-	const uniqueItems = $derived(Object.keys(wikeloStore.inventory).length);
+	const uniqueItems = $derived(
+		Object.values(wikeloStore.inventory).filter((qty) => Number(qty) > 0).length
+	);
 
 	// Get unique rarities avec traductions
 	const rarities = $derived.by(() => {
@@ -224,9 +229,21 @@
 	<link rel="canonical" href="https://www.star-citizen-wikelo-tools.space/inventory" />
 
 	<!-- Hreflang for multilingual support -->
-	<link rel="alternate" hreflang="en" href="https://www.star-citizen-wikelo-tools.space/inventory" />
-	<link rel="alternate" hreflang="fr" href="https://www.star-citizen-wikelo-tools.space/inventory" />
-	<link rel="alternate" hreflang="x-default" href="https://www.star-citizen-wikelo-tools.space/inventory" />
+	<link
+		rel="alternate"
+		hreflang="en"
+		href="https://www.star-citizen-wikelo-tools.space/inventory"
+	/>
+	<link
+		rel="alternate"
+		hreflang="fr"
+		href="https://www.star-citizen-wikelo-tools.space/inventory"
+	/>
+	<link
+		rel="alternate"
+		hreflang="x-default"
+		href="https://www.star-citizen-wikelo-tools.space/inventory"
+	/>
 
 	<!-- Open Graph / Facebook -->
 	<meta property="og:type" content="website" />
@@ -320,7 +337,7 @@
 	<!-- Top Navigation - Back button + Language + Auth -->
 	<div class="mb-4">
 		<!-- Top row: Back button + Auth -->
-		<div class="flex items-start justify-between mb-3">
+		<div class="mb-3 flex items-start justify-between">
 			<!-- Back to Home Button -->
 			<a
 				href="/"
@@ -345,14 +362,14 @@
 			</a>
 
 			<!-- Auth on desktop, hidden on mobile -->
-			<div class="hidden sm:flex items-center gap-3">
+			<div class="hidden items-center gap-3 sm:flex">
 				<LanguageToggle />
 				<AuthButton variant="compact" />
 			</div>
 		</div>
 
 		<!-- Second row on mobile: Language + Auth centered -->
-		<div class="flex sm:hidden items-center justify-center gap-3">
+		<div class="flex items-center justify-center gap-3 sm:hidden">
 			<LanguageToggle />
 			<AuthButton variant="compact" />
 		</div>
@@ -436,7 +453,7 @@
 					favoritesOnly = !favoritesOnly;
 					captureEvent('inventory_favorites_filter_toggled', { enabled: favoritesOnly });
 				}}
-				class="hidden cursor-pointer items-center gap-2 rounded-lg border transition-all hover:scale-105 sm:flex px-4 py-2
+				class="hidden cursor-pointer items-center gap-2 rounded-lg border px-4 py-2 transition-all hover:scale-105 sm:flex
 					{favoritesOnly
 					? 'border-pink-500 bg-pink-500/20 text-pink-400 shadow-lg shadow-pink-500/20'
 					: 'border-white/10 bg-white/5 text-gray-400 hover:border-pink-500/50 hover:bg-pink-500/10 hover:text-pink-300'}"
@@ -570,7 +587,7 @@
 												isFavorite: !wikeloStore.isFavoriteIngredient(ingredient.id)
 											});
 										}}
-										class="rounded-full bg-slate-900/50 p-2 backdrop-blur-sm transition-all hover:bg-pink-500/10 hover:scale-110"
+										class="rounded-full bg-slate-900/50 p-2 backdrop-blur-sm transition-all hover:scale-110 hover:bg-pink-500/10"
 										title={wikeloStore.isFavoriteIngredient(ingredient.id)
 											? 'Remove from favorites'
 											: 'Add to favorites'}
@@ -656,7 +673,7 @@
 									</div>
 
 									<!-- Buttons Below -->
-									<div class="grid grid-cols-4 gap-1.5 mt-2">
+									<div class="mt-2 grid grid-cols-4 gap-1.5">
 										<button
 											onclick={() =>
 												handleQuantityButton(
@@ -861,48 +878,78 @@
 	<article class="mt-12 rounded-xl border border-white/10 bg-slate-900/50 p-8 backdrop-blur-xl">
 		<h2 class="mb-6 text-2xl font-bold text-white">
 			{wikeloStore.currentLang === 'fr'
-				? 'Gestionnaire d\'Inventaire Wikelo - Guide Complet'
+				? "Gestionnaire d'Inventaire Wikelo - Guide Complet"
 				: 'Wikelo Inventory Manager - Complete Guide'}
 		</h2>
-		
+
 		<div class="space-y-4 leading-relaxed text-gray-400">
 			{#if wikeloStore.currentLang === 'fr'}
 				<p>
-					Le <strong class="text-cyan-400">Gestionnaire d'Inventaire Wikelo</strong> est l'outil gratuit le plus complet pour suivre vos ingrédients et matériaux de fabrication dans Star Citizen. Gérez efficacement plus de 60 ingrédients différents nécessaires pour débloquer les récompenses exclusives du marchand Banu Wikelo.
+					Le <strong class="text-cyan-400">Gestionnaire d'Inventaire Wikelo</strong> est l'outil gratuit
+					le plus complet pour suivre vos ingrédients et matériaux de fabrication dans Star Citizen.
+					Gérez efficacement plus de 60 ingrédients différents nécessaires pour débloquer les récompenses
+					exclusives du marchand Banu Wikelo.
 				</p>
 
 				<h3 class="mt-6 mb-3 text-lg font-bold text-cyan-400">Fonctionnalités Principales</h3>
 				<p>
-					Notre système de gestion d'inventaire vous permet de suivre en temps réel vos <strong>Crocs de Valakkar</strong> (Juvénile, Adulte, Apex), <strong>Perles Valakkar Grade AAA</strong>, <strong>Marqueurs de Service de Guerre Tevarin</strong>, et tous les matériaux de minage comme la <strong>Carinite</strong>, le <strong>Jaclium</strong>, et le <strong>Saldynium</strong>. Ajustez rapidement les quantités avec les boutons +/- ou saisissez directement les valeurs.
+					Notre système de gestion d'inventaire vous permet de suivre en temps réel vos <strong
+						>Crocs de Valakkar</strong
+					>
+					(Juvénile, Adulte, Apex), <strong>Perles Valakkar Grade AAA</strong>,
+					<strong>Marqueurs de Service de Guerre Tevarin</strong>, et tous les matériaux de minage
+					comme la <strong>Carinite</strong>, le <strong>Jaclium</strong>, et le
+					<strong>Saldynium</strong>. Ajustez rapidement les quantités avec les boutons +/- ou
+					saisissez directement les valeurs.
 				</p>
 
 				<h3 class="mt-6 mb-3 text-lg font-bold text-cyan-400">Organisation et Filtres</h3>
 				<p>
-					Organisez votre inventaire par catégories : monnaies (<strong>MG Scrip</strong>, <strong>Council Scrip</strong>, <strong>Wikelo Favor</strong>), matériaux organiques, minerais, et composants spéciaux. Utilisez la recherche avancée et les filtres par rareté pour trouver rapidement ce dont vous avez besoin. Le système de favoris vous permet de marquer vos ingrédients les plus importants.
+					Organisez votre inventaire par catégories : monnaies (<strong>MG Scrip</strong>,
+					<strong>Council Scrip</strong>, <strong>Wikelo Favor</strong>), matériaux organiques,
+					minerais, et composants spéciaux. Utilisez la recherche avancée et les filtres par rareté
+					pour trouver rapidement ce dont vous avez besoin. Le système de favoris vous permet de
+					marquer vos ingrédients les plus importants.
 				</p>
 
 				<h3 class="mt-6 mb-3 text-lg font-bold text-cyan-400">Synchronisation et Sauvegarde</h3>
 				<p>
-					Vos données sont automatiquement sauvegardées dans le cloud lorsque vous êtes connecté. Accédez à votre inventaire depuis n'importe quel appareil et ne perdez jamais vos données. L'interface multilingue (Français/Anglais) s'adapte à vos préférences.
+					Vos données sont automatiquement sauvegardées dans le cloud lorsque vous êtes connecté.
+					Accédez à votre inventaire depuis n'importe quel appareil et ne perdez jamais vos données.
+					L'interface multilingue (Français/Anglais) s'adapte à vos préférences.
 				</p>
 			{:else}
 				<p>
-					The <strong class="text-cyan-400">Wikelo Inventory Manager</strong> is the most comprehensive free tool for tracking your crafting ingredients and materials in Star Citizen. Efficiently manage over 60 different ingredients needed to unlock exclusive rewards from the Banu merchant Wikelo.
+					The <strong class="text-cyan-400">Wikelo Inventory Manager</strong> is the most comprehensive
+					free tool for tracking your crafting ingredients and materials in Star Citizen. Efficiently
+					manage over 60 different ingredients needed to unlock exclusive rewards from the Banu merchant
+					Wikelo.
 				</p>
 
 				<h3 class="mt-6 mb-3 text-lg font-bold text-cyan-400">Key Features</h3>
 				<p>
-					Our inventory management system allows you to track in real-time your <strong>Valakkar Fangs</strong> (Juvenile, Adult, Apex), <strong>Valakkar Pearls Grade AAA</strong>, <strong>Tevarin War Service Markers</strong>, and all mining materials like <strong>Carinite</strong>, <strong>Jaclium</strong>, and <strong>Saldynium</strong>. Quickly adjust quantities with +/- buttons or enter values directly.
+					Our inventory management system allows you to track in real-time your <strong
+						>Valakkar Fangs</strong
+					>
+					(Juvenile, Adult, Apex), <strong>Valakkar Pearls Grade AAA</strong>,
+					<strong>Tevarin War Service Markers</strong>, and all mining materials like
+					<strong>Carinite</strong>, <strong>Jaclium</strong>, and <strong>Saldynium</strong>.
+					Quickly adjust quantities with +/- buttons or enter values directly.
 				</p>
 
 				<h3 class="mt-6 mb-3 text-lg font-bold text-cyan-400">Organization and Filters</h3>
 				<p>
-					Organize your inventory by categories: currencies (<strong>MG Scrip</strong>, <strong>Council Scrip</strong>, <strong>Wikelo Favor</strong>), organic materials, ores, and special components. Use advanced search and rarity filters to quickly find what you need. The favorites system lets you mark your most important ingredients.
+					Organize your inventory by categories: currencies (<strong>MG Scrip</strong>,
+					<strong>Council Scrip</strong>, <strong>Wikelo Favor</strong>), organic materials, ores,
+					and special components. Use advanced search and rarity filters to quickly find what you
+					need. The favorites system lets you mark your most important ingredients.
 				</p>
 
 				<h3 class="mt-6 mb-3 text-lg font-bold text-cyan-400">Synchronization and Backup</h3>
 				<p>
-					Your data is automatically saved to the cloud when you're logged in. Access your inventory from any device and never lose your data. The multilingual interface (French/English) adapts to your preferences.
+					Your data is automatically saved to the cloud when you're logged in. Access your inventory
+					from any device and never lose your data. The multilingual interface (French/English)
+					adapts to your preferences.
 				</p>
 			{/if}
 		</div>
