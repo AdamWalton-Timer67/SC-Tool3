@@ -8,8 +8,8 @@
 
 	const { data }: Props = $props();
 
-	function normalizeStatus(status: string | null | undefined): 'pending' | 'reviewed' | 'resolved' {
-		if (status === 'reviewed' || status === 'resolved') return status;
+	function normalizeStatus(status: string | null | undefined): 'pending' | 'resolved' {
+		if (status === 'resolved') return status;
 		return 'pending';
 	}
 
@@ -20,7 +20,7 @@
 		}))
 	);
 	let deletingId = $state<string | null>(null);
-	let filter = $state<'all' | 'pending' | 'reviewed' | 'resolved'>('all');
+	let filter = $state<'all' | 'pending' | 'resolved'>('all');
 
 	const filteredSuggestions = $derived(
 		filter === 'all' ? suggestions : suggestions.filter((s) => normalizeStatus(s.status) === filter)
@@ -29,7 +29,6 @@
 	const stats = $derived({
 		total: suggestions.length,
 		pending: suggestions.filter((s) => normalizeStatus(s.status) === 'pending').length,
-		reviewed: suggestions.filter((s) => normalizeStatus(s.status) === 'reviewed').length,
 		resolved: suggestions.filter((s) => normalizeStatus(s.status) === 'resolved').length
 	});
 
@@ -59,7 +58,7 @@
 		}
 	}
 
-	async function updateStatus(id: string, newStatus: 'pending' | 'reviewed' | 'resolved') {
+	async function updateStatus(id: string, newStatus: 'pending' | 'resolved') {
 		try {
 			const response = await fetch(`/api/suggestions/${id}`, {
 				method: 'PATCH',
@@ -103,8 +102,6 @@
 		switch (status) {
 			case 'pending':
 				return 'bg-yellow-500/20 border-yellow-400/30 text-yellow-300';
-			case 'reviewed':
-				return 'bg-blue-500/20 border-blue-400/30 text-blue-300';
 			case 'resolved':
 				return 'bg-green-500/20 border-green-400/30 text-green-300';
 			default:
@@ -116,8 +113,6 @@
 		switch (status) {
 			case 'pending':
 				return 'Pending';
-			case 'reviewed':
-				return 'Reviewed';
 			case 'resolved':
 				return 'Resolved';
 			default:
@@ -142,7 +137,7 @@
 	</div>
 
 	<!-- Statistics Cards -->
-	<div class="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-4">
+	<div class="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
 		<div
 			class="group relative rounded-xl border-2 border-cyan-500/30 bg-gradient-to-br from-cyan-500/10 to-purple-500/10 p-6 transition-all hover:scale-105 hover:border-cyan-500/60 hover:shadow-lg hover:shadow-cyan-500/30"
 		>
@@ -175,24 +170,6 @@
 				</h3>
 				<p class="text-shadow-glow font-orbitron text-3xl font-bold text-yellow-300 sm:text-4xl">
 					{stats.pending}
-				</p>
-			</div>
-		</div>
-
-		<div
-			class="group relative rounded-xl border-2 border-blue-500/30 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 p-6 transition-all hover:scale-105 hover:border-blue-500/60 hover:shadow-lg hover:shadow-blue-500/30"
-		>
-			<div
-				class="absolute inset-0 rounded-xl bg-gradient-to-br from-blue-400/5 via-cyan-500/5 to-blue-400/5 opacity-0 transition-opacity group-hover:opacity-100"
-			></div>
-			<div class="relative">
-				<h3
-					class="font-orbitron mb-1 text-xs font-medium tracking-wider text-blue-300/60 uppercase sm:text-sm"
-				>
-					Reviewed
-				</h3>
-				<p class="text-shadow-glow font-orbitron text-3xl font-bold text-blue-300 sm:text-4xl">
-					{stats.reviewed}
 				</p>
 			</div>
 		</div>
@@ -235,15 +212,6 @@
 				: 'border-white/10 bg-slate-900/85 text-gray-300 hover:border-yellow-400/50 hover:bg-yellow-500/10'}"
 		>
 			Pending ({stats.pending})
-		</button>
-		<button
-			onclick={() => (filter = 'reviewed')}
-			class="font-orbitron rounded-lg border-2 px-4 py-2.5 text-sm tracking-wide uppercase transition-all {filter ===
-			'reviewed'
-				? 'border-blue-400 bg-blue-500/20 text-blue-300 shadow-lg shadow-blue-400/50'
-				: 'border-white/10 bg-slate-900/85 text-gray-300 hover:border-blue-400/50 hover:bg-blue-500/10'}"
-		>
-			Reviewed ({stats.reviewed})
 		</button>
 		<button
 			onclick={() => (filter = 'resolved')}
@@ -326,40 +294,24 @@
 
 					<!-- Actions -->
 					<div class="flex flex-wrap gap-2">
-						<!-- Status change buttons -->
-						{#if suggestion.status !== 'pending'}
-							<button
-								onclick={() => updateStatus(suggestion.id, 'pending')}
-								class="font-orbitron rounded-lg border-2 border-yellow-400/30 bg-yellow-500/20 px-3 py-2 text-xs tracking-wide text-yellow-300 uppercase transition-all hover:scale-105 hover:border-yellow-400/60 hover:bg-yellow-500/30"
-							>
-								→ Pending
-							</button>
-						{/if}
-						{#if suggestion.status !== 'reviewed'}
-							<button
-								onclick={() => updateStatus(suggestion.id, 'reviewed')}
-								class="font-orbitron rounded-lg border-2 border-blue-400/30 bg-blue-500/20 px-3 py-2 text-xs tracking-wide text-blue-300 uppercase transition-all hover:scale-105 hover:border-blue-400/60 hover:bg-blue-500/30"
-							>
-								→ Reviewed
-							</button>
-						{/if}
-						{#if suggestion.status !== 'resolved'}
+						{#if normalizeStatus(suggestion.status) !== 'resolved'}
 							<button
 								onclick={() => updateStatus(suggestion.id, 'resolved')}
 								class="font-orbitron rounded-lg border-2 border-green-400/30 bg-green-500/20 px-3 py-2 text-xs tracking-wide text-green-300 uppercase transition-all hover:scale-105 hover:border-green-400/60 hover:bg-green-500/30"
 							>
-								→ Resolved
+								Resolve
 							</button>
 						{/if}
 
-						<!-- Delete button -->
-						<button
-							onclick={() => deleteSuggestion(suggestion.id)}
-							disabled={deletingId === suggestion.id}
-							class="font-orbitron ml-auto rounded-lg border-2 border-red-400/30 bg-red-500/20 px-3 py-2 text-xs tracking-wide text-red-300 uppercase transition-all hover:scale-105 hover:border-red-400/60 hover:bg-red-500/30 disabled:cursor-not-allowed disabled:opacity-50"
-						>
-							{deletingId === suggestion.id ? 'Deleting...' : '🗑️ Delete'}
-						</button>
+						{#if normalizeStatus(suggestion.status) === 'resolved'}
+							<button
+								onclick={() => deleteSuggestion(suggestion.id)}
+								disabled={deletingId === suggestion.id}
+								class="font-orbitron ml-auto rounded-lg border-2 border-red-400/30 bg-red-500/20 px-3 py-2 text-xs tracking-wide text-red-300 uppercase transition-all hover:scale-105 hover:border-red-400/60 hover:bg-red-500/30 disabled:cursor-not-allowed disabled:opacity-50"
+							>
+								{deletingId === suggestion.id ? 'Deleting...' : '🗑️ Delete'}
+							</button>
+						{/if}
 					</div>
 				</div>
 			{/each}
