@@ -2,11 +2,17 @@ import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { createAdminClient, requireAdmin } from '$lib/server/admin';
 
-/**
- * DELETE /api/suggestions/[id]
- * Delete a suggestion (admin only)
- */
-export const DELETE: RequestHandler = async ({ params, locals }) => {
+type SuggestionStatus = 'pending' | 'resolved';
+
+type AuthContext = {
+	db: any;
+	id: string;
+};
+
+async function getAuthorizedContext(
+	params: { id: string },
+	locals: Parameters<RequestHandler>[0]['locals']
+): Promise<AuthContext | Response> {
 	const { supabase, safeGetSession } = locals;
 	const { user } = await safeGetSession();
 	const adminSupabase = createAdminClient();
@@ -22,8 +28,28 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
 		return json({ error: 'Forbidden' }, { status: 403 });
 	}
 
-	const { id } = params;
+	const adminSupabase = createAdminClient();
+	const db = adminSupabase ?? supabase;
 
+	return {
+		db,
+		id: params.id
+	};
+}
+
+function parseStatus(value: unknown): SuggestionStatus | null {
+	return value === 'pending' || value === 'resolved' ? value : null;
+}
+
+/**
+ * DELETE /api/suggestions/[id]
+ * Delete a suggestion (admin only)
+ */
+export const DELETE: RequestHandler = async ({ params, locals }) => {
+	const auth = await getAuthorizedContext(params, locals);
+	if (auth instanceof Response) return auth;
+
+	const { db, id } = auth;
 	const { error } = await db.from('suggestions').delete().eq('id', id);
 
 	if (error) {
@@ -39,28 +65,16 @@ export const DELETE: RequestHandler = async ({ params, locals }) => {
  * Update a suggestion status (admin only)
  */
 export const PATCH: RequestHandler = async ({ params, request, locals }) => {
-	const { supabase, safeGetSession } = locals;
-	const { user } = await safeGetSession();
-	const adminSupabase = createAdminClient();
-	const db = adminSupabase ?? supabase;
+	const auth = await getAuthorizedContext(params, locals);
+	if (auth instanceof Response) return auth;
 
-	if (!user) {
-		return json({ error: 'Unauthorized' }, { status: 401 });
-	}
-
-	try {
-		await ensureAdminAccess(db, user.id);
-	} catch {
-		return json({ error: 'Forbidden' }, { status: 403 });
-	}
-
-	const { id } = params;
+	const { db, id } = auth;
 
 	try {
 		const body = await request.json();
-		const { status } = body;
+		const status = parseStatus(body?.status);
 
-		if (!['pending', 'resolved'].includes(status)) {
+		if (!status) {
 			return json({ error: 'Invalid status' }, { status: 400 });
 		}
 
