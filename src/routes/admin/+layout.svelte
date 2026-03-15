@@ -15,7 +15,8 @@
 		{ label: 'Rewards', href: '/admin/rewards', icon: '🎁', color: 'yellow' },
 		{ label: 'Locations', href: '/admin/locations', icon: '🗺️', color: 'blue' },
 		{ label: 'Suggestions', href: '/admin/suggestions', icon: '💡', color: 'green' },
-		{ label: 'Users', href: '/admin/users', icon: '👥', color: 'yellow' }
+		{ label: 'Users', href: '/admin/users', icon: '👥', color: 'yellow' },
+		{ label: 'Loadouts', href: '/admin/loadouts', icon: '⛏️', color: 'cyan' }
 	];
 
 	function isCurrentPath(href: string): boolean {
