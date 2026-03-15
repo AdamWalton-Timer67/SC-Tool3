@@ -2,21 +2,24 @@
 	let { data } = $props();
 	let selectedLaserCode = $state(data.lasers[0]?.code ?? '');
 	let selectedModuleCode = $state(data.modules[0]?.code ?? '');
+
 	const selectedLaser = $derived(
 		data.lasers.find((l: any) => l.code === selectedLaserCode) ?? data.lasers[0]
 	);
 	const selectedModule = $derived(
 		data.modules.find((m: any) => m.code === selectedModuleCode) ?? data.modules[0]
 	);
-	let laserStats = $state(JSON.stringify(selectedLaser?.stats ?? {}, null, 2));
-	let laserPrices = $state(JSON.stringify(selectedLaser?.prices ?? {}, null, 2));
-	let moduleStats = $state(JSON.stringify(selectedModule?.stats ?? {}, null, 2));
-	let modulePrices = $state(JSON.stringify(selectedModule?.prices ?? {}, null, 2));
+
+	let laserStats = $state('');
+	let laserPrices = $state('');
+	let moduleStats = $state('');
+	let modulePrices = $state('');
 
 	$effect(() => {
 		laserStats = JSON.stringify(selectedLaser?.stats ?? {}, null, 2);
 		laserPrices = JSON.stringify(selectedLaser?.prices ?? {}, null, 2);
 	});
+
 	$effect(() => {
 		moduleStats = JSON.stringify(selectedModule?.stats ?? {}, null, 2);
 		modulePrices = JSON.stringify(selectedModule?.prices ?? {}, null, 2);
@@ -34,6 +37,7 @@
 		});
 		alert('Laser updated');
 	}
+
 	async function saveModule() {
 		await fetch(`/api/admin/loadouts/modules?code=${selectedModule.code}`, {
 			method: 'PUT',

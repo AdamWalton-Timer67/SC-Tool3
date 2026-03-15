@@ -15,15 +15,13 @@ async function getAuthorizedContext(
 ): Promise<AuthContext | Response> {
 	const { supabase, safeGetSession } = locals;
 	const { user } = await safeGetSession();
-	const adminSupabase = createAdminClient();
-	const db = adminSupabase ?? supabase;
 
 	if (!user) {
 		return json({ error: 'Unauthorized' }, { status: 401 });
 	}
 
 	try {
-		await ensureAdminAccess(db, user.id);
+		await requireAdmin(supabase);
 	} catch {
 		return json({ error: 'Forbidden' }, { status: 403 });
 	}

@@ -16,18 +16,22 @@
 
 <div class="grid gap-4 md:grid-cols-2">
 	<div class="rounded bg-slate-800 p-4">
-		<label class="mb-2 block">Laser</label>
-		<select bind:value={laserCode} class="w-full bg-slate-900 p-2">
+		<label for="laser-select" class="mb-2 block">Laser</label>
+		<select id="laser-select" bind:value={laserCode} class="w-full bg-slate-900 p-2">
 			{#each data.lasers as l}
 				<option value={l.code}>{l.name}</option>
 			{/each}
 		</select>
-		<label class="mt-4 mb-2 block">Modules</label>
-		{#each data.modules as m}
-			<label class="mb-1 flex items-center gap-2"
-				><input type="checkbox" value={m.code} bind:group={moduleCodes} /> {m.name}</label
-			>
-		{/each}
+
+		<div class="mt-4 mb-2 block">Modules</div>
+		<fieldset>
+			<legend class="sr-only">Mining modules</legend>
+			{#each data.modules as m}
+				<label class="mb-1 flex items-center gap-2"
+					><input type="checkbox" value={m.code} bind:group={moduleCodes} /> {m.name}</label
+				>
+			{/each}
+		</fieldset>
 	</div>
 	<div class="rounded bg-slate-800 p-4">
 		<h2 class="mb-2 text-xl font-semibold">Result</h2>
