@@ -227,6 +227,17 @@ export async function createUserMiningLoadout(payload: any) {
 	);
 }
 
+export async function deleteUserMiningLoadout(userId: string, id: string): Promise<boolean> {
+	if (!hasMariaConfig()) return false;
+	await ensureTables();
+	const pool = getMariaPool();
+	const [result] = await pool.query<any[]>(
+		'DELETE FROM user_mining_loadouts WHERE id = ? AND user_id = ?',
+		[id, userId]
+	);
+	return Number(result?.affectedRows ?? 0) > 0;
+}
+
 export async function updateMiningEntry(
 	table: 'mining_lasers' | 'mining_modules',
 	code: string,

@@ -11,14 +11,21 @@ export async function POST({ locals, request }: any) {
 	const { data } = await locals.supabase.auth.getUser();
 	if (!data?.user) return json({ error: 'Unauthorized' }, { status: 401 });
 	const body = await request.json();
+
+	const name = String(body?.name ?? '').trim();
+	const laserCode = String(body?.laser_code ?? '').trim();
+	if (!name || !laserCode) {
+		return json({ error: 'Missing required fields: name, laser_code' }, { status: 400 });
+	}
+
 	const id = `ml_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
 	await createUserMiningLoadout({
 		id,
 		user_id: data.user.id,
-		name: body.name,
+		name,
 		ship: body.ship ?? null,
-		laser_code: body.laser_code,
-		module_codes: body.module_codes ?? [],
+		laser_code: laserCode,
+		module_codes: Array.isArray(body?.module_codes) ? body.module_codes : [],
 		notes: body.notes ?? null
 	});
 	return json({ success: true, id });
