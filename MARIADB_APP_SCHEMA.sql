@@ -855,3 +855,52 @@ INSERT INTO reputation_requirements (id,reward_id,reputation_name_en,reputation_
   ('rep_reward_dm_ship_038','reward_dm_ship_038','Wikelo Reputation','Réputation Wikelo',340),
   ('rep_reward_dm_ship_039','reward_dm_ship_039','Wikelo Reputation','Réputation Wikelo',999)
 ON DUPLICATE KEY UPDATE reward_id=VALUES(reward_id),reputation_name_en=VALUES(reputation_name_en),reputation_name_fr=VALUES(reputation_name_fr),required_level=VALUES(required_level);
+
+-- Mining loadouts reference data
+CREATE TABLE IF NOT EXISTS mining_lasers (
+  code VARCHAR(128) PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  size INT NULL,
+  slots INT NULL,
+  uex_id INT NULL,
+  stats_json LONGTEXT NOT NULL,
+  prices_json LONGTEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS mining_modules (
+  code VARCHAR(128) PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  category VARCHAR(16) NULL,
+  active TINYINT(1) NOT NULL DEFAULT 0,
+  uex_id INT NULL,
+  stats_json LONGTEXT NOT NULL,
+  prices_json LONGTEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS mining_stores (
+  code VARCHAR(128) PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  nickname VARCHAR(255) NULL,
+  system_name VARCHAR(255) NULL,
+  planet VARCHAR(255) NULL,
+  moon VARCHAR(255) NULL,
+  station VARCHAR(255) NULL,
+  outpost VARCHAR(255) NULL,
+  city VARCHAR(255) NULL
+);
+
+CREATE TABLE IF NOT EXISTS user_mining_loadouts (
+  id VARCHAR(128) PRIMARY KEY,
+  user_id VARCHAR(128) NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  ship VARCHAR(128) NULL,
+  laser_code VARCHAR(128) NOT NULL,
+  module_codes_json LONGTEXT NOT NULL,
+  notes TEXT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
